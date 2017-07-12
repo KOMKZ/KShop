@@ -5,6 +5,7 @@ $params = array_merge(
 );
 return [
     'id' => 'kshopapi',
+    'defaultRoute' => 'api/index',
     'basePath' => dirname(dirname(__DIR__)),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'kshopapi\controllers',
