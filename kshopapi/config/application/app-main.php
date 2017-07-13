@@ -10,4 +10,5 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'kshopapi\controllers',
     'params' => $params,
+    'components' => []
 ];
