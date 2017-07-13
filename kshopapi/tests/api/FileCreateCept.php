@@ -8,7 +8,7 @@ $fileData = [
     'save_name' => '测试图片.jpg',
     'valid_time' => 3600,
     'save_type' => 'disk',
-    'category' => 'test'
+    'category' => 'test',
 ];
 $I->sendPOST('/file/create', $fileData, [
     'file' => codecept_data_dir('test.jpg')

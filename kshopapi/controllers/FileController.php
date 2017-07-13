@@ -19,23 +19,21 @@ class FileController extends Controller
             return $this->error(null, Yii::t('app','没有文件数据'));
         }
         $post = Yii::$app->request->getBodyParams();
-        $post['save_name'] = FileModel::buildFileSafeName($_FILES['file'], ArrayHelper::getValue($post, 'save_name'));
+        $post['save_name'] = empty($post['save_name']) ? ($_FILES['file']['name']) : $post['save_name'];
         $fileData = array_merge([
             'source_path' => $_FILES['file']['tmp_name']
         ], $post);
         $fileModel = new FileModel();
-
         $file = $fileModel->createFile($fileData);
         if(!$file){
             list($code, $message) = $fileModel->getOneError();
             return $this->error($code, $message);
         }
-        console($file->toArray());
         $file = $fileModel->saveFile($file);
         if(!$file){
 
         }
-
+        console($file->toArray());
         $file = $fileModel->saveFileInDb($file);
         if(!$file){
 

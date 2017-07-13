@@ -18,4 +18,7 @@ class Model extends BaseModel
             return [null, null];
         }
     }
+    public function getOneErrMsg($obj){
+        return implode(',', $obj->getFirstErrors());
+    }
 }

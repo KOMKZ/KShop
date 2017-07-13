@@ -1,8 +1,10 @@
 <?php
 namespace common\models\file;
 
+use Yii;
 use common\models\Model;
 use common\models\file\File;
+use common\models\file\drivers\Disk;
 
 /**
  *
@@ -27,21 +29,53 @@ class FileModel extends Model
      *   该属性将被用于设置文件下载时的响应头
      * - source_path: string, 文件的源路径
      *   注意文件路径必须携带完整的文件名称，包括文件后缀
-     * -
+     * - category: string, 文件分类信息
+     *   文件分类如
+     *   /user/image/ 将会被转成 user/image
+     *   最中被计算为md5
      * @return [type]       [description]
      */
     public function createFile($data){
         $file = new File();
         if(!$file->load($data, '') || !$file->validate()){
-            $this->addErrors($file->getErrors());
+            $this->addError('', $this->getOneErrMsg($file));
             return false;
         }
+        $file->ext = pathinfo($file->save_name, PATHINFO_EXTENSION);
+        $file->md5_value = md5_file($file->source_path);
+        $file->prefix = md5($file->category);
         return $file;
     }
 
     public function saveFile(File $file){
+        self::buildFileSavePath($file);
+        $saveMedium = $this->getSaveMedium($file->save_type);
+        $file = $saveMedium->save($file);
         return $file;
     }
+
+
+    public function getSaveMedium($type){
+        switch ($type) {
+            case Disk::NAME:
+                return Yii::$app->filedisk;
+                break;
+            default:
+                throw new \InvalidParamException(Yii::t('app', "{$type} 不支持的存储类型"));
+                break;
+        }
+    }
+
+    protected static function buildFileSavePath(File $file){
+        $file->save_path = $file->prefix . '/' .
+                           md5(
+                             $file->md5_value .
+                             microtime(true)
+                           ) .
+                           ($file->ext ? '.' . $file->ext : '')
+                           ;
+    }
+
 
     public function saveFileInDb(File $file){
         return $file;
