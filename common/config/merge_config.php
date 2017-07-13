@@ -14,7 +14,9 @@ foreach(\yii\helpers\FileHelper::findFiles($configDir, [
         return 'application' != $type && !in_array(basename($path), [
             '.gitignore',
             'bootstrap.php',
-            'merge_config.php'
+            'merge_config.php',
+            'application.php',
+            'application-test.php'
         ]);
     }
 ]) as $configFile){
