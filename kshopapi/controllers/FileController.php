@@ -31,7 +31,8 @@ class FileController extends Controller
         }
         $file = $fileModel->saveFile($file);
         if(!$file){
-
+            list($code, $message) = $fileModel->getOneError();
+            return $this->error($code, $message);
         }
         console($file->toArray());
         $file = $fileModel->saveFileInDb($file);

@@ -48,14 +48,15 @@ class FileModel extends Model
     }
 
     public function saveFile(File $file){
-        self::buildFileSavePath($file);
+        $file->save_path = self::buildFileSavePath($file);
         $saveMedium = $this->getSaveMedium($file->save_type);
         $file = $saveMedium->save($file);
         return $file;
     }
 
 
-    public function getSaveMedium($type){
+
+    public static function getSaveMedium($type){
         switch ($type) {
             case Disk::NAME:
                 return Yii::$app->filedisk;
@@ -66,8 +67,15 @@ class FileModel extends Model
         }
     }
 
+    public static function buildFileQueryId(File $file){
+        return $file->save_type . ':' .
+               $file->category . '/' . basename($file->save_path);
+    }
+    public static function buildFileUrl(File $file){
+        return self::getSaveMedium($file->save_type)->buildFileUrl($file);
+    }
     protected static function buildFileSavePath(File $file){
-        $file->save_path = $file->prefix . '/' .
+        return             $file->prefix . '/' .
                            md5(
                              $file->md5_value .
                              microtime(true)
@@ -81,16 +89,5 @@ class FileModel extends Model
         return $file;
     }
 
-    /**
-     * 从$_FILES中的数据构建文件的保存名称
-     * @param  [type] $tmpFileInfo [description]
-     * @param  string $saveName    [description]
-     * @return [type]              [description]
-     */
-    public static function buildFileSafeName($tmpFileInfo, $saveName = ''){
-        $saveName = empty($saveName) ? $tmpFileInfo['name'] : $saveName;
-        $fileExt = pathinfo($saveName, PATHINFO_EXTENSION);
-        $safeName = preg_replace('/[^\w_-]+/u', '', pathinfo($saveName, PATHINFO_FILENAME));
-        return $fileExt ? $safeName . '.' . $fileExt : $safeName;
-    }
+
 }

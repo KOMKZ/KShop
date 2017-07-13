@@ -25,6 +25,21 @@ class File extends Model
     public $md5_value = '';
     public $medium_info = [];
 
+    public function getQuery_id(){
+        return FileModel::buildFileQueryId($this);
+    }
+
+    public function getUrl(){
+        return FileModel::buildFileUrl($this);
+    }
+
+
+    public function attributes(){
+        return array_merge(parent::attributes(), [
+            'query_id',
+            'url'
+        ]);
+    }
 
 
 

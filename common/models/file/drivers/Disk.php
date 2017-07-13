@@ -15,15 +15,24 @@ class Disk extends Model implements SaveMediumInterface
     protected $base = '';
     public $dirMode = 0755;
     public $fileMode = 0755;
+    public $host = "";
+    public $urlRoute = "";
 
     public function setBase($value){
         if(!is_dir($value)){
             throw new InvalidConfigException(Yii::t('app',"{$value} 路径不存在"));
         }
+
         if(!is_writable($value)){
             throw new InvalidConfigException(Yii::t('app', "{$value} 对象没有写权限"));
         }
         $this->base = rtrim($value, '/');
+    }
+
+    public function buildFileUrl(File $file, $params = []){
+        $apiUrlManager = Yii::$app->apiurl;
+        $apiUrlManager->hostInfo = $this->host;
+        return $apiUrlManager->createAbsoluteUrl([$this->urlRoute, 'query_id' => $file->query_id]);
     }
 
     public function save(File $file){
