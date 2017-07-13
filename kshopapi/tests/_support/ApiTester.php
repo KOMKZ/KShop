@@ -16,9 +16,9 @@ namespace kshopapi\tests;
  *
  * @SuppressWarnings(PHPMD)
 */
-class FunctionalTester extends \Codeception\Actor
+class ApiTester extends \Codeception\Actor
 {
-    use _generated\FunctionalTesterActions;
+    use _generated\ApiTesterActions;
 
    /**
     * Define custom actions here
