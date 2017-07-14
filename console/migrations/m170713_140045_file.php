@@ -1,11 +1,11 @@
 <?php
-
 use yii\db\Migration;
+use common\models\file\ar\FileAr;
 
 class m170713_140045_file extends Migration
 {
     public function getTableName(){
-        return sprintf("%sfile", Yii::$app->db->tablePrefix);
+        return preg_replace('/[\{\}]/', '', preg_replace("/%/", Yii::$app->db->tablePrefix, FileAr::tableName()));
     }
     public function safeUp(){
         $tableName = $this->getTableName();
@@ -37,6 +37,7 @@ class m170713_140045_file extends Migration
         $dropTableSql = "
         drop table if exists {$tableName}
         ";
+        $this->execute($dropTableSql);
         return true;
     }
 }
