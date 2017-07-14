@@ -7,7 +7,7 @@ $fileData = [
     'file_is_tmp' => 1,
     'file_save_name' => '测试图片.jpg',
     'file_valid_time' => 3600,
-    'file_save_type' => 'disk',
+    'file_save_type' => 'oss',
     'file_category' => 'test',
 ];
 $I->sendPOST('/file/create', $fileData, [

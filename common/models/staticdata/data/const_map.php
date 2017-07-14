@@ -2,7 +2,8 @@
 use Yii;
 return [
     'file_save_type' => [
-        \common\models\file\drivers\Disk::NAME => Yii::t('app', '本地存储')
+        \common\models\file\drivers\Disk::NAME => Yii::t('app', '本地存储'),
+        \common\models\file\drivers\Oss::NAME => Yii::t('app', 'Oss存储'),
     ],
     'file_is_private' => [
         1 => Yii::t('app', '私有访问'),

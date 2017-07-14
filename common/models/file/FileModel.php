@@ -5,7 +5,9 @@ use Yii;
 use common\models\Model;
 use common\models\file\ar\File;
 use common\models\file\drivers\Disk;
+use common\models\file\drivers\Oss;
 use common\models\staticdata\ConstMap;
+use yii\base\InvalidParamException;
 
 /**
  *
@@ -54,7 +56,14 @@ class FileModel extends Model
 
     public function saveFile(File $file){
         $saveMedium = $this->getSaveMedium($file->file_save_type);
-        $file = $saveMedium->save($file);
+        try {
+            $file = $saveMedium->save($file);
+        } catch (\Exception $e) {
+            Yii::error($e);
+            $this->addError('', $e->getMessage());
+            return false;
+        }
+
         $file->file_medium_info = json_encode($saveMedium->buildMediumInfo());
         $file->file_created_time = time();
         return $file;
@@ -89,9 +98,10 @@ class FileModel extends Model
         switch ($type) {
             case Disk::NAME:
                 return Yii::$app->filedisk;
-                break;
+            case Oss::NAME:
+                return Yii::$app->fileoss;
             default:
-                throw new \InvalidParamException(Yii::t('app', "{$type} 不支持的存储类型"));
+                throw new InvalidParamException(Yii::t('app', "{$type} 不支持的存储类型"));
                 break;
         }
     }
