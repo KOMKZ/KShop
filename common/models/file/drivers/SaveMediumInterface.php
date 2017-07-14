@@ -1,7 +1,7 @@
 <?php
 namespace common\models\file\drivers;
 
-use common\models\file\File;
+use common\models\file\ar\File;
 
 /**
  *

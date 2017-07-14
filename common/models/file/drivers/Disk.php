@@ -4,7 +4,7 @@ namespace common\models\file\drivers;
 use Yii;
 use common\models\Model;
 use yii\base\InvalidConfigException;
-use common\models\file\File;
+use common\models\file\ar\File;
 use yii\helpers\FileHelper;
 /**
  *
@@ -32,23 +32,22 @@ class Disk extends Model implements SaveMediumInterface
     public function buildFileUrl(File $file, $params = []){
         $apiUrlManager = Yii::$app->apiurl;
         $apiUrlManager->hostInfo = $this->host;
-        return $apiUrlManager->createAbsoluteUrl([$this->urlRoute, 'query_id' => $file->query_id]);
+        return $apiUrlManager->createAbsoluteUrl([$this->urlRoute, 'query_id' => $file->file_query_id]);
     }
 
     public function save(File $file){
-        $savePath = $this->base . '/' . $file->save_path;
+        $savePath = $this->base . '/' . $file->getFileSavePath();
         $saveDir = dirname($savePath);
         if(!is_dir($saveDir)){
             FileHelper::createDirectory($saveDir);
             chmod($saveDir, $this->dirMode);
         }
-        copy($file->source_path, $savePath);
+        copy($file->file_source_path, $savePath);
         chmod($savePath, $this->fileMode);
-        $file->medium_info = $this->buildMediumInfo();
         return $file;
     }
 
-    protected function buildMediumInfo(){
+    public function buildMediumInfo(){
         return [
             'base' => $this->base,
             'dirMode' => $this->dirMode,
