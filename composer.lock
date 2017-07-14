@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b88f277058cddb04134a2ff037e584b2",
-    "content-hash": "e1d40342a97339a88f5f94f4d47bdf50",
+    "hash": "c2c0d4d2e226874e792f4c9946e48773",
+    "content-hash": "60d34727a29eae7927c44db1a9c547a4",
     "packages": [
         {
             "name": "bower-asset/bootstrap",
@@ -467,6 +467,64 @@
                 "stream"
             ],
             "time": "2014-10-12 19:18:40"
+        },
+        {
+            "name": "lcobucci/jwt",
+            "version": "3.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lcobucci/jwt.git",
+                "reference": "7668cb045296f290588d04c391569c7b7fc1f899"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://files.phpcomposer.com/files/lcobucci/jwt/7668cb045296f290588d04c391569c7b7fc1f899.zip",
+                "reference": "7668cb045296f290588d04c391569c7b7fc1f899",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*",
+                "php": ">=5.5"
+            },
+            "require-dev": {
+                "mdanter/ecc": "~0.3.1",
+                "mikey179/vfsstream": "~1.5",
+                "phpmd/phpmd": "~2.2",
+                "phpunit/php-invoker": "~1.1",
+                "phpunit/phpunit": "~4.5",
+                "squizlabs/php_codesniffer": "~2.3"
+            },
+            "suggest": {
+                "mdanter/ecc": "Required to use Elliptic Curves based algorithms."
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Lcobucci\\JWT\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Luís Otávio Cobucci Oblonczyk",
+                    "email": "lcobucci@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A simple library to work with JSON Web Token and JSON Web Signature",
+            "keywords": [
+                "JWS",
+                "jwt"
+            ],
+            "time": "2016-08-13 23:12:58"
         },
         {
             "name": "react/promise",

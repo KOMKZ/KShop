@@ -30,6 +30,11 @@ class File extends ActiveRecord
         return FileModel::buildFileSavePath($this);
     }
 
+    public function getFileDiskFullSavePath(){
+        $mediumInfo = json_decode($this->file_medium_info);
+        return $mediumInfo->base . '/' . $this->getFileSavePath();
+    }
+
 
     public function fields(){
         $attrs = array_merge(parent::attributes(), [

@@ -44,11 +44,13 @@ class FileModel extends Model
         }
         $file->file_ext = pathinfo($file->file_save_name, PATHINFO_EXTENSION);
         $file->file_md5_value = md5_file($file->file_source_path);
-        $file->file_prefix = md5($file->file_category);
+        $file->file_prefix = self::buildPrefix($file->file_category);
         $file->file_real_name = self::buildFileRealName($file);
         $file->file_valid_time = 1 == $file->file_is_tmp ? $file->file_valid_time : 0;
         return $file;
     }
+
+
 
     public function saveFile(File $file){
         $saveMedium = $this->getSaveMedium($file->file_save_type);
@@ -66,14 +68,17 @@ class FileModel extends Model
         return $file;
     }
 
+    public static function checkSignature($signature, $data = []){
+        return false;
+    }
 
     public static function parseQueryId($string){
         $typeList = implode('|', ConstMap::getConst('file_save_type', true));
         if(preg_match("/^({$typeList}):{1}(.+)/", $string, $matches)){
             $fileCondition = [];
             $fileCondition['file_save_type'] = $matches[1];
-            $fileCondition['file_prefix'] = trim(dirname($matches[2]), '/');
-            $fileCondition['file_real_name'] = trim($matches[2]);
+            $fileCondition['file_prefix'] = self::buildPrefix(trim(dirname($matches[2]), '/'));
+            $fileCondition['file_real_name'] = basename(trim($matches[2]));
             return $fileCondition;
         }else{
             return [];
@@ -90,7 +95,9 @@ class FileModel extends Model
                 break;
         }
     }
-
+    public static function buildPrefix($value){
+        return md5($value);
+    }
     public static function buildFileQueryId(File $file){
         return $file->file_save_type . ':' .
                $file->file_category . '/' . $file->file_real_name;

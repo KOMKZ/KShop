@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 use common\models\file\drivers\Disk;
 use yii\web\NotFoundHttpException;
 use yii\base\InvalidParamException;
+use yii\web\ForbiddenHttpException;
 /**
  *
  */
@@ -45,15 +46,18 @@ class FileController extends Controller
         return $this->succ($file->toArray());
     }
     public function actionOutput($query_id){
+        $get = Yii::$app->request->get();
         $fileInfo = FileModel::parseQueryId($query_id);
         if(Disk::NAME != $fileInfo['file_save_type']){
             throw new InvalidParamException(Yii::t('app', "只支持disk类型的文件"));
         }
-        console($fileInfo);
         $file = FileQuery::find()->where($fileInfo)->one();
         if(!$file){
             throw new NotFoundHttpException(Yii::t('app', "{$query_id} 文件不存在"));
         }
-        console($file->toArray());
+        if($file->file_is_private && (empty($get['signature']) || !FileModel::checkSignature($get['signature'], $get))){
+            throw new ForbiddenHttpException(Yii::t('app', "您没有权限访问该文件"));
+        }
+        return Yii::$app->response->sendFile($file->getFileDiskFullSavePath(), $file->file_save_name, ['inline' => true]);
     }
 }

@@ -1,11 +1,11 @@
 <?php
 use yii\db\Migration;
-use common\models\file\ar\FileAr;
+use common\models\file\ar\File;
 
 class m170713_140045_file extends Migration
 {
     public function getTableName(){
-        return preg_replace('/[\{\}]/', '', preg_replace("/%/", Yii::$app->db->tablePrefix, FileAr::tableName()));
+        return preg_replace('/[\{\}]/', '', preg_replace("/%/", Yii::$app->db->tablePrefix, File::tableName()));
     }
     public function safeUp(){
         $tableName = $this->getTableName();

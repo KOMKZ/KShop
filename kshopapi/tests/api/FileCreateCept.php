@@ -3,7 +3,7 @@ $I = new ApiTester($scenario);
 $I->wantTo('上传文件是否成功，并且正确访问数据');
 $I->haveHttpHeader('Content-Type', 'multipart/form-data');
 $fileData = [
-    'file_is_private' => 1,
+    'file_is_private' => 0,
     'file_is_tmp' => 1,
     'file_save_name' => '测试图片.jpg',
     'file_valid_time' => 3600,
@@ -23,4 +23,4 @@ $fileUrl = $fileRes['data']['file_url'];
 $fileMd5Value = $fileRes['data']['file_md5_value'];
 $I->sendGet($fileUrl);
 $I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
-$I->seeResponseContains("abc");
+$I->seeBinaryResponseEquals($fileMd5Value);
