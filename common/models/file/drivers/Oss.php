@@ -81,7 +81,7 @@ class Oss extends Model implements SaveMediumInterface{
         if(!$file->file_is_private){
             $client->putObjectAcl($this->bucket, $objectName, OssClient::OSS_ACL_TYPE_PUBLIC_READ_WRITE);
         }
-        $file->file_medium_info = json_encode($this->buildMediumInfo);
+        $file->file_medium_info = json_encode($this->buildMediumInfo());
         return $file;
     }
 
