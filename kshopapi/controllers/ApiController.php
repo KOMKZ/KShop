@@ -36,7 +36,7 @@ class ApiController extends Controller
         if ($exception instanceof UserException) {
             $message = $exception->getMessage();
         } else {
-            $message = Yii::t('app', '服务器内部错误');
+            $message = Yii::t('app', 'dev' == YII_ENV ? $exception->getMessage() : '服务器内部错误');
         }
         return $this->error($code, $message);
     }
