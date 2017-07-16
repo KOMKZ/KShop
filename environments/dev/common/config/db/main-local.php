@@ -2,10 +2,10 @@
 return [
     'db' => [
         'class' => 'yii\db\Connection',
-        'dsn' => '',
+        'dsn' => 'mysql:host=localhost;dbname=testdb',
         'username' => '',
         'password' => '',
         'charset' => '',
-        'tablePrefix' => 'kshop_'
+        'tablePrefix' => ''
     ],
 ];
