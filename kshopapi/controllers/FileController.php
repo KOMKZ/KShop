@@ -7,6 +7,7 @@ use common\models\file\FileModel;
 use common\models\file\FileQuery;
 use yii\helpers\ArrayHelper;
 use common\models\file\drivers\Disk;
+use common\models\file\drivers\Oss;
 use yii\web\NotFoundHttpException;
 use yii\base\InvalidParamException;
 use yii\web\ForbiddenHttpException;
@@ -73,15 +74,14 @@ class FileController extends Controller
         }
     }
     public function actionList(){
-        $file = FileQuery::find()->where(['file_md5_value' => '30e1a411ece0c0feb0df36043ea27ae4', 'file_is_private' => 1])->one();
-        console($file->file_url);
+        $file = FileQuery::find()->where(['file_md5_value' => '30e1a411ece0c0feb0df36043ea27ae4', 'file_is_private' => 0])->one();
+        $url = Yii::$app->urlManager->createAbsoluteUrl(['file/output', 'query_id' => $file->file_query_id]);
+        header("location:{$url}");
     }
     public function actionOutput($query_id){
         $get = Yii::$app->request->get();
         $fileInfo = FileModel::parseQueryId($query_id);
-        if(Disk::NAME != $fileInfo['file_save_type']){
-            throw new InvalidParamException(Yii::t('app', "只支持disk类型的文件"));
-        }
+
         $file = FileQuery::find()->where($fileInfo)->one();
         if(!$file){
             throw new NotFoundHttpException(Yii::t('app', "{$query_id} 文件不存在"));
@@ -89,6 +89,13 @@ class FileController extends Controller
         if($file->file_is_private && (empty($get['signature']) || !FileModel::checkSignature($get['signature'], $get))){
             throw new ForbiddenHttpException(Yii::t('app', "您没有权限访问该文件"));
         }
-        return Yii::$app->response->sendFile($file->getFileDiskFullSavePath(), $file->file_save_name, ['inline' => true]);
+        if(Disk::NAME == $file->file_save_type){
+            return Yii::$app->response->sendFile($file->getFileDiskFullSavePath(), $file->file_save_name, ['inline' => true]);
+        }elseif(Oss::NAME == $file->file_save_type){
+            $url = $file->file_url;
+            header("location:{$url}");
+        }else{
+            throw new InvalidParamException(Yii::t('app', "不支持的输出类型" . $file->file_save_type));
+        }
     }
 }
