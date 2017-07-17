@@ -50,9 +50,10 @@ class Oss extends Model implements SaveMediumInterface{
             return "http://" . $host . '/' . $objectName;
         }else{
             $objectName = $this->buildFileObjectName($file);
-            return $this->createClient()->signUrl($this->bucket, $objectName, $this->timeout , OssClient::OSS_HTTP_GET, [
+            $originMedium = json_decode($file->file_medium_info);
+            return $this->createClient()->signUrl($originMedium->bucket, $objectName, $this->timeout , OssClient::OSS_HTTP_GET, [
                 OssClient::OSS_HEADERS => [
-                    Oss::OSS_CONTENT_DISPOSTION => $file->file_save_name
+                    OssClient::OSS_CONTENT_DISPOSTION => $file->file_save_name
                 ]
             ]);
         }
@@ -72,6 +73,20 @@ class Oss extends Model implements SaveMediumInterface{
     public function buildFileObjectName(File $file){
          return $this->base . '/' . $file->getFileSavePath();
     }
+
+    public function saveByCopy(File $targetFile, File $originFile){
+        $client = $this->createClient(true);
+        $originObjectName = $this->buildFileObjectName($originFile);
+        $targetObjectName = $this->buildFileObjectName($targetFile);
+        $originMedium = json_decode($originFile->file_medium_info);
+        $client->copyObject($originMedium->bucket, $originObjectName, $this->bucket, $targetObjectName);
+        if(!$targetFile->file_is_private){
+            $client->putObjectAcl($this->bucket, $targetObjectName, OssClient::OSS_ACL_TYPE_PUBLIC_READ_WRITE);
+        }
+
+        return $targetFile;
+    }
+
     public function save(File $file){
         $client = $this->createClient(true);
         $objectName = $this->buildFileObjectName($file);
@@ -81,7 +96,6 @@ class Oss extends Model implements SaveMediumInterface{
         if(!$file->file_is_private){
             $client->putObjectAcl($this->bucket, $objectName, OssClient::OSS_ACL_TYPE_PUBLIC_READ_WRITE);
         }
-        $file->file_medium_info = json_encode($this->buildMediumInfo());
         return $file;
     }
 
@@ -101,13 +115,13 @@ class Oss extends Model implements SaveMediumInterface{
 
     public function buildMediumInfo(){
         return [
-            'bucket;' => $this->bucket,
-            'access_key_id;' => $this->access_key_id,
-            'access_secret_key;' => $this->access_secret_key,
-            'is_cname;' => $this->is_cname,
-            'endpoint;' => $this->endpoint,
-            'inner_endpoint;' => $this->inner_endpoint,
-            'base;' => $this->base,
+            'bucket' => $this->bucket,
+            'access_key_id' => $this->access_key_id,
+            'access_secret_key' => $this->access_secret_key,
+            'is_cname' => $this->is_cname,
+            'endpoint' => $this->endpoint,
+            'inner_endpoint' => $this->inner_endpoint,
+            'base' => $this->base,
         ];
     }
 

@@ -34,7 +34,9 @@ class Disk extends Model implements SaveMediumInterface
         $apiUrlManager->hostInfo = $this->host;
         return $apiUrlManager->createAbsoluteUrl([$this->urlRoute, 'query_id' => $file->file_query_id]);
     }
-
+    public function saveByCopy(File $targetFile, File $originFile){
+        return $targetFile;
+    }
     public function save(File $file){
         $savePath = $this->base . '/' . $file->getFileSavePath();
         $saveDir = dirname($savePath);

@@ -19,31 +19,62 @@ class FileController extends Controller
 
     }
     public function actionCreate(){
-        if(empty($_FILES) || empty($_FILES['file'])){
-            return $this->error(null, Yii::t('app','没有文件数据'));
-        }
         $post = Yii::$app->request->getBodyParams();
-        $post['file_save_name'] = empty($post['file_save_name']) ? ($_FILES['file']['name']) : $post['file_save_name'];
-        $fileData = array_merge([
-            'file_source_path' => $_FILES['file']['tmp_name']
-        ], $post);
         $fileModel = new FileModel();
-        $file = $fileModel->createFile($fileData);
-        if(!$file){
-            list($code, $message) = $fileModel->getOneError();
-            return $this->error($code, $message);
+        if(empty($post['file_md5_value'])){
+            // 从文件流来上传
+            if(empty($_FILES) || empty($_FILES['file'])){
+                return $this->error(null, Yii::t('app','没有文件数据'));
+            }
+            $post['file_save_name'] = empty($post['file_save_name']) ? ($_FILES['file']['name']) : $post['file_save_name'];
+            $fileData = array_merge([
+                'file_source_path' => $_FILES['file']['tmp_name']
+            ], $post);
+            $file = $fileModel->createFile($fileData);
+            if(!$file){
+                list($code, $message) = $fileModel->getOneError();
+                return $this->error($code, $message);
+            }
+            $file = $fileModel->saveFile($file);
+            if(!$file){
+                list($code, $message) = $fileModel->getOneError();
+                return $this->error($code, $message);
+            }
+            $file = $fileModel->saveFileInDb($file);
+            if(!$file){
+                list($code, $message) = $fileModel->getOneError();
+                return $this->error($code, $message);
+            }
+            return $this->succ($file->toArray());
+        }else{
+            // 从文件md5值在服务端进行拷贝
+            $file = FileQuery::find()->where(['file_md5_value' => $post['file_md5_value']])->one();
+            if(!$file){
+                return $this->error(404, Yii::t('app', "{$post['file_md5_value']}相关文件不存在"));
+            }
+            $fileCopy = $fileModel->createFile(array_merge($file->toArray(), $post), true);
+            if(!$fileCopy){
+                list($code, $message) = $fileModel->getOneError();
+                return $this->error($code, $message);
+            }
+
+            $fileCopy = $fileModel->saveFileByCopy($fileCopy, $file);
+            if(!$fileCopy){
+                list($code, $message) = $fileModel->getOneError();
+                return $this->error($code, $message);
+            }
+
+            $fileCopy = $fileModel->saveFileInDb($fileCopy);
+            if(!$fileCopy){
+                list($code, $message) = $fileModel->getOneError();
+                return $this->error($code, $message);
+            }
+            return $this->succ($fileCopy->toArray());
         }
-        $file = $fileModel->saveFile($file);
-        if(!$file){
-            list($code, $message) = $fileModel->getOneError();
-            return $this->error($code, $message);
-        }
-        $file = $fileModel->saveFileInDb($file);
-        if(!$file){
-            list($code, $message) = $fileModel->getOneError();
-            return $this->error($code, $message);
-        }
-        return $this->succ($file->toArray());
+    }
+    public function actionList(){
+        $file = FileQuery::find()->where(['file_md5_value' => '30e1a411ece0c0feb0df36043ea27ae4', 'file_is_private' => 1])->one();
+        console($file->file_url);
     }
     public function actionOutput($query_id){
         $get = Yii::$app->request->get();

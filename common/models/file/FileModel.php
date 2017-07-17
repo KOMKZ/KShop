@@ -15,6 +15,18 @@ use yii\base\InvalidParamException;
 class FileModel extends Model
 {
 
+    public function saveFileByCopy(File $targetFile, File $originFile){
+        $saveMedium = $this->getSaveMedium($originFile->file_save_type);
+        if($targetFile->file_save_type == $originFile->file_save_type){
+            $file = $saveMedium->saveByCopy($targetFile, $originFile);
+        }else{
+            throw new \Exception("还没有实现");
+        }
+        $file->file_medium_info = json_encode($saveMedium->buildMediumInfo());
+        $file->file_created_time = time();
+        return $file;
+    }
+
     /**
      * 创建一个文件对象
      * @param  array $data 文件对象的基础数据
@@ -38,14 +50,14 @@ class FileModel extends Model
      *   最中被计算为md5
      * @return [type]       [description]
      */
-    public function createFile($data, $safe = false){
+    public function createFile($data, $isCopy = false){
         $file = new File();
         if(!$file->load($data, '') || !$file->validate()){
             $this->addError('', $this->getOneErrMsg($file));
             return false;
         }
         $file->file_ext = pathinfo($file->file_save_name, PATHINFO_EXTENSION);
-        $file->file_md5_value = md5_file($file->file_source_path);
+        $file->file_md5_value = $isCopy ? $data['file_md5_value'] : md5_file($file->file_source_path);
         $file->file_prefix = self::buildPrefix($file->file_category);
         $file->file_real_name = self::buildFileRealName($file);
         $file->file_valid_time = 1 == $file->file_is_tmp ? $file->file_valid_time : 0;

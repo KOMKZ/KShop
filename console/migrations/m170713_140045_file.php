@@ -26,7 +26,8 @@ class m170713_140045_file extends Migration
             `file_mime_type` varchar(64) not null default '' comment '文件媒体类型',
             `file_created_time` int(10) unsigned not null comment '文件创建时间',
             primary key `file_id` (file_id),
-            index `query_id` (file_prefix, file_real_name, file_ext)
+            index `query_id` (file_prefix, file_real_name, file_ext),
+            index `md5_value` (file_md5_value)
         );
         ";
         $this->execute($createTabelSql);

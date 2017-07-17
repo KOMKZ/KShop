@@ -10,22 +10,7 @@ $fileData = [
     'file_save_type' => 'oss',
     'file_category' => 'test',
 ];
-$I->sendPOST('/file/create', $fileData, [
-    'file' => codecept_data_dir('test.jpg')
-]);
-$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
-$I->seeResponseIsJson();
-$I->seeResponseContains("file_query_id");
 
-
-$fileRes = json_decode($I->grabResponse(), true);
-$fileUrl = $fileRes['data']['file_url'];
-$fileMd5Value = $fileRes['data']['file_md5_value'];
-$I->sendGet($fileUrl);
-$I->seeResponseCodeIs(\Codeception\Util\HttpCode::OK); // 200
-$I->seeBinaryResponseEquals($fileMd5Value);
-
-$fileData['file_save_type'] = 'disk';
 $I->sendPOST('/file/create', $fileData, [
     'file' => codecept_data_dir('test.jpg')
 ]);

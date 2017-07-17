@@ -10,4 +10,5 @@ interface SaveMediumInterface
 {
     public function save(File $file);
     public function buildFileUrl(File $file, $params = []);
+    public function saveByCopy(File $targetFile, File $originFile);
 }
