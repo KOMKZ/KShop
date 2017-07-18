@@ -19,12 +19,17 @@ class FileController extends Controller
     public function actionIndex(){
 
     }
+
+    public function actionChunkCreate(){
+        echo 1;
+    }
+
     public function actionCreate(){
         $post = Yii::$app->request->getBodyParams();
         $fileModel = new FileModel();
         if(empty($post['file_md5_value'])){
             // 从文件流来上传
-            if(empty($_FILES) || empty($_FILES['file'])){
+            if(empty($_FILES) || empty($_FILES['file']) || $_FILES["file"]["error"]){
                 return $this->error(null, Yii::t('app','没有文件数据'));
             }
             $post['file_save_name'] = empty($post['file_save_name']) ? ($_FILES['file']['name']) : $post['file_save_name'];
@@ -73,11 +78,7 @@ class FileController extends Controller
             return $this->succ($fileCopy->toArray());
         }
     }
-    public function actionList(){
-        $file = FileQuery::find()->where(['file_md5_value' => '30e1a411ece0c0feb0df36043ea27ae4', 'file_is_private' => 0])->one();
-        $url = Yii::$app->urlManager->createAbsoluteUrl(['file/output', 'query_id' => $file->file_query_id]);
-        header("location:{$url}");
-    }
+
     public function actionOutput($query_id){
         $get = Yii::$app->request->get();
         $fileInfo = FileModel::parseQueryId($query_id);

@@ -51,11 +51,7 @@ class Oss extends Model implements SaveMediumInterface{
         }else{
             $objectName = $this->buildFileObjectName($file);
             $originMedium = json_decode($file->file_medium_info);
-            return $this->createClient()->signUrl($originMedium->bucket, $objectName, $this->timeout , OssClient::OSS_HTTP_GET, [
-                OssClient::OSS_HEADERS => [
-                    OssClient::OSS_CONTENT_DISPOSTION => $file->file_save_name
-                ]
-            ]);
+            return $this->createClient()->signUrl($originMedium->bucket, $objectName, $this->timeout , OssClient::OSS_HTTP_GET, []);
         }
     }
 
@@ -79,19 +75,33 @@ class Oss extends Model implements SaveMediumInterface{
         $originObjectName = $this->buildFileObjectName($originFile);
         $targetObjectName = $this->buildFileObjectName($targetFile);
         $originMedium = json_decode($originFile->file_medium_info);
-        $client->copyObject($originMedium->bucket, $originObjectName, $this->bucket, $targetObjectName);
+        $options[OssClient::OSS_HEADERS] = [
+            'Content-Disposition' => sprintf('%s; filename="%s"', 'inline', $targetFile->file_save_name)
+        ];
+        $client->copyObject($originMedium->bucket, $originObjectName, $this->bucket, $targetObjectName, $options);
         if(!$targetFile->file_is_private){
             $client->putObjectAcl($this->bucket, $targetObjectName, OssClient::OSS_ACL_TYPE_PUBLIC_READ_WRITE);
         }
 
         return $targetFile;
     }
-
+    public function setFileDownloadName(File $file, $name = '', $inline = true){
+        $options = [];
+        $options[OssClient::OSS_HEADERS] = [
+            'Content-Disposition' => sprintf('%s; filename="%s"', $inline ? 'inline' : 'attachment', $name ? $name : $file->file_save_name)
+        ];
+        $originMedium = json_decode($file->file_medium_info);
+        $objectName = $this->buildFileObjectName($file);
+        $this->createClient(true)->copyObject($originMedium->bucket, $objectName, $originMedium->bucket, $objectName, $options);
+    }
     public function save(File $file){
         $client = $this->createClient(true);
         $objectName = $this->buildFileObjectName($file);
         $options = [];
         $options[OssClient::OSS_CONTENT_LENGTH] = filesize($file->file_source_path);
+        $options[OssClient::OSS_HEADERS] = [
+            'Content-Disposition' => sprintf('%s; filename="%s"', 'inline', $file->file_save_name)
+        ];
         $client->uploadFile($this->bucket, $objectName, $file->file_source_path, $options);
         if(!$file->file_is_private){
             $client->putObjectAcl($this->bucket, $objectName, OssClient::OSS_ACL_TYPE_PUBLIC_READ_WRITE);
