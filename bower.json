@@ -1,0 +1,22 @@
+{
+  "name": "bower.json",
+  "authors": [
+    "kz <784248377@qq.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "plupload": "2.3.1"
+  }
+}
