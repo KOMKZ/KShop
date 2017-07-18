@@ -4,10 +4,13 @@ namespace common\models\file;
 use Yii;
 use common\models\Model;
 use common\models\file\ar\File;
+use common\models\file\ar\FileTask;
 use common\models\file\drivers\Disk;
 use common\models\file\drivers\Oss;
 use common\models\staticdata\ConstMap;
+use yii\helpers\FileHelper;
 use yii\base\InvalidParamException;
+
 
 /**
  *
@@ -51,9 +54,7 @@ class FileModel extends Model
      * @return [type]       [description]
      */
     public function createFile($data, $isCopy = false){
-        $file = new File();
-        if(!$file->load($data, '') || !$file->validate()){
-            $this->addError('', $this->getOneErrMsg($file));
+        if(!$file = $this->validateFileData($data)){
             return false;
         }
         $file->file_ext = pathinfo($file->file_save_name, PATHINFO_EXTENSION);
@@ -64,7 +65,57 @@ class FileModel extends Model
         return $file;
     }
 
+    public function validateFileData($data, $scenario = 'default'){
+        $file = new File();
+        $file->scenario = $scenario;
+        if(!$file->load($data, '') || !$file->validate()){
+            $this->addError('', $this->getOneErrMsg($file));
+            return false;
+        }
+        return $file;
+    }
 
+    public function createFileTask($data){
+        $fileTask = new FileTask();
+        if(!$fileTask->load($data, '') || !$fileTask->validate()){
+            $this->addError('', $this->getOneErrMsg($fileTask));
+        }
+        if(!$fileTask->insert(false)){
+            $this->addError('', Yii::t('app', '数据库插入失败'));
+            return false;
+        }
+        return $fileTask;
+    }
+
+    public function createFileChunkedUploadTask($fileInfo = [], $validDuration = 86400){
+        $fileTaskData = [
+            'file_task_code' => static::buildTaskUniqueString(),
+            'file_task_invalid_at' => time() + $validDuration,
+            'file_task_type' => FileTask::TASK_CHUNK_UPLOAD,
+            'file_task_data' => json_encode($fileInfo),
+        ];
+        return $this->createFileTask($fileTaskData);
+    }
+
+    protected static function buildTaskUniqueString(){
+        return md5(microtime(true) . uniqid());
+    }
+
+    public static function buildFileChunkDir(FileTask $fileTask){
+        $baseDir = Yii::getAlias('@app/runtime/file_chunk');
+        if(!is_dir($baseDir)){
+            FileHelper::createDirectory($baseDir);
+            //todo fix
+            chmod($baseDir, 0777);
+        }
+        $chunkDir = $baseDir . '/' . $fileTask->file_task_code;
+        if(!is_dir($chunkDir)){
+            FileHelper::createDirectory($chunkDir);
+            // todo fix
+            chmod($chunkDir, 0777);
+        }
+        return $chunkDir;
+    }
 
     public function saveFile(File $file){
         $saveMedium = $this->getSaveMedium($file->file_save_type);
@@ -91,6 +142,10 @@ class FileModel extends Model
 
     public static function checkSignature($signature, $data = []){
         return false;
+    }
+
+    public static function checkFileTask(FileTask $fileTask){
+        return time() < $fileTask->file_task_invalid_at;
     }
 
     public static function parseQueryId($string){

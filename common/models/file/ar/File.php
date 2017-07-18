@@ -16,6 +16,9 @@ class File extends ActiveRecord
 {
     public $file_source_path = '';
 
+    public static function tableName(){
+        return "{{%file}}";
+    }
 
 
     public function getFile_query_id(){
@@ -48,7 +51,16 @@ class File extends ActiveRecord
         return $attrs;
     }
 
-
+    public function scenarios(){
+        return [
+            'default' => [
+                'file_is_private', 'file_is_tmp', 'file_save_name', 'file_save_type', 'file_valid_time', 'file_source_path', 'file_category'
+            ],
+            'chunkupload' => [
+                'file_is_private', 'file_is_tmp', 'file_save_name', 'file_save_type', 'file_valid_time', 'file_category'
+            ]
+        ];
+    }
 
     public function rules(){
         return [
