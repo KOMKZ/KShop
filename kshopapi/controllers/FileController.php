@@ -13,6 +13,7 @@ use common\models\file\drivers\Oss;
 use yii\web\NotFoundHttpException;
 use yii\base\InvalidParamException;
 use yii\web\ForbiddenHttpException;
+use common\helpers\FileHelper;
 /**
  *
  */
@@ -116,8 +117,61 @@ class FileController extends Controller
                 $fileInfoFile = $chunkDir . '/file.txt';
                 file_put_contents($fileInfoFile, serialize($post));
             }
+            $chunkDir = FileModel::getFileChunkDir($fileTask);
+            if(empty($_FILES) || empty($_FILES['file']) || $_FILES["file"]["error"]){
+                return $this->error(null, Yii::t('app','没有文件数据/文件上传错误'));
+            }
+            $chunkFile = $chunkDir . '/file.' . $chunkIndex;
+            if(!file_exists($chunkFile) || $_FILES['file']['size'] != filesize($chunkFile)){
+                move_uploaded_file($_FILES['file']['tmp_name'], $chunkFile);
+            }
+            if($chunkIndex != $chunkTotal - 1){
+                return $this->succ(['chunk' => $chunkIndex]);
+            }
+            $finalFilePath = $chunkDir . '/file.final';
+            if(file_exists($finalFilePath)){
+                unlink($finalFilePath);
+            }
+            $finalFile = @fopen($chunkDir . '/file.final', "ab");
+            if(!$finalFile){
+                return $this->error('', Yii::t('app', '打开文件流失败'));
+            }
+            $i = 0;
+            while($i < $chunkTotal){
+                $in = @fopen($chunkDir . '/file.' . $i, "rb");
+                if(!$in){
+                    return $this->error('', Yii::t('app', '打开分片文件流失败'));
+                }
+                while ($buff = fread($in, 4096))fwrite($finalFile, $buff);
+                @fclose($in);
+                $i++;
+            }
+            @fclose($finalFile);
+            $fileInfo = unserialize(file_get_contents($chunkDir . '/file.txt'));
 
-            console(1);
+            //
+            $fileData = array_merge([
+                'file_source_path' => $finalFilePath
+            ], $fileInfo);
+            $file = $fileModel->createFile($fileData);
+            if(!$file){
+                list($code, $message) = $fileModel->getOneError();
+                return $this->error($code, $message);
+            }
+            $file = $fileModel->saveFile($file);
+            if(!$file){
+                list($code, $message) = $fileModel->getOneError();
+                return $this->error($code, $message);
+            }
+            $file = $fileModel->saveFileInDb($file);
+            if(!$file){
+                list($code, $message) = $fileModel->getOneError();
+                return $this->error($code, $message);
+            }
+            FileHelper::removeDirectory($chunkDir);
+            return $this->succ($file->toArray());
+
+
         }
     }
 

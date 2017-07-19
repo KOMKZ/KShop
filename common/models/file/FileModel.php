@@ -101,21 +101,7 @@ class FileModel extends Model
         return md5(microtime(true) . uniqid());
     }
 
-    public static function buildFileChunkDir(FileTask $fileTask){
-        $baseDir = Yii::getAlias('@app/runtime/file_chunk');
-        if(!is_dir($baseDir)){
-            FileHelper::createDirectory($baseDir);
-            //todo fix
-            chmod($baseDir, 0777);
-        }
-        $chunkDir = $baseDir . '/' . $fileTask->file_task_code;
-        if(!is_dir($chunkDir)){
-            FileHelper::createDirectory($chunkDir);
-            // todo fix
-            chmod($chunkDir, 0777);
-        }
-        return $chunkDir;
-    }
+
 
     public function saveFile(File $file){
         $saveMedium = $this->getSaveMedium($file->file_save_type);
@@ -160,7 +146,9 @@ class FileModel extends Model
             return [];
         }
     }
-
+    public static function getFileChunkDir(FileTask $fileTask){
+        return Yii::getAlias('@app/runtime/file_chunk/') . $fileTask->file_task_code;
+    }
     public static function getSaveMedium($type){
         switch ($type) {
             case Disk::NAME:
@@ -171,6 +159,21 @@ class FileModel extends Model
                 throw new InvalidParamException(Yii::t('app', "{$type} 不支持的存储类型"));
                 break;
         }
+    }
+    public static function buildFileChunkDir(FileTask $fileTask){
+        $baseDir = dirname(self::getFileChunkDir($fileTask));
+        if(!is_dir($baseDir)){
+            FileHelper::createDirectory($baseDir);
+            //todo fix
+            chmod($baseDir, 0777);
+        }
+        $chunkDir = self::getFileChunkDir($fileTask);
+        if(!is_dir($chunkDir)){
+            FileHelper::createDirectory($chunkDir);
+            // todo fix
+            chmod($chunkDir, 0777);
+        }
+        return $chunkDir;
     }
     public static function buildPrefix($value){
         return md5($value);
