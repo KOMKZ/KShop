@@ -3,11 +3,12 @@ var uploader = new plupload.Uploader({
 	url: 'http://localhost:8011/file/create',
     chunk_size: '100kb',
 	multipart_params: {
-		file_task_code: "0b89540e723abc1b030932715952aa5b",
 		file_save_type: "disk",
 		file_save_name: "中国地图一亿像素.jpg",
+		timestamp: '1500538759',
 		file_is_private: 0,
 		file_is_tmp: 0,
+		access_token: 'abc',
 	}
 });
 uploader.init();

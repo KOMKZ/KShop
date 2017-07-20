@@ -28,11 +28,11 @@ class FileController extends Controller
     public function actionChunkTaskCreate(){
         $fileModel = new FileModel();
         $post = Yii::$app->request->getBodyParams();
-        // todo 检查 access_token 的合法性
+        // todo 检查 access_token 的合法性,应该在数据库中检查
         if(empty($post['access_token'])){
-
+            return $this->error('', Yii::t('app', 'access_token不合法'));
         }
-        $fileTask = $fileModel->createFileChunkedUploadTask($fileInfo);
+        $fileTask = $fileModel->createFileChunkedUploadTask($post);
         if(!$fileTask){
             list($code, $message) = $fileModel->getOneError();
             return $this->error($code, $message);
@@ -68,7 +68,7 @@ class FileController extends Controller
             }
             return $this->succ($fileCopy->toArray());
 
-        }elseif(empty($post['file_task_code'])){
+        }elseif(empty($post['chunks'])){
             // 从文件流来上传, 不分片
             if(empty($_FILES) || empty($_FILES['file']) || $_FILES["file"]["error"]){
                 return $this->error(null, Yii::t('app','没有文件数据'));
@@ -102,11 +102,10 @@ class FileController extends Controller
             }
             // todo 考虑文件保存名称是否必须提供
             // todo sql太松散
-            $fileTask = FileTaskQuery::find()->
-                                       where(['file_task_code' => $post['file_task_code'], 'file_task_type' => FileTask::TASK_CHUNK_UPLOAD])->
-                                       one();
+            $fileInfo = $post;
+            $fileTask = FileTaskQuery::findOneCUByData($fileInfo);
             if(!$fileTask || !$fileModel::checkFileTask($fileTask)){
-                return $this->error('', Yii::t('app', "{$post['file_task_code']}分片任务不存在/文件任务已经失效"));
+                return $this->error('', Yii::t('app', "分片任务不存在/文件任务已经失效"));
             }
             $chunkIndex = (int)$post['chunk'];
             $chunkTotal = (int)$post['chunks'];
@@ -128,6 +127,7 @@ class FileController extends Controller
             $chunkFile = $chunkDir . '/file.' . $chunkIndex;
             $new = 0;
             if(!file_exists($chunkFile) || $_FILES['file']['size'] != filesize($chunkFile)){
+                sleep(1);
                 move_uploaded_file($_FILES['file']['tmp_name'], $chunkFile);
                 $new = 1;
             }

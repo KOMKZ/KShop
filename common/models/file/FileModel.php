@@ -9,8 +9,9 @@ use common\models\file\drivers\Disk;
 use common\models\file\drivers\Oss;
 use common\models\staticdata\ConstMap;
 use yii\helpers\FileHelper;
+use common\helpers\ArrayHelper;
 use yii\base\InvalidParamException;
-
+use yii\base\InvalidArgumentException;
 
 /**
  *
@@ -89,7 +90,7 @@ class FileModel extends Model
 
     public function createFileChunkedUploadTask($fileInfo = [], $validDuration = 86400){
         $fileTaskData = [
-            'file_task_code' => static::buildTaskUniqueString(),
+            'file_task_code' => static::buildTaskUniqueString('hash_post', $fileInfo),
             'file_task_invalid_at' => time() + $validDuration,
             'file_task_type' => FileTask::TASK_CHUNK_UPLOAD,
             'file_task_data' => json_encode($fileInfo),
@@ -97,8 +98,20 @@ class FileModel extends Model
         return $this->createFileTask($fileTaskData);
     }
 
-    protected static function buildTaskUniqueString(){
-        return md5(microtime(true) . uniqid());
+    public static function buildTaskUniqueString($type = 'hash_post', $data = []){
+        switch ($type) {
+            case 'hash_post':
+                $hashAttrs = array_merge(['access_token', 'timestamp'], (new File())->attributes());
+                foreach($data as $key => $value){
+                    if(!in_array($key, $hashAttrs)) unset($data[$key]);
+                }
+                return empty($data) ? null : md5(ArrayHelper::concatAsString($data));
+            case 'simple_uniqid':
+                return md5(microtime(true) . uniqid());
+            default:
+                throw new InvalidArgumentException(Yii::t("{$type}不支持的参数值"));
+                break;
+        }
     }
 
 
