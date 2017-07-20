@@ -7,7 +7,7 @@ use common\models\file\FileModel;
 use common\models\file\FileQuery;
 use common\models\file\FileTaskQuery;
 use common\models\file\ar\FileTask;
-use yii\helpers\ArrayHelper;
+use common\helpers\ArrayHelper;
 use common\models\file\drivers\Disk;
 use common\models\file\drivers\Oss;
 use yii\web\NotFoundHttpException;
@@ -27,7 +27,11 @@ class FileController extends Controller
 
     public function actionChunkTaskCreate(){
         $fileModel = new FileModel();
-        $fileInfo = [];
+        $post = Yii::$app->request->getBodyParams();
+        // todo 检查 access_token 的合法性
+        if(empty($post['access_token'])){
+
+        }
         $fileTask = $fileModel->createFileChunkedUploadTask($fileInfo);
         if(!$fileTask){
             list($code, $message) = $fileModel->getOneError();
@@ -119,14 +123,16 @@ class FileController extends Controller
             }
             $chunkDir = FileModel::getFileChunkDir($fileTask);
             if(empty($_FILES) || empty($_FILES['file']) || $_FILES["file"]["error"]){
-                return $this->error(null, Yii::t('app','没有文件数据/文件上传错误'));
+                return $this->error(null, Yii::t('app','没有文件数据/文件上传错误:'. $_FILES['file']['error']));
             }
             $chunkFile = $chunkDir . '/file.' . $chunkIndex;
+            $new = 0;
             if(!file_exists($chunkFile) || $_FILES['file']['size'] != filesize($chunkFile)){
                 move_uploaded_file($_FILES['file']['tmp_name'], $chunkFile);
+                $new = 1;
             }
             if($chunkIndex != $chunkTotal - 1){
-                return $this->succ(['chunk' => $chunkIndex]);
+                return $this->succ(['chunk' => $chunkIndex, 'new' => $new]);
             }
             $finalFilePath = $chunkDir . '/file.final';
             if(file_exists($finalFilePath)){

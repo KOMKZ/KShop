@@ -1,7 +1,7 @@
 var uploader = new plupload.Uploader({
 	browse_button: 'browse', // this can be an id of a DOM element or the DOM element itself
 	url: 'http://localhost:8011/file/create',
-    chunk_size: '400kb',
+    chunk_size: '100kb',
 	multipart_params: {
 		file_task_code: "0b89540e723abc1b030932715952aa5b",
 		file_save_type: "disk",
