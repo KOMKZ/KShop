@@ -12,6 +12,7 @@ use yii\helpers\FileHelper;
 use common\helpers\ArrayHelper;
 use yii\base\InvalidParamException;
 use yii\base\InvalidArgumentException;
+use common\models\file\FileTaskQuery;
 
 /**
  *
@@ -63,6 +64,83 @@ class FileModel extends Model
         $file->file_prefix = self::buildPrefix($file->file_category);
         $file->file_real_name = self::buildFileRealName($file);
         $file->file_valid_time = 1 == $file->file_is_tmp ? $file->file_valid_time : 0;
+        return $file;
+    }
+
+    public function createFilePart($fileInfo, $fileStream = null){
+        if(!isset($fileInfo['chunk']) || !isset($fileInfo['chunks']) || !is_numeric($fileInfo['chunk']) || !is_numeric($fileInfo['chunks'])){
+            $this->addError("", Yii::t('app', '分片上传参数不完整'));
+            return false;
+        }
+        $fileTask = FileTaskQuery::findOneCUByData($fileInfo);
+        if(!$fileTask || !static::checkFileTask($fileTask)){
+            $this->addError('', Yii::t('app', "分片任务不存在/文件任务已经失效"));
+            return false;
+        }
+        $chunkIndex = (int)$fileInfo['chunk'];
+        $chunkTotal = (int)$fileInfo['chunks'];
+        if(0 == $chunkIndex){
+            // 先验证文件信息
+            if(!$this->validateFileData($fileInfo, 'chunkupload')){
+                return $this->error($code, $message);
+            }
+            // 初始化分片目录
+            $chunkDir = static::buildFileChunkDir($fileTask);
+            $fileInfoFile = $chunkDir . '/file.txt';
+            file_put_contents($fileInfoFile, serialize($fileInfo));
+        }
+        $chunkDir = static::getFileChunkDir($fileTask);
+        if(empty($_FILES) || empty($_FILES['file']) || $_FILES["file"]["error"]){
+            $this->addError('', Yii::t('app','没有文件数据/文件上传错误:'. $_FILES['file']['error']));
+            return false;
+        }
+        $chunkFile = $chunkDir . '/file.' . $chunkIndex;
+        $new = 0;
+        if(!file_exists($chunkFile) || $_FILES['file']['size'] != filesize($chunkFile)){
+            move_uploaded_file($_FILES['file']['tmp_name'], $chunkFile);
+            $new = 1;
+        }
+        if($chunkIndex != $chunkTotal - 1){
+            return ['chunk' => $chunkIndex, 'new' => $new];
+        }
+        $finalFilePath = $chunkDir . '/file.final';
+        if(file_exists($finalFilePath)){
+            unlink($finalFilePath);
+        }
+        $finalFile = @fopen($chunkDir . '/file.final', "ab");
+        if(!$finalFile){
+            $this->addError('', Yii::t('app', '打开文件流失败'));
+            return false;
+        }
+        $i = 0;
+        while($i < $chunkTotal){
+            $in = @fopen($chunkDir . '/file.' . $i, "rb");
+            if(!$in){
+                return $this->error('', Yii::t('app', '打开分片文件流失败'));
+                return false;
+            }
+            while ($buff = fread($in, 4096))fwrite($finalFile, $buff);
+            @fclose($in);
+            $i++;
+        }
+        @fclose($finalFile);
+        $fileInfo = unserialize(file_get_contents($chunkDir . '/file.txt'));
+        $fileData = array_merge([
+            'file_source_path' => $finalFilePath
+        ], $fileInfo);
+        $file = $this->createFile($fileData);
+        if(!$file){
+            return false;
+        }
+        $file = $this->saveFile($file);
+        if(!$file){
+            return false;
+        }
+        $file = $this->saveFileInDb($file);
+        if(!$file){
+            return false;
+        }
+        FileHelper::removeDirectory($chunkDir);
         return $file;
     }
 
@@ -144,6 +222,7 @@ class FileModel extends Model
     }
 
     public static function checkFileTask(FileTask $fileTask){
+        return true;
         return time() < $fileTask->file_task_invalid_at;
     }
 
