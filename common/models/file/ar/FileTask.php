@@ -17,6 +17,7 @@ class FileTask extends ActiveRecord
     CONST TASK_CHUNK_UPLOAD = 'chunk';
 
     CONST STATUS_INIT = 'init';
+    CONST STATUS_INVALID = 'invalid';
 
     public static function tableName(){
         return "{{%file_task}}";

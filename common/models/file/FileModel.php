@@ -73,7 +73,7 @@ class FileModel extends Model
             return false;
         }
         $fileTask = FileTaskQuery::findOneCUByData($fileInfo);
-        if(!$fileTask || !static::checkFileTask($fileTask)){
+        if(!$fileTask || !static::checkFileTaskIsExpired($fileTask)){
             $this->addError('', Yii::t('app', "分片任务不存在/文件任务已经失效"));
             return false;
         }
@@ -192,7 +192,16 @@ class FileModel extends Model
         }
     }
 
-
+    public static function clearInvalidTask(){
+        return FileTask::deleteAll("
+            file_task_invalid_at <= :current_time
+            or
+            file_task_status = :status
+        ", [
+            ':current_time' => time(),
+            ':status' => FileTask::STATUS_INVALID
+        ]);
+    }
 
     public function saveFile(File $file){
         $saveMedium = $this->getSaveMedium($file->file_save_type);
@@ -221,7 +230,7 @@ class FileModel extends Model
         return false;
     }
 
-    public static function checkFileTask(FileTask $fileTask){
+    public static function checkFileTaskIsExpired(FileTask $fileTask){
         return true;
         return time() < $fileTask->file_task_invalid_at;
     }
