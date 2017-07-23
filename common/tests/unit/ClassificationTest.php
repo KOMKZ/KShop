@@ -1,12 +1,13 @@
 <?php
 namespace common\tests;
 use Yii;
-use common\models\classification\ClassificationModel;
+use common\models\goods\ClassificationModel;
+use common\models\goods\GoodsClassificationQuery;
+
 
 
 class ClassificationTest extends \Codeception\Test\Unit
 {
-    use \Codeception\Specify;
 
     /**
      * @var \common\tests\UnitTester
@@ -61,5 +62,13 @@ class ClassificationTest extends \Codeception\Test\Unit
             $this->debug($clsModel->getOneError());
         }
         $this->tester->assertEquals($childGoodsCls['g_cls_id'], $subChildGoodsCls['g_cls_pid']);
+
+        $childData = [
+            'g_cls_name' => 'php图书',
+            'g_cls_pid' => $subChildGoodsCls['g_cls_id']
+        ];
+        $result = $clsModel->createGoodsClassification($childData);
+
+        $this->tester->assertFalse($result);
     }
 }

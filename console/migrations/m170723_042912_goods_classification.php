@@ -1,7 +1,7 @@
 <?php
 
 use yii\db\Migration;
-use common\models\classification\ar\GoodsClassification;
+use common\models\goods\ar\GoodsClassification;
 
 class m170723_042912_goods_classification extends Migration
 {

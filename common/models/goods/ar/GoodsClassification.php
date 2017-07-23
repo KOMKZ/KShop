@@ -1,5 +1,5 @@
 <?php
-namespace common\models\classification\ar;
+namespace common\models\goods\ar;
 
 use Yii;
 use common\models\staticdata\ConstMap;
