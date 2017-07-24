@@ -12,7 +12,7 @@ use yii\helpers\FileHelper;
 use common\helpers\ArrayHelper;
 use yii\base\InvalidParamException;
 use yii\base\InvalidArgumentException;
-use common\models\file\FileTaskQuery;
+use common\models\file\query\FileTaskQuery;
 
 /**
  *

@@ -12,5 +12,7 @@ use common\models\goods\query\GoodsAttrQuery;
  */
 class ClassificationModel extends Model
 {
-    
+    public function addAttrsToClassification(){
+
+    }
 }
