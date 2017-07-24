@@ -19,7 +19,13 @@ use common\models\file\query\FileTaskQuery;
  */
 class FileModel extends Model
 {
-
+    /**
+     * 通过复制保存文件在存储媒介中
+     * 该方法暂时没有实现不同媒介之间的复制
+     * @param  File   $targetFile 目标文件
+     * @param  File   $originFile 源文件
+     * @return File   返回目标文件
+     */
     public function saveFileByCopy(File $targetFile, File $originFile){
         $saveMedium = $this->getSaveMedium($originFile->file_save_type);
         if($targetFile->file_save_type == $originFile->file_save_type){
@@ -49,6 +55,7 @@ class FileModel extends Model
      *   该属性将被用于设置文件下载时的响应头
      * - file_source_path: string, 文件的源路径
      *   注意文件路径必须携带完整的文件名称，包括文件后缀
+     *   当参数isCopy传为true的时候，说明可以不需要源路径
      * - file_category: string, 文件分类信息
      *   文件分类如
      *   /user/image/ 将会被转成 user/image
@@ -67,6 +74,16 @@ class FileModel extends Model
         return $file;
     }
 
+    /**
+     * 从文件分片中来上传新建一个文件
+     * @param  array $fileInfo   文件的分片信息和文件信息
+     * - chunk: 文件分片的序号
+     * - chunks: 文件分片的数量
+     * 其他支持的字段 @see createFile 方法
+     * 创建文件分片流将会先验证文件信息是否合法，在所有分片都到达之后合并分片文件，然后从本地保存到指定的存储媒介中。
+     * @param  array $fileStream 文件分片流，目前不支持
+     * @return File $file 所有文件分片上传成功，返回合并后的分片对象，使用createFile创建。
+     */
     public function createFilePart($fileInfo, $fileStream = null){
         if(!isset($fileInfo['chunk']) || !isset($fileInfo['chunks']) || !is_numeric($fileInfo['chunk']) || !is_numeric($fileInfo['chunks'])){
             $this->addError("", Yii::t('app', '分片上传参数不完整'));
@@ -144,6 +161,13 @@ class FileModel extends Model
         return $file;
     }
 
+    /**
+     * 验证文件数据的合法性
+     * 具体的验证规则@common\models\file\ar\File;
+     * @param  array $data     文件数据
+     * @param  string $scenario 验证场景
+     * @return File $file 验证成功将创建对应的文件对象返回
+     */
     public function validateFileData($data, $scenario = 'default'){
         $file = new File();
         $file->scenario = $scenario;
@@ -154,6 +178,18 @@ class FileModel extends Model
         return $file;
     }
 
+    /**
+     * 创建一个文件任务
+     * @param  array $data 文件任务数据
+     * - file_task_code:string,文件任务值，
+     * - file_task_type:string,任务类型,请使用常量代替
+     * - file_task_start_at:integer,开始时间
+     * - file_task_invalid_at:integer,失效时间
+     * - file_task_status:string,初始状态，请使用常量代替
+     * - file_task_data:string,相关数据
+     * @see common\models\file\ar\FileTask;了解具体的验证规则
+     * @return FileTask $fileTask 返回文件任务对象
+     */
     public function createFileTask($data){
         $fileTask = new FileTask();
         if(!$fileTask->load($data, '') || !$fileTask->validate()){
@@ -165,7 +201,15 @@ class FileModel extends Model
         }
         return $fileTask;
     }
-
+    /**
+    * 创建一个文件分片任务
+    * 创建一个文件分片上传需要有分片任务的支持，分片任务的业务号由分片上传的业务参数决定，
+    * 每次提交过来的参数经过一定的计算得到任务值，查找任务值存在且有效则允许上传的接续。
+    * @see self::buildTaskUniqueString 方法了解详细任务值的产生
+     * @param  array   $fileInfo      文件信息
+     * @param  integer $validDuration 分片任务有效时间
+     * @return FileTask                 文件任务
+     */
     public function createFileChunkedUploadTask($fileInfo = [], $validDuration = 86400){
         $fileTaskData = [
             'file_task_code' => static::buildTaskUniqueString('hash_post', $fileInfo),
@@ -176,6 +220,14 @@ class FileModel extends Model
         return $this->createFileTask($fileTaskData);
     }
 
+    /**
+     * 构建文件任务值
+     * @param  string $type 任务值产生方式
+     * 可以是以下值，
+     * hash_post:针对文件分片任务
+     * @param  array  $data 相关数据
+     * @return string       文件任务值
+     */
     public static function buildTaskUniqueString($type = 'hash_post', $data = []){
         switch ($type) {
             case 'hash_post':
@@ -192,6 +244,10 @@ class FileModel extends Model
         }
     }
 
+    /**
+     * 删除无效的文件任务
+     * @return integer 返回删除的文件数量
+     */
     public static function clearInvalidTask(){
         return FileTask::deleteAll("
             file_task_invalid_at <= :current_time
@@ -203,6 +259,11 @@ class FileModel extends Model
         ]);
     }
 
+    /**
+     * 保存文件到存储媒介
+     * @param  File   $file 文件对象
+     * @return File       返回文件对象
+     */
     public function saveFile(File $file){
         $saveMedium = $this->getSaveMedium($file->file_save_type);
         try {

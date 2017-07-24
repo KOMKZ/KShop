@@ -23,6 +23,9 @@ class GoodsAttr extends ActiveRecord
 
     public function rules(){
         return [
+            ['g_atr_code', 'string'],
+            ['g_atr_code', 'required'],
+
             ['g_atr_name', 'string'],
             ['g_atr_name', 'required'],
 
@@ -30,7 +33,7 @@ class GoodsAttr extends ActiveRecord
             ['g_atr_show_name', 'default', 'value' => function(){return $this->g_atr_name;}],
 
             ['g_atr_cls_id', 'integer'],
-            ['g_atr_pid', 'exist', 'targetAttribute' => 'g_atr_id', 'targetClass' => GoodsClassification::className()],
+            ['g_atr_cls_id', 'exist', 'targetAttribute' => 'g_cls_id', 'targetClass' => GoodsClassification::className()],
 
 
         ];
