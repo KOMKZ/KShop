@@ -27,7 +27,12 @@ class ClassificationTest extends \Codeception\Test\Unit
         console($data);
     }
 
-    // tests
+    public function testCreateGoods(){
+        Yii::$app->db->beginTransaction();
+        // 1 分类数据
+
+    }
+
     public function testCreateGoodsClassification()
     {
         Yii::$app->db->beginTransaction();

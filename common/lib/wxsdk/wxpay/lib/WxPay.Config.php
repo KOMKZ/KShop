@@ -22,10 +22,10 @@ class WxPayConfig
 	 * 获取地址：https://mp.weixin.qq.com/advanced/advanced?action=dev&t=advanced/dev&token=2005451881&lang=zh_CN
 	 * @var string
 	 */
-	static public APPID = '';
-	static public MCHID = '';
-	static public KEY = '';
-	static public APPSECRET = '';
+	static public $APPID = '';
+	static public $MCHID = '';
+	static public $KEY = '';
+	static public $APPSECRET = '';
 
 	//=======【证书路径设置】=====================================
 	/**
@@ -34,8 +34,8 @@ class WxPayConfig
 	 * API证书下载地址：https://pay.weixin.qq.com/index.php/account/api_cert，下载之前需要安装商户操作证书）
 	 * @var path
 	 */
-	static public SSLCERT_PATH = '';
-	static public SSLKEY_PATH = '';
+	static public $SSLCERT_PATH = '';
+	static public $SSLKEY_PATH = '';
 
 	//=======【curl代理设置】===================================
 	/**
@@ -44,8 +44,8 @@ class WxPayConfig
 	 * 默认CURL_PROXY_HOST=0.0.0.0和CURL_PROXY_PORT=0，此时不开启代理（如有需要才设置）
 	 * @var unknown_type
 	 */
-	static public CURL_PROXY_HOST = "0.0.0.0";//"10.152.18.220";
-	static public CURL_PROXY_PORT = 0;//8080;
+	const CURL_PROXY_HOST = "0.0.0.0";//"10.152.18.220";
+	const CURL_PROXY_PORT = 0;//8080;
 
 	//=======【上报信息配置】===================================
 	/**
@@ -55,5 +55,5 @@ class WxPayConfig
 	 * 上报等级，0.关闭上报; 1.仅错误出错上报; 2.全量上报
 	 * @var int
 	 */
-	static public REPORT_LEVENL = 1;
+	const REPORT_LEVENL = 1;
 }

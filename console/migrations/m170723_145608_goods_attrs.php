@@ -23,6 +23,23 @@ class m170723_145608_goods_attrs extends Migration
         );
         ";
         $this->execute($createTabelSql);
+        $this->batchInsert($this->getTableName(), [
+            'g_atr_id',
+            'g_atr_code',
+            'g_atr_name',
+            'g_atr_show_name',
+            'g_atr_cls_id',
+            'g_atr_created_at'
+            ] ,[
+            ['g_atr_id' => 1, 'g_atr_code' => 'model_number', 'g_atr_name' => '型号', 'g_atr_show_name' => '型号', 'g_atr_cls_id' => 1, 'g_atr_created_at' => time()],
+            ['g_atr_id' => 2, 'g_atr_code' => 'memory', 'g_atr_name' => '内存', 'g_atr_show_name' => '内存', 'g_atr_cls_id' => 2, 'g_atr_created_at' => time()],
+            ['g_atr_id' => 3, 'g_atr_code' => 'cpu', 'g_atr_name' => '处理器', 'g_atr_show_name' => '处理器', 'g_atr_cls_id' => 2, 'g_atr_created_at' => time()],
+            ['g_atr_id' => 4, 'g_atr_code' => 'memory', 'g_atr_name' => '内存', 'g_atr_show_name' => '内存', 'g_atr_cls_id' => 3, 'g_atr_created_at' => time()],
+            ['g_atr_id' => 5, 'g_atr_code' => 'color', 'g_atr_name' => '内存', 'g_atr_show_name' => '内存', 'g_atr_cls_id' => 3, 'g_atr_created_at' => time()],
+
+
+
+        ]);
         return true;
     }
     public function safeDown(){

@@ -21,6 +21,17 @@ class m170723_042912_goods_classification extends Migration
         );
         ";
         $this->execute($createTabelSql);
+        $this->batchInsert($this->getTableName(), [
+            'g_cls_id',
+            'g_cls_name',
+            'g_cls_show_name',
+            'g_cls_pid',
+            'g_cls_created_at'
+            ] ,[
+            ['g_cls_id' => 1, 'g_cls_name' => '数码产品', 'g_cls_show_name' => '数码产品', 'g_cls_pid' => 0, 'g_cls_created_at' => time()],
+            ['g_cls_id' => 2, 'g_cls_name' => '电脑', 'g_cls_show_name' => '电脑', 'g_cls_pid' => 1, 'g_cls_created_at' => time()],
+            ['g_cls_id' => 3, 'g_cls_name' => '手机', 'g_cls_show_name' => '手机', 'g_cls_pid' => 1, 'g_cls_created_at' => time()]
+        ]);
         return true;
     }
     public function safeDown(){

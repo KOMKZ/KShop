@@ -4,7 +4,7 @@ namespace kshopapi\controllers;
 use Yii;
 use common\controllers\ApiController as Controller;
 use common\models\file\FileModel;
-use common\models\file\query\FileQuery;
+use common\models\file\queryFileQuery;
 use common\models\file\ar\FileTask;
 use common\models\file\ar\File;
 use common\helpers\ArrayHelper;

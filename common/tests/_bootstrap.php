@@ -1,4 +1,6 @@
 <?php
+$_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'test');
 defined('YII_APP_BASE_PATH') or define('YII_APP_BASE_PATH', __DIR__.'/../../');
