@@ -10,7 +10,8 @@ use yii\db\ActiveRecord;
  */
 class GoodsAttr extends ActiveRecord
 {
-
+    const ATR_TYPE_SKU = 'sku';
+    const ATR_TYPE_INFO = 'info';
 
     public static function tableName(){
         return "{{%goods_attr}}";
@@ -31,6 +32,10 @@ class GoodsAttr extends ActiveRecord
 
             ['g_atr_show_name', 'string'],
             ['g_atr_show_name', 'default', 'value' => function(){return $this->g_atr_name;}],
+
+            ['g_atr_type', 'string'],
+            ['g_atr_type', 'in', 'range' => ConstMap::getConst('g_atr_type')],
+            ['g_atr_type', 'default', 'value' => static::ATR_TYPE_INFO],
 
             ['g_atr_cls_id', 'integer'],
             ['g_atr_cls_id', 'exist', 'targetAttribute' => 'g_cls_id', 'targetClass' => GoodsClassification::className()],

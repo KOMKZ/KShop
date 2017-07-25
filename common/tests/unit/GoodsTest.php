@@ -4,11 +4,13 @@ use Yii;
 use common\models\goods\ClassificationModel;
 use common\models\goods\GoodsAttrModel;
 use common\models\goods\query\GoodsAttrQuery;
+use common\models\goods\ar\Goods;
+use common\models\goods\GoodsModel;
+use common\models\goods\ar\GoodsAttr;
 
 
 class ClassificationTest extends \Codeception\Test\Unit
 {
-    use \Codeception\Specify;
 
     /**
      * @var \common\tests\UnitTester
@@ -30,11 +32,67 @@ class ClassificationTest extends \Codeception\Test\Unit
     public function testCreateGoods(){
         Yii::$app->db->beginTransaction();
         // 1 分类数据
-
+        $data = [
+            'g_cls_id' => 3,
+            'g_status' => Goods::STATUS_DRAFT,
+            'g_primary_name' => 'IPhone7',
+            'g_secondary_name' => 'IPhone7',
+            'g_start_at' => time(),
+            'g_end_at' => time(),
+            'g_create_uid' => 1,
+            'g_attrs' => [
+                [
+                    // 型号
+                    'g_atr_id' => 1,
+                    'g_atr_opts' => "IPhone7"
+                ],
+                [
+                    // 内存
+                    'g_atr_id' => 4,
+                    'g_atr_opts' => [
+                        [
+                            'g_opt_name' => '32G',
+                        ],
+                        [
+                            'g_opt_name' => '128G',
+                        ],
+                        [
+                            'g_opt_name' => '256G',
+                        ],
+                    ]
+                ],
+                [
+                    // 颜色
+                    'g_atr_id' => 5,
+                    'g_atr_opts' => [
+                        [
+                            'g_opt_name' => '金色',
+                            'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
+                        ],
+                        [
+                            'g_opt_name' => '白色',
+                            'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
+                        ],
+                        [
+                            'g_opt_name' => '亮黑色',
+                            'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
+                        ],
+                    ]
+                ]
+            ],
+            'g_detail' => "IPhone7很长的富文本介绍",
+        ];
+        $gModel = new GoodsModel();
+        $goods = $gModel->createGoods($data);
+        if(!$goods){
+            console($gModel->getOneError());
+        }
+        console($goods->toArray());
     }
 
     public function testCreateGoodsClassification()
     {
+        return ;
         Yii::$app->db->beginTransaction();
         $clsModel = new ClassificationModel();
         $data = [
