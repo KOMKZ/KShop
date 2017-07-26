@@ -9,6 +9,7 @@ use WxPayApi;
 use WxPayRefund;
 use WxPayRefundQuery;
 use WxPayCloseOrder;
+use WxPayResults;
 use common\models\Model;
 use yii\base\InvalidArgumentException;
 /**
@@ -49,8 +50,60 @@ class Wxpay extends Model
         ];
     }
 
-    public function handleNotify($notifyData, $params = []){
+    public function sayFail($data = []){
+        $notify = new \WxPayNotify();
+        $notify->SetReturn_code("FAIL");
+        $notify->SetReturn_msg('');
+        return $notify->ReplyNotify(false);
+    }
 
+    public function saySucc($data){
+        $notify = new \WxPayNotify();
+        $notify->SetReturn_code("SUCCESS");
+        $notify->SetReturn_msg("OK");
+        return $notify->ReplyNotify(false);
+    }
+
+    public function handleNotify($notifyData, $params = []){
+        $result = [
+            'code' => 1,
+            'error' => '',
+            'errno' => '',
+            'third_order' => null,
+            'trans_number' => null,
+            'trans_is_payed' => false,
+            'notify_data_origin' => null,
+            'notify_data_parse' => null,
+            'type' => static::NAME
+        ];
+        $xml = empty($notifyData) ? $GLOBALS['HTTP_RAW_POST_DATA'] : $notifyData;
+        try {
+            $result['notify_data_origin'] = $xml;
+            $data = WxPayResults::Init($xml);
+            $result['notify_data_parse'] = $data;
+            if(empty($data['out_trade_no'])){
+                $result['errno'] = PayModel::NOTIFY_INVALID;
+                $result['error'] = Yii::t('app', "微信通知数据out_trade_no不存在");
+                return $result;
+            }
+            $thirdOrder = $this->queryOrder(['trans_number' => $data['out_trade_no']]);
+            if(!$thirdOrder){
+                list($code, $error) = $this->getOneError();
+                $result['error'] = $error;
+                $result['errno'] = PayModel::NOTIFY_ORDER_INVALID;
+                return $result;
+            }
+            $result['code'] = 0;
+            $result['third_order'] = $thirdOrder;
+            $result['trans_number'] = $data['out_trade_no'];
+            $result['trans_is_payed'] = $this->checkOrderIsPayed($thirdOrder);
+            return $result;
+        } catch (\WxPayException $e){
+            $result['error'] = $e->errorMessage();
+            return $result;
+        }
+
+        return call_user_func($callback, $result);
     }
 
     public function queryRefund($data){
@@ -69,11 +122,10 @@ class Wxpay extends Model
         }
     }
 
-    public function checkOrderIsRefunded($data){
-        $result = $this->queryRefund($data);
-        if($result
+    public function checkOrderIsRefunded($thirdRefund){
+        if($thirdRefund
             //todo
-           && in_array($result['refund_status_0'], ['SUCCESS'])
+           && in_array($thirdRefund['refund_status_0'], ['SUCCESS'])
         ){
             return true;
         }
@@ -133,15 +185,16 @@ class Wxpay extends Model
         }
     }
 
-    public function checkOrderIsPayed($data){
-        $result = $this->queryOrder($data);
-        if($result
-            && in_array($result['trade_state'], ['SUCCESS']))
+    public function checkOrderIsPayed($thirdOrder){
+        if($thirdOrder
+            && in_array($thirdOrder['trade_state'], ['SUCCESS']))
         {
             return true;
         }
         return false;
     }
+
+
     public function createOrder($data, $type){
         try {
             switch ($type) {

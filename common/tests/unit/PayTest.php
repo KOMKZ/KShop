@@ -89,7 +89,21 @@ class PayTest extends \Codeception\Test\Unit
         $result = $wxpay->checkOrderIsRefunded(['trans_number' => $num]);
         return $this->assertEquals(true, !empty($result));
     }
-
+    public function testCreate(){
+        $wxpay = PayModel::getPayment(Wxpay::NAME);
+        $data = [
+            'trans_body' => '测试数据内容说明',
+            'trans_detail' => '测试数据内容详细',
+            'trans_total_fee' => 1,
+            'trans_start_at' => time(),
+            'trans_invalid_at' => time() + 3600,
+        ];
+        $num1 = 'ceshi' . mt_rand(111111111,999999999);
+        $data['trans_number'] = $num1;
+        $data['trans_module_number'] = 'ceshi' . mt_rand(111111111,999999999);
+        $result = $wxpay->createOrder($data, Wxpay::MODE_NATIVE);
+        console($num1, $result['master_data']);
+    }
     public function testRefund(){
         return ;
         // $wxpay = PayModel::getPayment(Wxpay::NAME);

@@ -11,7 +11,8 @@ use yii\base\InvalidArgumentException;
  */
 class PayModel extends Model
 {
-
+    CONST NOTIFY_INVALID = 'notify_invalid';
+    CONST NOTIFY_ORDER_INVALID = 'notify_order_invalid';
     public static function getPayment($type){
         switch ($type) {
             case Wxpay::NAME:
