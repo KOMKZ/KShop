@@ -33,8 +33,10 @@ class GoodsAttr extends ActiveRecord
             ['g_atr_show_name', 'string'],
             ['g_atr_show_name', 'default', 'value' => function(){return $this->g_atr_name;}],
 
+            ['g_atr_opt_img', 'default', 'value' => 0],
+
             ['g_atr_type', 'string'],
-            ['g_atr_type', 'in', 'range' => ConstMap::getConst('g_atr_type')],
+            ['g_atr_type', 'in', 'range' => ConstMap::getConst('g_atr_type', true)],
             ['g_atr_type', 'default', 'value' => static::ATR_TYPE_INFO],
 
             ['g_atr_cls_id', 'integer'],
