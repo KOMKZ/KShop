@@ -140,6 +140,7 @@ class Wxpay extends Model
             if(!$this->checkResultIsValid($result)){
                 return false;
             }
+            // todo check result
             return $result;
         } catch (\Exception $e) {
             Yii::error($e);
@@ -240,7 +241,7 @@ class Wxpay extends Model
     public function createAppOrder($data){
         try {
             $input = new WxPayUnifiedOrder();
-            $input->SetBody($data['trans_body']);
+            $input->SetBody($data['trans_title']);
             $input->SetOut_trade_no($data['trans_number']);
             $input->SetTotal_fee($data['trans_total_fee']);
             $input->SetTime_start(date("YmdHis", $data['trans_start_at']));
@@ -273,7 +274,7 @@ class Wxpay extends Model
 
     public function createNativeOrder($data){
         $input = new WxPayUnifiedOrder();
-        $input->SetBody($data['trans_body']);
+        $input->SetBody($data['trans_title']);
         $input->SetOut_trade_no($data['trans_number']);
         $input->SetTotal_fee($data['trans_total_fee']);
         $input->SetTime_start(date("YmdHis", $data['trans_start_at']));

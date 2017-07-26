@@ -18,7 +18,7 @@ class PayModel extends Model
             case Wxpay::NAME:
                 return Yii::$app->wxpay;
             case AliPay::NAME:
-                break;
+                return Yii::$app->alipay;
             default:
                 throw new InvalidArgumentException(Yii::t('app', "{$type}不支持的支付类型"));
                 break;

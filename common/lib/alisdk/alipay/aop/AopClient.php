@@ -5,7 +5,7 @@ require_once 'AopEncrypt.php';
 class AopClient {
 	//应用ID
 	public $appId;
-	
+
 	//私钥文件路径
 	public $rsaPrivateKeyFilePath;
 
@@ -127,7 +127,7 @@ class AopClient {
 			$res = openssl_get_privatekey($priKey);
 		}
 
-		($res) or die('您使用的私钥格式错误，请检查RSA私钥配置'); 
+		($res) or die('您使用的私钥格式错误，请检查RSA私钥配置');
 
 		if ("RSA2" == $signType) {
 			openssl_sign($data, $sign, $res, OPENSSL_ALGO_SHA256);
@@ -145,10 +145,10 @@ class AopClient {
     /**
      * RSA单独签名方法，未做字符串处理,字符串处理见getSignContent()
      * @param $data 待签名字符串
-     * @param $privatekey 商户私钥，根据keyfromfile来判断是读取字符串还是读取文件，false:填写私钥字符串去回车和空格 true:填写私钥文件路径 
-     * @param $signType 签名方式，RSA:SHA1     RSA2:SHA256 
+     * @param $privatekey 商户私钥，根据keyfromfile来判断是读取字符串还是读取文件，false:填写私钥字符串去回车和空格 true:填写私钥文件路径
+     * @param $signType 签名方式，RSA:SHA1     RSA2:SHA256
      * @param $keyfromfile 私钥获取方式，读取字符串还是读文件
-     * @return string 
+     * @return string
      * @author mengyu.wh
      */
 	public function alonersaSign($data,$privatekey,$signType = "RSA",$keyfromfile=false) {
@@ -164,7 +164,7 @@ class AopClient {
 			$res = openssl_get_privatekey($priKey);
 		}
 
-		($res) or die('您使用的私钥格式错误，请检查RSA私钥配置'); 
+		($res) or die('您使用的私钥格式错误，请检查RSA私钥配置');
 
 		if ("RSA2" == $signType) {
 			openssl_sign($data, $sign, $res, OPENSSL_ALGO_SHA256);
@@ -272,16 +272,16 @@ class AopClient {
     /**
      * 生成用于调用收银台SDK的字符串
      * @param $request SDK接口的请求参数对象
-     * @return string 
+     * @return string
      * @author guofa.tgf
      */
 	public function sdkExecute($request) {
-		
+
 		$this->setupCharsets($request);
 
 		$params['app_id'] = $this->appId;
 		$params['method'] = $request->getApiMethodName();
-		$params['format'] = $this->format; 
+		$params['format'] = $this->format;
 		$params['sign_type'] = $this->signType;
 		$params['timestamp'] = date("Y-m-d H:i:s");
 		$params['alipay_sdk'] = $this->alipaySdkVersion;
@@ -304,7 +304,7 @@ class AopClient {
 		foreach ($params as &$value) {
 			$value = $this->characet($value, $params['charset']);
 		}
-		
+
 		return http_build_query($params);
 	}
 
@@ -377,7 +377,7 @@ class AopClient {
 
 		//print_r($apiParams);
 		$totalParams = array_merge($apiParams, $sysParams);
-		
+
 		//待签名字符串
 		$preSignStr = $this->getSignContent($totalParams);
 
@@ -385,12 +385,12 @@ class AopClient {
 		$totalParams["sign"] = $this->generateSign($totalParams, $this->signType);
 
 		if ("GET" == strtoupper($httpmethod)) {
-			
+
 			//value做urlencode
 			$preString=$this->getSignContentUrlencode($totalParams);
 			//拼接GET请求串
 			$requestUrl = $this->gatewayUrl."?".$preString;
-			
+
 			return $requestUrl;
 		} else {
 			//拼接表单字符串
@@ -408,7 +408,7 @@ class AopClient {
      * @return 提交表单HTML文本
      */
 	protected function buildRequestForm($para_temp) {
-		
+
 		$sHtml = "<form id='alipaysubmit' name='alipaysubmit' action='".$this->gatewayUrl."?charset=".trim($this->postCharset)."' method='POST'>";
 		while (list ($key, $val) = each ($para_temp)) {
 			if (false === $this->checkEmpty($val)) {
@@ -421,9 +421,9 @@ class AopClient {
 
 		//submit按钮控件请不要含有name属性
         $sHtml = $sHtml."<input type='submit' value='ok' style='display:none;''></form>";
-		
+
 		$sHtml = $sHtml."<script>document.forms['alipaysubmit'].submit();</script>";
-		
+
 		return $sHtml;
 	}
 
@@ -584,7 +584,7 @@ class AopClient {
 	 * @return string
 	 */
 	function characet($data, $targetCharset) {
-		
+
 		if (!empty($data)) {
 			$fileType = $this->fileCharset;
 			if (strcasecmp($fileType, $targetCharset) != 0) {
@@ -671,7 +671,7 @@ class AopClient {
 			$res = openssl_get_publickey($pubKey);
 		}
 
-		($res) or die('支付宝RSA公钥错误。请检查公钥文件格式是否正确');  
+		($res) or die('支付宝RSA公钥错误。请检查公钥文件格式是否正确');
 
 		//调用openssl内置方法验签，返回bool值
 
@@ -689,7 +689,7 @@ class AopClient {
 		return $result;
 	}
 
-/** 
+/**
 	 *  在使用本方法前，必须初始化AopClient且传入公私钥参数。
 	 *  公钥是否是读取字符串还是读取文件，是根据初始化传入的值判断的。
 	 **/
@@ -709,7 +709,7 @@ class AopClient {
 		return $bizContent;
 	}
 
-	/** 
+	/**
 	 *  在使用本方法前，必须初始化AopClient且传入公私钥参数。
 	 *  公钥是否是读取字符串还是读取文件，是根据初始化传入的值判断的。
 	 **/
@@ -738,7 +738,7 @@ class AopClient {
 		return $response;
 	}
 
-	/** 
+	/**
 	 *  在使用本方法前，必须初始化AopClient且传入公私钥参数。
 	 *  公钥是否是读取字符串还是读取文件，是根据初始化传入的值判断的。
 	 **/
@@ -756,7 +756,7 @@ class AopClient {
 			$res = openssl_get_publickey($pubKey);
 		}
 
-		($res) or die('支付宝RSA公钥错误。请检查公钥文件格式是否正确'); 
+		($res) or die('支付宝RSA公钥错误。请检查公钥文件格式是否正确');
 		$blocks = $this->splitCN($data, 0, 30, $charset);
 		$chrtext  = null;
 		$encodes  = array();
@@ -771,12 +771,12 @@ class AopClient {
 		return base64_encode($chrtext);
 	}
 
-	/** 
+	/**
 	 *  在使用本方法前，必须初始化AopClient且传入公私钥参数。
 	 *  公钥是否是读取字符串还是读取文件，是根据初始化传入的值判断的。
 	 **/
 	public function rsaDecrypt($data, $rsaPrivateKeyPem, $charset) {
-		
+
 		if($this->checkEmpty($this->rsaPrivateKeyFilePath)){
 			//读字符串
 			$priKey=$this->rsaPrivateKey;
@@ -787,7 +787,7 @@ class AopClient {
 			$priKey = file_get_contents($this->rsaPrivateKeyFilePath);
 			$res = openssl_get_privatekey($priKey);
 		}
-		($res) or die('您使用的私钥格式错误，请检查RSA私钥配置'); 
+		($res) or die('您使用的私钥格式错误，请检查RSA私钥配置');
 		//转换为openssl格式密钥
 		$decodes = explode(',', $data);
 		$strnull = "";

@@ -10,3 +10,4 @@ require(dirname(__DIR__) . '/lib/wxsdk/wxpay/lib/WxPay.Exception.php');
 require(dirname(__DIR__) . '/lib/wxsdk/wxpay/lib/WxPay.Data.php');
 require(dirname(__DIR__) . '/lib/wxsdk/wxpay/lib/WxPay.Notify.php');
 require(dirname(__DIR__) . '/lib/wxsdk/wxpay/lib/WxPay.Api.php');
+require(dirname(__DIR__) . '/lib/alisdk/alipay/AopSdk.php');

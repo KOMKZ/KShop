@@ -4,7 +4,7 @@ use common\models\pay\PayModel;
 use common\models\pay\payment\Wxpay;
 
 
-class PayTest extends \Codeception\Test\Unit
+class WxpayTest extends \Codeception\Test\Unit
 {
     /**
      * @var \common\tests\UnitTester
@@ -27,7 +27,7 @@ class PayTest extends \Codeception\Test\Unit
         return ;
         $wxpay = PayModel::getPayment(Wxpay::NAME);
         $data = [
-            'trans_body' => '测试数据内容说明',
+            'trans_title' => '测试数据内容说明',
             'trans_detail' => '测试数据内容详细',
             'trans_total_fee' => 1,
             'trans_start_at' => time(),
@@ -59,7 +59,7 @@ class PayTest extends \Codeception\Test\Unit
         return ;
         // $wxpay = PayModel::getPayment(Wxpay::NAME);
         // $data = [
-        //     'trans_body' => '测试数据内容说明',
+        //     'trans_title' => '测试数据内容说明',
         //     'trans_detail' => '测试数据内容详细',
         //     'trans_total_fee' => 1,
         //     'trans_start_at' => time(),
@@ -92,7 +92,7 @@ class PayTest extends \Codeception\Test\Unit
     public function testCreate(){
         $wxpay = PayModel::getPayment(Wxpay::NAME);
         $data = [
-            'trans_body' => '测试数据内容说明',
+            'trans_title' => '测试数据内容说明',
             'trans_detail' => '测试数据内容详细',
             'trans_total_fee' => 1,
             'trans_start_at' => time(),
@@ -108,7 +108,7 @@ class PayTest extends \Codeception\Test\Unit
         return ;
         // $wxpay = PayModel::getPayment(Wxpay::NAME);
         // $data = [
-        //     'trans_body' => '测试数据内容说明',
+        //     'trans_title' => '测试数据内容说明',
         //     'trans_detail' => '测试数据内容详细',
         //     'trans_total_fee' => 1,
         //     'trans_start_at' => time(),
