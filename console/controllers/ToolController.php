@@ -27,4 +27,8 @@ class ToolController extends Controller{
             sprintf("<?php\nreturn %s;", VarDumper::export($config))
         );
     }
+    public function actionDecode($string = '', $type = 'json'){
+        echo json_decode('"' . $string . '"');
+        echo "\n";
+    }
 }

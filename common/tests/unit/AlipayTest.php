@@ -22,7 +22,7 @@ class WxpayTest extends \Codeception\Test\Unit
     }
     public function testRefund(){
         return ;
-        $num1 = 'ceshi388717177';
+        $num1 = 'ceshi638224374';
         $data = [
             'trans_number' => $num1,
             'trans_total_fee' => 1,
@@ -32,28 +32,31 @@ class WxpayTest extends \Codeception\Test\Unit
         ];
         $payment = PayModel::getPayment(Alipay::NAME);
         $result = $payment->createRefund($data);
-        // console($result, payment->getOneError());
+        // console($result, $payment->getOneError());
         $this->assertEquals(true, !empty($result));
     }
     public function testCloseOrder(){
         return ;
-        $num1 = 'ceshi209683313';
+        $num1 = 'ceshi638224374';
         $payment = PayModel::getPayment(Alipay::NAME);
         $result = $payment->closeOrder(['trans_number' => $num1]);
+        // console($result, $payment->getOneError());
         $this->assertEquals(true, !empty($result));
     }
     public function testQueryRefund(){
         // return ;
-        $num1 = 'ceshi388717177';
+        $num1 = 'ceshi638224374';
         $payment = PayModel::getPayment(Alipay::NAME);
         $result = $payment->queryRefund(['trans_number' => $num1]);;
         console($result, $payment->getOneError());
+        $this->assertEquals(true, !empty($result));
     }
     public function testQueryOrder(){
         return ;
-        $num1 = 'ceshi209683313';
+        $num1 = 'ceshi638224374';
         $payment = PayModel::getPayment(Alipay::NAME);
         $result = $payment->queryOrder(['trans_number' => $num1]);
+        // console($result);
         $this->assertEquals(true, !empty($result));
         $this->assertEquals(false, $payment->checkOrderIsPayed($result));
     }
