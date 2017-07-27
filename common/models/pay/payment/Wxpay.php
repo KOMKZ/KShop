@@ -100,6 +100,7 @@ class Wxpay extends Model
             return $result;
         } catch (\WxPayException $e){
             $result['error'] = $e->errorMessage();
+            $result['errno'] = PayModel::NOTIFY_EXCEPTION;
             return $result;
         }
 

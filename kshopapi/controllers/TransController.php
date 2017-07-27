@@ -13,7 +13,7 @@ use common\models\pay\PayModel;
  */
 class TransController extends Controller{
     public function actionNotify($type){
-        $notifyData = Yii::$app->request->getBodyParams();
+       $notifyData = Yii::$app->request->getBodyParams();
        $payment = PayModel::getPayment($type);
        $result = $payment->handleNotify($notifyData, []);
        if($result['code'] > 0){

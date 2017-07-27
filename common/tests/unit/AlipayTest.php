@@ -21,8 +21,8 @@ class WxpayTest extends \Codeception\Test\Unit
         console($data);
     }
     public function testRefund(){
-        // return ;
-        $num1 = 'ceshi3887171771';
+        return ;
+        $num1 = 'ceshi388717177';
         $data = [
             'trans_number' => $num1,
             'trans_total_fee' => 1,
@@ -32,7 +32,7 @@ class WxpayTest extends \Codeception\Test\Unit
         ];
         $payment = PayModel::getPayment(Alipay::NAME);
         $result = $payment->createRefund($data);
-        console($result, $payment->getOneError());
+        // console($result, payment->getOneError());
         $this->assertEquals(true, !empty($result));
     }
     public function testCloseOrder(){
@@ -42,7 +42,15 @@ class WxpayTest extends \Codeception\Test\Unit
         $result = $payment->closeOrder(['trans_number' => $num1]);
         $this->assertEquals(true, !empty($result));
     }
+    public function testQueryRefund(){
+        // return ;
+        $num1 = 'ceshi388717177';
+        $payment = PayModel::getPayment(Alipay::NAME);
+        $result = $payment->queryRefund(['trans_number' => $num1]);;
+        console($result, $payment->getOneError());
+    }
     public function testQueryOrder(){
+        return ;
         $num1 = 'ceshi209683313';
         $payment = PayModel::getPayment(Alipay::NAME);
         $result = $payment->queryOrder(['trans_number' => $num1]);
@@ -50,7 +58,7 @@ class WxpayTest extends \Codeception\Test\Unit
         $this->assertEquals(false, $payment->checkOrderIsPayed($result));
     }
     public function testCreateUrlOrder(){
-        // return ;
+        return ;
         $payment = PayModel::getPayment(Alipay::NAME);
         $data = [
             'trans_title' => '测试数据内容说明',
