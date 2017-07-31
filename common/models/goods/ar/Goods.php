@@ -42,6 +42,8 @@ class Goods extends ActiveRecord
 
     public function rules(){
         return [
+            ['g_attrs', 'required'],
+
             ['g_cls_id', 'required'],
             ['g_cls_id', 'exist', 'targetAttribute' => 'g_cls_id', 'targetClass' => GoodsClassification::className()],
 

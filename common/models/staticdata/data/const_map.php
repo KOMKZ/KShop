@@ -28,5 +28,9 @@ return [
     'g_atr_type' => [
         \common\models\goods\ar\GoodsAttr::ATR_TYPE_INFO => \Yii::t('app', '信息属性'),
         \common\models\goods\ar\GoodsAttr::ATR_TYPE_SKU => \Yii::t('app', 'sku属性')
+    ],
+    'g_atr_cls_type' => [
+        \common\models\goods\ar\GoodsAttr::ATR_CLS_TYPE_CLS => Yii::t('app', "属性直属于分类"),
+        \common\models\goods\ar\GoodsAttr::ATR_CLS_TYPE_GOODS => Yii::t('app', "属性直属于商品"),
     ]
 ];

@@ -11,9 +11,7 @@ class m170730_081356_notify_result extends Migration
 
     public function safeDown()
     {
-        echo "m170730_081356_notify_result cannot be reverted.\n";
-
-        return false;
+        return true;
     }
 
     /*

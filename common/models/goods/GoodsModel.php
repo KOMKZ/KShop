@@ -3,6 +3,7 @@ namespace common\models\goods;
 
 use Yii;
 use common\models\Model;
+use common\models\goods\GoodsAttrModel;
 use common\models\goods\ar\Goods;
 use common\models\goods\query\GoodsAttrQuery;
 use common\helpers\ArrayHelper;
@@ -13,10 +14,26 @@ use common\helpers\ArrayHelper;
 class GoodsModel extends Model
 {
     public function createGoods($data){
+        Yii::$app->db->beginTransaction();
         if(!$goods = $this->validateCreateGoodsData($data)){
             return false;
         }
+        // fix todo
+        $goods->g_id = 1;
         // 使用GoodsAttrModel 来创建 商品属性, 同时创建属性选项值
+            // 首先选出新的属性和存在的属性
+        $gAttrModel = new GoodsAttrModel();
+
+        $gAttrs = $gAttrModel->createGoodsAttrs([
+            'attrs' => $data['g_attrs']
+        ], $goods);
+        if(!$gAttrs){
+            list($code, $error) = $gAttrModel->getOneError();
+            $this->addError($code, $error);
+            return false;
+        }
+
+
 
         // 创建sku记录，当然预览sku记录是另外一个方法
 
@@ -35,10 +52,7 @@ class GoodsModel extends Model
             $this->addError('', $this->getOneErrMsg($goods));
             return false;
         }
-        if(!is_array($data['g_attrs'])){
-            $this->addError('', Yii::t('app', 'g_attrs必须是一个数组'));
-            return false;
-        }
+
 
         return $goods;
     }

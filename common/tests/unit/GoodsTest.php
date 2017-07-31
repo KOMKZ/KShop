@@ -42,6 +42,24 @@ class ClassificationTest extends \Codeception\Test\Unit
             'g_create_uid' => 1,
             'g_attrs' => [
                 [
+                    // 颜色
+                    'g_atr_id' => 5,
+                    'g_atr_opts' => [
+                        [
+                            'g_opt_name' => '金色',
+                            'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
+                        ],
+                        [
+                            'g_opt_name' => '白色',
+                            'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
+                        ],
+                        [
+                            'g_opt_name' => '亮黑色',
+                            'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
+                        ],
+                    ]
+                ],
+                [
                     // 型号
                     'g_atr_id' => 1,
                     'g_atr_opts' => "IPhone7"
@@ -62,19 +80,18 @@ class ClassificationTest extends \Codeception\Test\Unit
                     ]
                 ],
                 [
-                    // 颜色
-                    'g_atr_id' => 5,
+                    // 是否带logo
+                    'g_atr_name' => "自定义logo",
+                    'g_atr_opt_img' => 1,
+                    'g_atr_type' => 'has_logo',
+                    'g_atr_type' => 'sku',
                     'g_atr_opts' => [
                         [
-                            'g_opt_name' => '金色',
+                            'g_opt_name' => '暗黑logo',
                             'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
                         ],
                         [
-                            'g_opt_name' => '白色',
-                            'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
-                        ],
-                        [
-                            'g_opt_name' => '亮黑色',
+                            'g_opt_name' => '强色logo',
                             'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
                         ],
                     ]
@@ -129,11 +146,11 @@ class ClassificationTest extends \Codeception\Test\Unit
 
         // 测试属性插入
         $attrs = [
-            ['g_atr_code' => 'press_publish', 'g_atr_name' => '出版社', 'g_atr_cls_id' => $goodsCls['g_cls_id']],
-            ['g_atr_code' => 'call_number', 'g_atr_name' => '书号', 'g_atr_cls_id' => $goodsCls['g_cls_id']],
-            ['g_atr_code' => 'publication_date', 'g_atr_name' => '出版日期', 'g_atr_cls_id' => $goodsCls['g_cls_id']],
-            ['g_atr_code' => 'theme', 'g_atr_name' => '题材', 'g_atr_cls_id' => $goodsCls['g_cls_id']],
-            ['g_atr_code' => 'pages', 'g_atr_name' => '页数', 'g_atr_cls_id' => $goodsCls['g_cls_id']]
+            ['g_atr_cls_type' => 'cls', 'g_atr_code' => 'press_publish', 'g_atr_name' => '出版社', 'g_atr_cls_id' => $goodsCls['g_cls_id']],
+            ['g_atr_cls_type' => 'cls', 'g_atr_code' => 'call_number', 'g_atr_name' => '书号', 'g_atr_cls_id' => $goodsCls['g_cls_id']],
+            ['g_atr_cls_type' => 'cls', 'g_atr_code' => 'publication_date', 'g_atr_name' => '出版日期', 'g_atr_cls_id' => $goodsCls['g_cls_id']],
+            ['g_atr_cls_type' => 'cls', 'g_atr_code' => 'theme', 'g_atr_name' => '题材', 'g_atr_cls_id' => $goodsCls['g_cls_id']],
+            ['g_atr_cls_type' => 'cls', 'g_atr_code' => 'pages', 'g_atr_name' => '页数', 'g_atr_cls_id' => $goodsCls['g_cls_id']]
         ];
         $gAtrModel = new GoodsAttrModel();
         $rowsNum = $gAtrModel->createAttrs($attrs);
@@ -143,8 +160,8 @@ class ClassificationTest extends \Codeception\Test\Unit
         $this->tester->assertEquals(count($attrs), $rowsNum);
 
         $attrs = [
-            ['g_atr_code' => 'code01', 'g_atr_name' => '作者02', 'g_atr_cls_id' => $childGoodsCls['g_cls_id']],
-            ['g_atr_code' => 'code02', 'g_atr_name' => '作者03', 'g_atr_cls_id' => $childGoodsCls['g_cls_id']],
+            ['g_atr_cls_type' => 'cls', 'g_atr_code' => 'code01', 'g_atr_name' => '作者02', 'g_atr_cls_id' => $childGoodsCls['g_cls_id']],
+            ['g_atr_cls_type' => 'cls', 'g_atr_code' => 'code02', 'g_atr_name' => '作者03', 'g_atr_cls_id' => $childGoodsCls['g_cls_id']],
         ];
         $gAtrModel = new GoodsAttrModel();
         $rowsNum = $gAtrModel->createAttrs($attrs);
@@ -155,8 +172,8 @@ class ClassificationTest extends \Codeception\Test\Unit
 
 
         $attrs = [
-            ['g_atr_code' => 'code03', 'g_atr_name' => '出版社02', 'g_atr_cls_id' => $subChildGoodsCls['g_cls_id']],
-            ['g_atr_code' => 'code04', 'g_atr_name' => '出版社03', 'g_atr_cls_id' => $subChildGoodsCls['g_cls_id']],
+            ['g_atr_cls_type' => 'cls', 'g_atr_code' => 'code03', 'g_atr_name' => '出版社02', 'g_atr_cls_id' => $subChildGoodsCls['g_cls_id']],
+            ['g_atr_cls_type' => 'cls', 'g_atr_code' => 'code04', 'g_atr_name' => '出版社03', 'g_atr_cls_id' => $subChildGoodsCls['g_cls_id']],
         ];
         $gAtrModel = new GoodsAttrModel();
         $rowsNum = $gAtrModel->createAttrs($attrs);
