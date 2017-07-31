@@ -22,6 +22,8 @@ class GoodsRealOption extends ActiveRecord
 
             ['g_opt_name', 'required'],
 
+            ['g_opt_value', 'required'],
+
             ['g_opt_img', 'string'],
             ['g_opt_img', 'default', 'value' => '']
         ];

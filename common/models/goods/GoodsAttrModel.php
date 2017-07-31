@@ -18,15 +18,26 @@ use common\helpers\ArrayHelper;
 class GoodsAttrModel extends Model
 {
 
-    public function createGoodsAttrs($data, Goods $goods){
+    public function createGoodsAttrs($data, Goods $goods, $asArray = true){
         list($newAttrs, $oldAttrs) = $this->parseAttrsNewAndOld($data['attrs']);
+        $attrs = [];
+        foreach($newAttrs as $attr){
+            $attr['g_atr_cls_type'] = GoodsAttr::ATR_CLS_TYPE_GOODS;
+            $attr['g_atr_cls_id'] = $goods->g_id;
+            $attrObject = $this->createAttr($attr);
+            if(!$attrObject){
+                return false;
+            }
+            $attr['g_atr_id'] = $attrObject->g_atr_id;
+            $attrs[] = $attr;
+        }
         $attrDefs = [];
-        
-        foreach($oldAttrs as $oldAttr){
+        $attrs = array_merge($attrs, $oldAttrs);
+        foreach($attrs as $attr){
             $attrDef = new GoodsRealAttr();
             $attrData = array_merge([
                 'g_id' => $goods->g_id,
-            ], $oldAttr);
+            ], $attr);
             if(!$attrDef->load($attrData, '') || !$attrDef->validate()){
                 $this->addError('', $this->getOneErrMsg($attrDef));
                 return false;
@@ -36,13 +47,13 @@ class GoodsAttrModel extends Model
                 $this->addError('', Yii::t('商品属性创建失败'));
                 return false;
             }
-            $options = $this->createAttrOptions(ArrayHelper::getValue($oldAttr, 'g_atr_opts'), $attrDef->g_attr, $goods);
+            $options = $this->createAttrOptions(ArrayHelper::getValue($attr, 'g_atr_opts'), $attrDef->g_attr, $goods);
             if(!$options){
                 return false;
             }
-            $attrDefs[] = $attrDef->toArray();
+            $attrDefs[] = $asArray ? $attrDef->toArray() : $attrDef;
         }
-        console($attrDefs);
+        return $attrDefs;
     }
     protected function createAttrOptions($options, GoodsAttr $attr, Goods $goods){
         if(is_string($options)){
@@ -50,30 +61,47 @@ class GoodsAttrModel extends Model
                 'g_opt_name' => $options,
             ]];
         }
+        $optionValue = 1;
         foreach($options as $key => $optionData){
             $optionData['g_id'] = $goods->g_id;
             $optionData['g_atr_id'] = $attr->g_atr_id;
+            $optionData['g_opt_value'] = $optionValue;
             $option = $this->createAttrOption($optionData);
             if(!$option){
                 return false;
             }
+            $optionValue++;
             $options[$key] = $option;
         }
         return $options;
     }
-    protected function createAttrOption($optionData){
+
+    /**
+     * 创建一个商品属性选项值
+     * 选项值需要外部逻辑指定并保持唯一
+     * @param  [type] $optionData 选项数据
+     * @return [type]             [description]
+     */
+    public function createAttrOption($optionData){
         $option = new GoodsRealOption();
         if(!$option->load($optionData, '') || !$option->validate()){
             $this->addError('', $this->getOneErrMsg($option));
             return false;
         }
         $option->g_opt_created_at = time();
-        if(!$option->insert(false)){
+         if(!$option->insert(false)){
             $this->addError('', Yii::t('商品属性值创建失败'));
             return false;
         }
         return $option;
     }
+
+    /**
+     * 分析出新的属性和旧的属性
+     * $attrs 中的每个元素都是数组，如果该元素含有g_atr_id则为旧属性，否则为旧属性
+     * @param  [type] $attrs [description]
+     * @return [type]        [description]
+     */
     protected function parseAttrsNewAndOld($attrs){
         $newAttrs = [];
         $oldAttrs = [];
@@ -87,6 +115,31 @@ class GoodsAttrModel extends Model
         return [$newAttrs, $oldAttrs];
     }
 
+    /**
+     * 创建一个分类属性
+     * @param  array $attrData 属性数据
+     * - g_atr_name: string,required 属性名称
+     * - g_atr_code: string,required 属性标识
+     * - g_atr_show_name: string,optional 属性展示名称，空时则默认值时g_atr_name
+     * - g_atr_opt_img: integer,optional,default:0 属性值是否支持图片 @see ConstMap::getConst('g_atr_opt_img')
+     * - g_atr_type: string, optional,default:info 属性的类型 @see ConstMap::getConst('g_atr_opt_img')
+     * - g_atr_cls_type: string, required 属性所属分类的类型 @see ConstMap::getConst('g_atr_cls_type')
+     * - g_atr_cls_id: integer, required 属性所属分类id
+     * @return object 返回属性数据对象
+     */
+    public function createAttr($attrData){
+        $goodsAttr = new GoodsAttr();
+        if(!$goodsAttr->load($attrData, '') || !$goodsAttr->validate()){
+            $this->addError('', $this->getOneErrMsg($goodsAttr));
+            return false;
+        }
+        $goodsAttr->g_atr_created_at = time();
+        if(!$goodsAttr->insert(false)){
+            $this->addError('', Yii::t('app', '创建属性失败'));
+            return false;
+        }
+        return $goodsAttr;
+    }
 
     /**
      * 添加属性列表到对应的分类中
@@ -99,7 +152,7 @@ class GoodsAttrModel extends Model
      * - g_atr_cls_id: integer, required,分类名称
      * @param integer 返回添加成功的属性数量
      */
-    public function createAttrs($data){
+    public function batchCreateAttrs($data){
         foreach($data as $key => $dataItem){
             $goodsAttr = new GoodsAttr();
             if(!$goodsAttr->load($dataItem, '') || !$goodsAttr->validate()){

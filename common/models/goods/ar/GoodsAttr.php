@@ -42,10 +42,11 @@ class GoodsAttr extends ActiveRecord
             ['g_atr_type', 'in', 'range' => ConstMap::getConst('g_atr_type', true)],
             ['g_atr_type', 'default', 'value' => static::ATR_TYPE_INFO],
 
+            ['g_atr_cls_type', 'required'],
             ['g_atr_cls_type', 'string'],
-            ['g_atr_cls_type', 'default', 'value' => static::ATR_CLS_TYPE_CLS],
             ['g_atr_cls_type', 'in', 'range' => ConstMap::getConst('g_atr_cls_type', true)],
 
+            ['g_atr_cls_id', 'required'],
             ['g_atr_cls_id', 'integer'],
             ['g_atr_cls_id', 'exist', 'targetAttribute' => 'g_cls_id', 'targetClass' => GoodsClassification::className()],
 

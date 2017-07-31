@@ -14,8 +14,9 @@ class m170731_060119_goods_real_options extends Migration
         $createTabelSql = "
         create table `{$tableName}`(
             `g_opt_id` int(10) unsigned not null auto_increment comment '主键',
+            `g_opt_value` smallint(3) unsigned not null comment '选项值',
             `g_id` int(10) unsigned not null comment '商品id',
-            `g_atr_id` int(10) unsigned not null comment '商品属性id', 
+            `g_atr_id` int(10) unsigned not null comment '商品属性id',
             `g_opt_name` varchar(100) not null comment '商品属性选项值',
             `g_opt_img` varchar(255) null comment '商品属性选项值图片',
             `g_opt_created_at` int(10) not null comment '创建时间',

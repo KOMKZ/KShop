@@ -38,7 +38,7 @@ class GoodsRealAttr extends ActiveRecord
     public function getG_atr_opts(){
         return $this->hasMany(GoodsRealOption::className(), [
             'g_id' => 'g_id',
-            'g_atr_id' => 'g_atr_id'])->indexBy('g_opt_id');
+            'g_atr_id' => 'g_atr_id']);
     }
     public function getG_attr(){
         return $this->hasOne(GoodsAttr::className(), [

@@ -81,10 +81,11 @@ class ClassificationTest extends \Codeception\Test\Unit
                 ],
                 [
                     // 是否带logo
-                    'g_atr_name' => "自定义logo",
+                    'g_atr_name' => "logo",
                     'g_atr_opt_img' => 1,
+                    'g_atr_code' => 'has_logo',
                     'g_atr_type' => 'has_logo',
-                    'g_atr_type' => 'sku',
+                    'g_atr_type' => 'info',
                     'g_atr_opts' => [
                         [
                             'g_opt_name' => '暗黑logo',
