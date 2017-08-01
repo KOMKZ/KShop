@@ -22,7 +22,7 @@ class Goods extends ActiveRecord
     CONST STATUS_DELETE = 'delete';
 
 
-
+    private $_g_valid_sku_ids = [];
 
 
     public static function tableName(){
@@ -40,7 +40,10 @@ class Goods extends ActiveRecord
     }
 
     public function getG_vaild_sku_ids(){
-        return GoodsModel::createSkuIds($this, ArrayHelper::toArray($this->g_sku_attrs));
+        if(!$this->_g_valid_sku_ids){
+            return $this->_g_valid_sku_ids = GoodsModel::createSkuIds($this, ArrayHelper::toArray($this->g_sku_attrs));
+        }
+        return $this->_g_valid_sku_ids;
     }
 
     public function getG_sku_attrs(){

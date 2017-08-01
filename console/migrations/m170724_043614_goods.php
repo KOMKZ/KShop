@@ -19,7 +19,7 @@ class m170724_043614_goods extends Migration
             `g_cls_id` int(10) unsigned not null comment '商品分类id',
             `g_status` char(15) not null comment '商品状态',
             `g_create_uid` int(10) unsigned not null comment '创建用户id',
-            `g_update_uid` int(10) unsigned not null comment '最后更新用户id',
+            `g_update_uid` int(10) unsigned null default 0 comment '最后更新用户id',
             `g_created_at` int(10) unsigned not null comment '商品创建时间',
             `g_updated_at` int(10) unsigned not null comment '商品创建时间',
             `g_start_at` int(10) unsigned null default 0 comment '商品上架时间',

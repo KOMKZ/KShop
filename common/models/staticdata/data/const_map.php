@@ -34,5 +34,9 @@ return [
     'g_atr_cls_type' => [
         \common\models\goods\ar\GoodsAttr::ATR_CLS_TYPE_CLS => Yii::t('app', "属性直属于分类"),
         \common\models\goods\ar\GoodsAttr::ATR_CLS_TYPE_GOODS => Yii::t('app', "属性直属于商品"),
+    ],
+    'g_sku_status' => [
+        \common\models\goods\ar\GoodsSku::STATUS_ON_SALE => Yii::t('app', "上架"),
+        \common\models\goods\ar\GoodsSku::STATUS_ON_NOT_SALE => Yii::t('app', "下架"),
     ]
 ];

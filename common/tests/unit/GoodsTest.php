@@ -8,6 +8,7 @@ use common\models\goods\query\GoodsQuery;
 use common\models\goods\ar\Goods;
 use common\models\goods\GoodsModel;
 use common\models\goods\ar\GoodsAttr;
+use common\models\goods\ar\GoodsSku;
 
 
 
@@ -32,7 +33,7 @@ class ClassificationTest extends \Codeception\Test\Unit
     }
 
     public function testUpdateGoods(){
-        // return ;
+        return ;
         Yii::$app->db->beginTransaction();
         $draftGoods = GoodsQuery::find()
                                 ->where(['g_status' => Goods::STATUS_DRAFT])
@@ -58,6 +59,50 @@ class ClassificationTest extends \Codeception\Test\Unit
             console($gModel->getOneError());
         }
         console($result);
+    }
+
+    public function testCreateSku(){
+        Yii::$app->db->beginTransaction();
+        $gModel = new GoodsModel();
+        $goods  = GoodsQuery::find()
+                                ->where(['g_id' => 1])
+                                ->one();
+        // 商品的sku信息
+        $skuData = [
+            [
+                'g_sku_value' => '4:1;5:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '499900',
+                'g_sku_sale_price' => '529900',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+            [
+                'g_sku_value' => '4:2;5:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '579900',
+                'g_sku_sale_price' => '599900',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+            [
+                'g_sku_value' => '4:3;5:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '678800',
+                'g_sku_sale_price' => '698800',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+        ];
+        $gModel = new GoodsModel();
+        $skus = $gModel->createMultiGoodsSku($skuData, $goods);
+        if(!$skus){
+            $this->debug($gModel->getOneError());
+        }
+        console($skus);
     }
 
 

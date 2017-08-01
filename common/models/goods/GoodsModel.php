@@ -9,6 +9,7 @@ use common\models\goods\ar\GoodsAttr;
 use common\models\goods\ar\GoodsDetail;
 use common\models\goods\query\GoodsAttrQuery;
 use common\helpers\ArrayHelper;
+use common\models\goods\ar\GoodsSku;
 
 /**
  *
@@ -55,20 +56,53 @@ class GoodsModel extends Model
         return $gAttrs;
     }
 
-    protected function createGoodsSku($data, Goods $goods){
-        $skuAttrs = [];
-        foreach($data['g_attrs'] as $attr){
-            if(GoodsAttr::ATR_TYPE_SKU == $attr['g_atr_type']){
-                $skuAttrs[] = $attr;
-            }
-        }
-        // 不应该在这个流程中todo
-        $skuIds = $this->createSkuIds($goods, $skuAttrs);
-        if(!$skuIds){
+    public function createMultiGoodsSku($skuData, Goods $goods, $asArray = true){
+        // todo transaction
+        $skuData = ArrayHelper::index($skuData, 'g_sku_value');
+        $skuIds = array_keys($skuData);
+        $validSkuIds = array_keys($goods->g_vaild_sku_ids);
+        $notExistIds = array_diff($skuIds, $validSkuIds);
+        if(!empty($notExistIds)){
+            $this->addError('', Yii::t('app', "sku值不存在:" . implode(',', $notExistIds)));
             return false;
         }
-        return $skuIds;
+        $skus = [];
+        foreach($skuData as $skuItem){
+            $sku = $this->createGoodsSku($skuItem, $goods);
+            if(!$sku){
+                return false;
+            }
+            $skus[] = $asArray ? $sku->toArray() : $sku;
+        }
+        return $skus;
     }
+
+    public function createGoodsSku($skuData, Goods $goods){
+        $sku = new GoodsSku();
+        if(!$sku->load($skuData, '') || !$sku->validate()){
+            $this->addError('', $this->getOneErrMsg($sku));
+            return false;
+        }
+        if(!array_key_exists($skuData['g_sku_value'], $goods->g_vaild_sku_ids)){
+            $this->addError('', Yii::t('app', '无效的g_sku_value值:' . $skuData['g_sku_value']));
+            return false;
+        }
+        $sku->g_sku_id = static::buildGSkuId($goods->g_id, $sku->g_sku_value);
+        $sku->g_sku_value_name = $goods->g_vaild_sku_ids[$sku->g_sku_value]['name'];
+        $sku->g_sku_created_at = time();
+        if(!$sku->insert(false)){
+            $this->addError("", Yii::t('', '创建商品sku失败'));
+            return false;
+        }
+        return $sku;
+    }
+    public static function buildGSkuId($gid, $skuValue){
+        return $gid . preg_replace('/[;:]/', '', $skuValue);
+    }
+
+
+
+
 
     public function createGoods($data){
         $t = Yii::$app->db->beginTransaction();
@@ -85,9 +119,10 @@ class GoodsModel extends Model
             $t->commit();
             return $goods;
         } catch (\Exception $e) {
+            throw $e;
             Yii::error($e);
             $t->rollback();
-            $this->addError('', Yii::t('', "创建商品发生异常"));
+            $this->addError('', Yii::t('app', "创建商品发生异常"));
             return false;
         }
     }
