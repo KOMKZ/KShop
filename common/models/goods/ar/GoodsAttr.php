@@ -12,6 +12,7 @@ class GoodsAttr extends ActiveRecord
 {
     const ATR_TYPE_SKU = 'sku';
     const ATR_TYPE_INFO = 'info';
+    const ATR_TYPE_OPTION = 'option';
 
     const ATR_CLS_TYPE_CLS = 'cls';
     const ATR_CLS_TYPE_GOODS = 'goods';

@@ -32,6 +32,7 @@ class ClassificationTest extends \Codeception\Test\Unit
     }
 
     public function testUpdateGoods(){
+        // return ;
         Yii::$app->db->beginTransaction();
         $draftGoods = GoodsQuery::find()
                                 ->where(['g_status' => Goods::STATUS_DRAFT])
@@ -62,7 +63,7 @@ class ClassificationTest extends \Codeception\Test\Unit
 
     public function testCreateGoods(){
         return ;
-        Yii::$app->db->beginTransaction();
+        // Yii::$app->db->beginTransaction();
         $data = [
             'g_cls_id' => 3,
             'g_status' => Goods::STATUS_DRAFT,
@@ -116,7 +117,7 @@ class ClassificationTest extends \Codeception\Test\Unit
                     'g_atr_opt_img' => 1,
                     'g_atr_code' => 'has_logo',
                     'g_atr_type' => 'has_logo',
-                    'g_atr_type' => 'sku',
+                    'g_atr_type' => 'option',
                     'g_atr_opts' => [
                         [
                             'g_opt_name' => '暗黑logo',

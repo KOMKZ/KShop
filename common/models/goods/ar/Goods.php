@@ -18,7 +18,7 @@ class Goods extends ActiveRecord
     CONST STATUS_DRAFT = 'draft';
     CONST STATUS_ON_SALE = 'on_sale';
     CONST STATUS_ON_NOT_SALE = 'on_not_sale';
-    CONST STAUTS_FORBIDDEN = 'forbidden';
+    CONST STATUS_FORBIDDEN = 'forbidden';
     CONST STATUS_DELETE = 'delete';
 
 
@@ -34,6 +34,7 @@ class Goods extends ActiveRecord
         return array_merge($fields, [
             'g_sku_attrs',
             'g_info_attrs',
+            'g_option_attrs',
             'g_vaild_sku_ids',
         ]);
     }
@@ -58,6 +59,15 @@ class Goods extends ActiveRecord
                ->hasMany(GoodsRealAttr::className(), ['g_id' => 'g_id'])
                ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$grTable}.g_atr_id")
                ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_INFO]);
+    }
+
+    public function getG_option_attrs(){
+        $gaTable = GoodsAttr::tableName();
+        $grTable = GoodsRealAttr::tableName();
+        return $this
+               ->hasMany(GoodsRealAttr::className(), ['g_id' => 'g_id'])
+               ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$grTable}.g_atr_id")
+               ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_OPTION]);
     }
 
 

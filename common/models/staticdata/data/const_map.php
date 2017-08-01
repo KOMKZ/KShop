@@ -23,12 +23,13 @@ return [
         \common\models\goods\ar\Goods::STATUS_DRAFT => \Yii::t('app', "草稿"),
         \common\models\goods\ar\Goods::STATUS_ON_SALE => \Yii::t('app', "上架"),
         \common\models\goods\ar\Goods::STATUS_ON_NOT_SALE => \Yii::t('app', "下架"),
-        \common\models\goods\ar\Goods::STAUTS_FORBIDDEN => \Yii::t('app', "禁止销售"),
-        \common\models\goods\ar\Goods::STAUTS_DELETE => \Yii::t('app', "删除"),
+        \common\models\goods\ar\Goods::STATUS_FORBIDDEN => \Yii::t('app', "禁止销售"),
+        \common\models\goods\ar\Goods::STATUS_DELETE => \Yii::t('app', "删除"),
     ],
     'g_atr_type' => [
         \common\models\goods\ar\GoodsAttr::ATR_TYPE_INFO => \Yii::t('app', '信息属性'),
-        \common\models\goods\ar\GoodsAttr::ATR_TYPE_SKU => \Yii::t('app', 'sku属性')
+        \common\models\goods\ar\GoodsAttr::ATR_TYPE_SKU => \Yii::t('app', 'sku属性'),
+        \common\models\goods\ar\GoodsAttr::ATR_TYPE_OPTION => \Yii::t('app', 'sku属性')
     ],
     'g_atr_cls_type' => [
         \common\models\goods\ar\GoodsAttr::ATR_CLS_TYPE_CLS => Yii::t('app', "属性直属于分类"),
