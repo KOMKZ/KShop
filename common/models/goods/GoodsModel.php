@@ -6,6 +6,7 @@ use common\models\Model;
 use common\models\goods\GoodsAttrModel;
 use common\models\goods\ar\Goods;
 use common\models\goods\ar\GoodsAttr;
+use common\models\goods\ar\GoodsDetail;
 use common\models\goods\query\GoodsAttrQuery;
 use common\helpers\ArrayHelper;
 
@@ -14,48 +15,89 @@ use common\helpers\ArrayHelper;
  */
 class GoodsModel extends Model
 {
-    public function createGoods($data){
-        Yii::$app->db->beginTransaction();
-        if(!$goods = $this->validateCreateGoodsData($data)){
+
+    protected function createGoodsBase($data){
+        // 首先创建基础属性
+        if(!$goods = $this->validateGoodsBaseData($data)){
             return false;
         }
-        // fix todo
-        $goods->g_id = 1;
-        // 使用GoodsAttrModel 来创建 商品属性, 同时创建属性选项值
-            // 首先选出新的属性和存在的属性
+        if(!$goods->insert(false)){
+            $this->addError("", Yii::t('', '创建商品基础信息失败'));
+            return false;
+        }
+        return $goods;
+    }
+
+    protected function createGoodsDetail($data, Goods $goods){
+        // 创建详细说明
+        $data['g_id'] = $goods->g_id;
+        if(!$goodsDetail = $this->validateGoodsDetailData($data)){
+            return false;
+        }
+        if(!$goodsDetail->insert(false)){
+            $this->addError("", Yii::t('', '创建商品详细信息失败'));
+            return false;
+        }
+        return $goodsDetail;
+    }
+
+    protected function createGoodsAttrs($data, Goods $goods){
+        // 创建商品属性及选项值
         $gAttrModel = new GoodsAttrModel();
         $gAttrs = $gAttrModel->createGoodsAttrs([
             'attrs' => $data['g_attrs']
         ], $goods);
         if(!$gAttrs){
             list($code, $error) = $gAttrModel->getOneError();
-            $this->addError($code, $error);
+            $this->addError($code, "创建商品属性失败:" . $error);
             return false;
         }
+        return $gAttrs;
+    }
+
+    protected function createGoodsSku($data, Goods $goods){
         $skuAttrs = [];
-        foreach($gAttrs as $attr){
+        foreach($data['g_attrs'] as $attr){
             if(GoodsAttr::ATR_TYPE_SKU == $attr['g_atr_type']){
                 $skuAttrs[] = $attr;
             }
         }
         // 不应该在这个流程中todo
-        $skuGoods = $this->createSkuGoods($goods, $skuAttrs);
-        if(!$skuGoods){
+        $skuIds = $this->createSkuIds($goods, $skuAttrs);
+        if(!$skuIds){
             return false;
         }
-
-        // 创建sku记录，当然预览sku记录是另外一个方法
-
-        // 创建商品的详细内容记录
-
-
-
-        $goods->g_created_at = time();
-
-        return $goods;
+        return $skuIds;
     }
 
-    public function createSkuGoods(Goods $goods, $skuAttrs){
+    public function createGoods($data){
+        $t = Yii::$app->db->beginTransaction();
+        try {
+            if(!$goods = $this->createGoodsBase($data)){
+                return false;
+            }
+            if(!$goodsDetail = $this->createGoodsDetail($data, $goods)){
+                return false;
+            }
+            if(!$gAttrs = $this->createGoodsAttrs($data, $goods)){
+                return false;
+            }
+            $t->commit();
+            return $goods;
+        } catch (\Exception $e) {
+            Yii::error($e);
+            $t->rollback();
+            $this->addError('', Yii::t('', "创建商品发生异常"));
+            return false;
+        }
+    }
+
+    public function deleteGoods(Goods $goods){
+        $goods->g_status = Goods::STATUS_DELETE;
+        return $goods->update(false);
+    }
+
+    public static function createSkuIds(Goods $goods, $skuAttrs){
         $skuValues = [];
         foreach($skuAttrs as $attr){
             $skuValues[$attr['g_atr_id']] = [];
@@ -67,12 +109,11 @@ class GoodsModel extends Model
             }
         }
         ksort($skuValues);
-        $skuIds = $this->buildSkuIds($skuValues);
-        console($skuIds);
-
+        $skuIds = static::buildSkuIds($skuValues);
+        return ArrayHelper::index($skuIds, 'value');
     }
 
-    public function buildSkuIds($skuValues){
+    protected static function buildSkuIds($skuValues){
         $skuIds = [];
         $first = array_shift($skuValues);
         foreach($first as $item){
@@ -89,19 +130,25 @@ class GoodsModel extends Model
         array_shift($skuValues);
         $next = array_shift($skuValues);
         if(!empty($next)){
-            return $this->buildSkuIds(array_merge([$skuIds], [$next]));
+            return static::buildSkuIds(array_merge([$skuIds], [$next]));
         }
         return $skuIds;
     }
-
-    public function validateCreateGoodsData($data){
+    public function validateGoodsDetailData($data){
+        $goodsDetail = new GoodsDetail();
+        if(!$goodsDetail->load($data, '') || !$goodsDetail->validate()){
+            $this->addError('', $this->getOneErrMsg($goodsDetail));
+            return false;
+        }
+        return $goodsDetail;
+    }
+    public function validateGoodsBaseData($data){
         $goods = new Goods();
         if(!$goods->load($data, '') || !$goods->validate()){
             $this->addError('', $this->getOneErrMsg($goods));
             return false;
         }
-
-
+        $goods->g_created_at = time();
         return $goods;
     }
 

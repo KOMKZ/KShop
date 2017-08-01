@@ -48,7 +48,8 @@ class GoodsAttr extends ActiveRecord
 
             ['g_atr_cls_id', 'required'],
             ['g_atr_cls_id', 'integer'],
-            ['g_atr_cls_id', 'exist', 'targetAttribute' => 'g_cls_id', 'targetClass' => GoodsClassification::className()],
+            // todo fix because of cls_type cls, goods
+            // ['g_atr_cls_id', 'exist', 'targetAttribute' => 'g_cls_id', 'targetClass' => GoodsClassification::className()],
 
         ];
     }

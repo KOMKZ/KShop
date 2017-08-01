@@ -24,6 +24,7 @@ return [
         \common\models\goods\ar\Goods::STATUS_ON_SALE => \Yii::t('app', "上架"),
         \common\models\goods\ar\Goods::STATUS_ON_NOT_SALE => \Yii::t('app', "下架"),
         \common\models\goods\ar\Goods::STAUTS_FORBIDDEN => \Yii::t('app', "禁止销售"),
+        \common\models\goods\ar\Goods::STAUTS_DELETE => \Yii::t('app', "删除"),
     ],
     'g_atr_type' => [
         \common\models\goods\ar\GoodsAttr::ATR_TYPE_INFO => \Yii::t('app', '信息属性'),

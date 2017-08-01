@@ -4,9 +4,11 @@ use Yii;
 use common\models\goods\ClassificationModel;
 use common\models\goods\GoodsAttrModel;
 use common\models\goods\query\GoodsAttrQuery;
+use common\models\goods\query\GoodsQuery;
 use common\models\goods\ar\Goods;
 use common\models\goods\GoodsModel;
 use common\models\goods\ar\GoodsAttr;
+
 
 
 class ClassificationTest extends \Codeception\Test\Unit
@@ -29,16 +31,45 @@ class ClassificationTest extends \Codeception\Test\Unit
         console($data);
     }
 
-    public function testCreateGoods(){
+    public function testUpdateGoods(){
         Yii::$app->db->beginTransaction();
-        // 1 分类数据
+        $draftGoods = GoodsQuery::find()
+                                ->where(['g_status' => Goods::STATUS_DRAFT])
+                                ->one();
+        if(!$draftGoods){
+            $this->debug("当前没有处于草稿的商品");
+        }
+        $data = [
+            'g_id' => $draftGoods['g_id'],
+        ];
+        console($draftGoods->toArray());
+    }
+
+
+    public function testDeleteGoods(){
+        return ;
+        $gModel = new GoodsModel();
+        $goods  = GoodsQuery::find()
+                                ->where(['g_id' => 31])
+                                ->one();
+        $result = $gModel->deleteGoods($goods);
+        if(!$result){
+            console($gModel->getOneError());
+        }
+        console($result);
+    }
+
+
+    public function testCreateGoods(){
+        return ;
+        Yii::$app->db->beginTransaction();
         $data = [
             'g_cls_id' => 3,
             'g_status' => Goods::STATUS_DRAFT,
             'g_primary_name' => 'IPhone7',
             'g_secondary_name' => 'IPhone7',
             'g_start_at' => time(),
-            'g_end_at' => time(),
+            'g_end_at' => time()+3600,
             'g_create_uid' => 1,
             'g_attrs' => [
                 [
@@ -85,7 +116,7 @@ class ClassificationTest extends \Codeception\Test\Unit
                     'g_atr_opt_img' => 1,
                     'g_atr_code' => 'has_logo',
                     'g_atr_type' => 'has_logo',
-                    'g_atr_type' => 'info',
+                    'g_atr_type' => 'sku',
                     'g_atr_opts' => [
                         [
                             'g_opt_name' => '暗黑logo',
@@ -98,14 +129,14 @@ class ClassificationTest extends \Codeception\Test\Unit
                     ]
                 ]
             ],
-            'g_detail' => "IPhone7很长的富文本介绍",
+            'g_intro_text' => "IPhone7很长的富文本介绍",
         ];
         $gModel = new GoodsModel();
         $goods = $gModel->createGoods($data);
         if(!$goods){
             console($gModel->getOneError());
         }
-        console($goods->toArray());
+        $this->assertNotEmpty($goods);
     }
 
     public function testCreateGoodsClassification()
