@@ -10,7 +10,7 @@ use common\models\goods\ar\GoodsDetail;
 use common\models\goods\query\GoodsAttrQuery;
 use common\helpers\ArrayHelper;
 use common\models\goods\ar\GoodsSku;
-use common\staticdata\Errno;
+use common\models\staticdata\Errno;
 
 /**
  *
@@ -42,7 +42,18 @@ class GoodsModel extends Model
         }
         return $goodsDetail;
     }
-
+    protected function createGoodsMeta($data, Goods $goods){
+        $gAttrModel = new GoodsAttrModel();
+        $gMetas = $gAttrModel->createGoodsMeta([
+            'metas' => $data['g_metas']
+        ], $goods);
+        if(!$gMetas){
+            list($code, $error) = $gAttrModel->getOneError();
+            $this->addError($code, "创建商品元属性失败:" . $error);
+            return false;
+        }
+        return $gMetas;
+    }
     protected function createGoodsAttrs($data, Goods $goods){
         // 创建商品属性及选项值
         $gAttrModel = new GoodsAttrModel();
@@ -119,6 +130,9 @@ class GoodsModel extends Model
                 return false;
             }
             if(!$goodsDetail = $this->createGoodsDetail($data, $goods)){
+                return false;
+            }
+            if(!$gMeta = $this->createGoodsMeta($data, $goods)){
                 return false;
             }
             if(!$gAttrs = $this->createGoodsAttrs($data, $goods)){

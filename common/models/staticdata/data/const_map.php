@@ -27,7 +27,7 @@ return [
         \common\models\goods\ar\Goods::STATUS_DELETE => \Yii::t('app', "删除"),
     ],
     'g_atr_type' => [
-        \common\models\goods\ar\GoodsAttr::ATR_TYPE_INFO => \Yii::t('app', '信息属性'),
+        \common\models\goods\ar\GoodsAttr::ATR_TYPE_META => \Yii::t('app', '信息属性'),
         \common\models\goods\ar\GoodsAttr::ATR_TYPE_SKU => \Yii::t('app', 'sku属性'),
         \common\models\goods\ar\GoodsAttr::ATR_TYPE_OPTION => \Yii::t('app', 'sku属性')
     ],

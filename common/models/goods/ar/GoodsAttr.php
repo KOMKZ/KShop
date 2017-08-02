@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
 class GoodsAttr extends ActiveRecord
 {
     const ATR_TYPE_SKU = 'sku';
-    const ATR_TYPE_INFO = 'info';
+    const ATR_TYPE_META = 'meta';
     const ATR_TYPE_OPTION = 'option';
 
     const ATR_CLS_TYPE_CLS = 'cls';
@@ -41,7 +41,7 @@ class GoodsAttr extends ActiveRecord
 
             ['g_atr_type', 'string'],
             ['g_atr_type', 'in', 'range' => ConstMap::getConst('g_atr_type', true)],
-            ['g_atr_type', 'default', 'value' => static::ATR_TYPE_INFO],
+            ['g_atr_type', 'default', 'value' => static::ATR_TYPE_META],
 
             ['g_atr_cls_type', 'required'],
             ['g_atr_cls_type', 'string'],

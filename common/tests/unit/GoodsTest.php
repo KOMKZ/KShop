@@ -62,7 +62,7 @@ class ClassificationTest extends \Codeception\Test\Unit
     }
 
     public function testCreateSku(){
-        // return ;
+        return ;
         Yii::$app->db->beginTransaction();
         $gModel = new GoodsModel();
         $goods  = GoodsQuery::find()
@@ -108,8 +108,8 @@ class ClassificationTest extends \Codeception\Test\Unit
 
 
     public function testCreateGoods(){
-        return ;
-        // Yii::$app->db->beginTransaction();
+        // return ;
+        Yii::$app->db->beginTransaction();
         $data = [
             'g_cls_id' => 3,
             'g_status' => Goods::STATUS_DRAFT,
@@ -118,6 +118,13 @@ class ClassificationTest extends \Codeception\Test\Unit
             'g_start_at' => time(),
             'g_end_at' => time()+3600,
             'g_create_uid' => 1,
+            'g_metas' => [
+                [
+                    // 型号
+                    'g_atr_id' => 1,
+                    'gm_value' => "IPhone7"
+                ],
+            ],
             'g_attrs' => [
                 [
                     // 颜色
@@ -136,11 +143,6 @@ class ClassificationTest extends \Codeception\Test\Unit
                             'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
                         ],
                     ]
-                ],
-                [
-                    // 型号
-                    'g_atr_id' => 1,
-                    'g_atr_opts' => "IPhone7"
                 ],
                 [
                     // 内存
@@ -183,6 +185,7 @@ class ClassificationTest extends \Codeception\Test\Unit
         if(!$goods){
             console($gModel->getOneError());
         }
+        console($goods->toArray());
         $this->assertNotEmpty($goods);
     }
 

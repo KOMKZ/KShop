@@ -8,15 +8,65 @@ use common\models\goods\query\GoodsClassificationQuery;
 use common\models\goods\ar\GoodsAttr;
 use common\models\goods\ar\GoodsRealAttr;
 use common\models\goods\ar\Goods;
+use common\models\goods\ar\GoodsMeta;
 use common\models\goods\ar\GoodsRealOption;
 use common\models\goods\query\GoodsAttrQuery;
 use common\helpers\ArrayHelper;
+
 
 /**
  *
  */
 class GoodsAttrModel extends Model
 {
+    public function createGoodsMeta($data, $goods, $asArray = true){
+        list($newMetas, $oldMetas) = $this->parseMetaNewAndOld($data['metas']);
+        $metas = [];
+        foreach($newMetas as $meta){
+            $meta['g_atr_cls_type'] = GoodsAttr::ATR_CLS_TYPE_GOODS;
+            $meta['g_atr_cls_id'] = $goods->g_id;
+            $metaObject = $this->createAttr($meta);
+            if(!$metaObject){
+                return false;
+            }
+            $meta['g_atr_id'] = $metaObject->g_atr_id;
+            $metas[] = $attr;
+        }
+
+        $metaDefs = [];
+        $metas = array_merge($metas, $oldMetas);
+        foreach($metas as $meta){
+            $metaDef = new GoodsMeta();
+            $metaData = array_merge([
+                'g_id' => $goods->g_id,
+            ], $meta);
+            if(!$metaDef->load($metaData, '') || !$metaDef->validate()){
+                $this->addError('', $this->getOneErrMsg($metaDef));
+                return false;
+            }
+            $metaDef->gm_created_at = time();
+            if(!$metaDef->insert(false)){
+                $this->addError('', Yii::t('商品元属性创建失败'));
+                return false;
+            }
+            $metaDefs[] = $asArray ? $metaDef->toArray() : $metaDef;
+        }
+        return $metaDefs;
+    }
+
+    public function parseMetaNewAndOld($metas){
+        $newMetas = [];
+        $oldMeta = [];
+        foreach($metas as $item){
+            if(empty($item['g_atr_id'])){
+                $newMetas[] = $item;
+            }else{
+                $oldMeta[] = $item;
+            }
+        }
+        return [$newMetas, $oldMeta];
+    }
+
 
     public function createGoodsAttrs($data, Goods $goods, $asArray = true){
         list($newAttrs, $oldAttrs) = $this->parseAttrsNewAndOld($data['attrs']);

@@ -33,7 +33,7 @@ class Goods extends ActiveRecord
         $fields = parent::fields();
         return array_merge($fields, [
             'g_sku_attrs',
-            'g_info_attrs',
+            'g_metas',
             'g_option_attrs',
             'g_vaild_sku_ids',
         ]);
@@ -55,13 +55,13 @@ class Goods extends ActiveRecord
                ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_SKU]);
     }
 
-    public function getG_info_attrs(){
+    public function getG_metas(){
         $gaTable = GoodsAttr::tableName();
-        $grTable = GoodsRealAttr::tableName();
+        $gmTable = GoodsMeta::tableName();
         return $this
-               ->hasMany(GoodsRealAttr::className(), ['g_id' => 'g_id'])
-               ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$grTable}.g_atr_id")
-               ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_INFO]);
+               ->hasMany(GoodsMeta::className(), ['g_id' => 'g_id'])
+               ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$gmTable}.g_atr_id")
+               ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_META]);
     }
 
     public function getG_option_attrs(){

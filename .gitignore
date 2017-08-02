@@ -2,6 +2,7 @@
 /yii
 /yii_test
 /yii_test.bat
+/runtime
 
 # phpstorm project files
 .idea
