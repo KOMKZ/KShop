@@ -33,7 +33,6 @@ class ClassificationTest extends \Codeception\Test\Unit
     }
 
     public function testUpdateGoods(){
-        return ;
         Yii::$app->db->beginTransaction();
         $draftGoods = GoodsQuery::find()
                                 ->where(['g_status' => Goods::STATUS_DRAFT])
@@ -43,6 +42,75 @@ class ClassificationTest extends \Codeception\Test\Unit
         }
         $data = [
             'g_id' => $draftGoods['g_id'],
+            'base' => [
+                'g_primary_name' => '苹果IPhone7',
+                'g_secondary_name' => '苹果IPhone7',
+                'g_cls_id' => 4,
+                'g_status' => 'draft',
+                'g_update_uid' => 2,
+                'g_start_at' => time(),
+                'g_end_at' => time() + 3600,
+            ],
+            'detail' => [
+                'g_intro_text' => 'IPhone7非常长的富文本介绍',
+            ],
+            'meta' => [
+                'g_metas' => [
+                    [
+                        // 型号
+                        'gm_id' => 3,
+                        'gm_value' => "苹果IPhone7"
+                    ],
+                    [
+                        'g_atr_code' => 'resolution',
+                        'g_atr_name' => '分辨率',
+                        'gm_value' => '1334*750',
+                    ],
+                    [
+                        'g_atr_code' => 'made_in',
+                        'g_atr_name' => '商品产地',
+                        'gm_value' => '中国大陆',
+                    ],
+                ],
+            ]
+            'attrs' => [
+                'g_attrs' => [
+
+                ]
+            ],
+            'sku' => [
+                [
+                    'g_sku_value' => '4:1;5:1',
+                    'g_sku_stock_num' => 100,
+                    'g_sku_price' => '499899',
+                    'g_sku_sale_price' => '529899',
+                    'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                    'g_sku_update_uid' => 1,
+                    'g_id' => $goods->g_id,
+                ],
+                [
+                    'g_sku_value' => '4:2;5:1',
+                    'g_sku_stock_num' => 100,
+                    'g_sku_price' => '579899',
+                    'g_sku_sale_price' => '599899',
+                    'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                    'g_sku_update_uid' => 1,
+                    'g_id' => $goods->g_id,
+                ],
+                [
+                    'g_sku_value' => '4:3;5:3',
+                    'g_sku_stock_num' => 100,
+                    'g_sku_price' => '678799',
+                    'g_sku_sale_price' => '698799',
+                    'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                    'g_sku_create_uid' => 2,
+                    'g_id' => $goods->g_id,
+                ],
+            ]
+
+
+
+
         ];
         console($draftGoods->toArray());
     }
@@ -108,7 +176,7 @@ class ClassificationTest extends \Codeception\Test\Unit
 
 
     public function testCreateGoods(){
-        // return ;
+        return ;
         Yii::$app->db->beginTransaction();
         $data = [
             'g_cls_id' => 3,
@@ -185,7 +253,7 @@ class ClassificationTest extends \Codeception\Test\Unit
         if(!$goods){
             console($gModel->getOneError());
         }
-        console($goods->toArray());
+        // console($goods->toArray());
         $this->assertNotEmpty($goods);
     }
 
