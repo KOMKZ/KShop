@@ -6,6 +6,8 @@ use yii\console\Controller;
 use yii\helpers\FileHelper;
 use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
+use PhpAmqpLib\Message\AMQPMessage;
+
 
 class ToolController extends Controller{
     public $is_test = false;
@@ -31,4 +33,14 @@ class ToolController extends Controller{
         echo json_decode('"' . $string . '"');
         echo "\n";
     }
+    public function actionPublish(){
+        $conn = Yii::$app->amqpConn;
+        $channel = $conn->channel();
+        $channel->queue_declare('email-job', false, true, false, false);
+        $msg = new AMQPMessage(json_encode([
+            'f_id' => 1
+        ]), ['delivery_mode' => 2]);
+        $channel->basic_publish($msg, '', 'email-job');
+    }
+
 }

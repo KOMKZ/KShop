@@ -1,0 +1,4 @@
+<?php
+return [
+    'amqpConn' => null,
+];
