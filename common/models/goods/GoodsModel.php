@@ -10,6 +10,7 @@ use common\models\goods\ar\GoodsDetail;
 use common\models\goods\query\GoodsAttrQuery;
 use common\helpers\ArrayHelper;
 use common\models\goods\ar\GoodsSku;
+use common\staticdata\Errno;
 
 /**
  *
@@ -23,7 +24,7 @@ class GoodsModel extends Model
             return false;
         }
         if(!$goods->insert(false)){
-            $this->addError("", Yii::t('', '创建商品基础信息失败'));
+            $this->addError(Errno::DB_FAIL_INSERT, Yii::t('app', '创建商品基础信息失败'));
             return false;
         }
         return $goods;
@@ -36,7 +37,7 @@ class GoodsModel extends Model
             return false;
         }
         if(!$goodsDetail->insert(false)){
-            $this->addError("", Yii::t('', '创建商品详细信息失败'));
+            $this->addError(Errno::DB_FAIL_INSERT, Yii::t('app', '创建商品详细信息失败'));
             return false;
         }
         return $goodsDetail;
@@ -57,24 +58,31 @@ class GoodsModel extends Model
     }
 
     public function createMultiGoodsSku($skuData, Goods $goods, $asArray = true){
-        // todo transaction
-        $skuData = ArrayHelper::index($skuData, 'g_sku_value');
-        $skuIds = array_keys($skuData);
-        $validSkuIds = array_keys($goods->g_vaild_sku_ids);
-        $notExistIds = array_diff($skuIds, $validSkuIds);
-        if(!empty($notExistIds)){
-            $this->addError('', Yii::t('app', "sku值不存在:" . implode(',', $notExistIds)));
-            return false;
-        }
-        $skus = [];
-        foreach($skuData as $skuItem){
-            $sku = $this->createGoodsSku($skuItem, $goods);
-            if(!$sku){
+        $t = Yii::$app->db->beginTransaction();
+        try {
+            $skuData = ArrayHelper::index($skuData, 'g_sku_value');
+            $skuIds = array_keys($skuData);
+            $validSkuIds = array_keys($goods->g_vaild_sku_ids);
+            $notExistIds = array_diff($skuIds, $validSkuIds);
+            if(!empty($notExistIds)){
+                $this->addError('', Yii::t('app', "sku值不存在:" . implode(',', $notExistIds)));
                 return false;
             }
-            $skus[] = $asArray ? $sku->toArray() : $sku;
+            $skus = [];
+            foreach($skuData as $skuItem){
+                $sku = $this->createGoodsSku($skuItem, $goods);
+                if(!$sku){
+                    return false;
+                }
+                $skus[] = $asArray ? $sku->toArray() : $sku;
+            }
+            return $skus;
+            $t->commit();
+        } catch (\Exception $e) {
+            Yii::error($e);
+            $this->addError(Errno::EXCEPTION, Yii::t('创建商品sku失败'));
+            return false;
         }
-        return $skus;
     }
 
     public function createGoodsSku($skuData, Goods $goods){
@@ -91,7 +99,7 @@ class GoodsModel extends Model
         $sku->g_sku_value_name = $goods->g_vaild_sku_ids[$sku->g_sku_value]['name'];
         $sku->g_sku_created_at = time();
         if(!$sku->insert(false)){
-            $this->addError("", Yii::t('', '创建商品sku失败'));
+            $this->addError(Errno::DB_FAIL_INSERT, Yii::t('app', '创建商品sku失败'));
             return false;
         }
         return $sku;
@@ -119,10 +127,9 @@ class GoodsModel extends Model
             $t->commit();
             return $goods;
         } catch (\Exception $e) {
-            throw $e;
             Yii::error($e);
             $t->rollback();
-            $this->addError('', Yii::t('app', "创建商品发生异常"));
+            $this->addError(Errno::EXCEPTION, Yii::t('app', "创建商品发生异常"));
             return false;
         }
     }

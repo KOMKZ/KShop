@@ -62,6 +62,7 @@ class ClassificationTest extends \Codeception\Test\Unit
     }
 
     public function testCreateSku(){
+        // return ;
         Yii::$app->db->beginTransaction();
         $gModel = new GoodsModel();
         $goods  = GoodsQuery::find()
