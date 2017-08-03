@@ -58,7 +58,7 @@ class ClassificationTest extends \Codeception\Test\Unit
                 'g_metas' => [
                     [
                         // 型号
-                        'gm_id' => 3,
+                        'gm_id' => 1,
                         'gm_value' => "苹果IPhone7"
                     ],
                     [

@@ -6,6 +6,7 @@ use common\models\staticdata\ConstMap;
 use common\models\goods\ar\GoodsClassification;
 use common\models\goods\ar\GoodsRealAttr;
 use common\models\goods\ar\GoodsAttr;
+use common\models\goods\ar\GoodsDetail;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use common\models\goods\GoodsModel;
@@ -29,6 +30,16 @@ class Goods extends ActiveRecord
         return "{{%goods}}";
     }
 
+    public function toArray(array $fields = [], array $expand = [], $recursive = true)
+    {
+        $data = parent::toArray($fields, $expand, $recursive);
+        if(!empty($data['g_detail'])){
+            $data = ArrayHelper::merge($data, $data['g_detail']);
+            unset($data['g_detail']);
+        }
+        return $data;
+    }
+
     public function fields(){
         $fields = parent::fields();
         return array_merge($fields, [
@@ -36,8 +47,18 @@ class Goods extends ActiveRecord
             'g_metas',
             'g_option_attrs',
             'g_vaild_sku_ids',
+            'g_detail'
         ]);
     }
+
+    public function getG_detail(){
+        return $this->hasOne(GoodsDetail::className(), ['g_id' => 'g_id']);
+    }
+
+    public function setG_detail($value){
+        $this->populateRelation('g_detail', $value);
+    }
+
 
     public function getG_vaild_sku_ids(){
         if(!$this->_g_valid_sku_ids){
@@ -75,7 +96,16 @@ class Goods extends ActiveRecord
 
 
 
-
+    public function scenarios(){
+        return [
+            'default' => [
+                'g_cls_id', 'g_status', 'g_primary_name', 'g_secondary_name', 'g_create_uid', 'g_updated_at', 'g_start_at', 'g_end_at',
+            ],
+            'update' => [
+                'g_status', 'g_primary_name', 'g_secondary_name', 'g_start_at', 'g_end_at'
+            ]
+        ];
+    }
 
 
 
@@ -83,9 +113,6 @@ class Goods extends ActiveRecord
         return [
             ['g_cls_id', 'required'],
             ['g_cls_id', 'exist', 'targetAttribute' => 'g_cls_id', 'targetClass' => GoodsClassification::className()],
-
-            ['g_status', 'required'],
-            ['g_status', 'in', 'range' => ConstMap::getConst('g_status', true)],
 
             ['g_primary_name', 'string'],
             ['g_primary_name', 'required'],

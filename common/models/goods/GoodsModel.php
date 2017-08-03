@@ -40,6 +40,7 @@ class GoodsModel extends Model
             $this->addError(Errno::DB_FAIL_INSERT, Yii::t('app', '创建商品详细信息失败'));
             return false;
         }
+        $goods->g_detail = $goodsDetail;
         return $goodsDetail;
     }
     protected function createGoodsMeta($data, Goods $goods){
@@ -205,6 +206,86 @@ class GoodsModel extends Model
             return false;
         }
         $goods->g_created_at = time();
+        return $goods;
+    }
+
+    public function updateGoods($data, Goods $goods){
+        if(empty($goods->g_id)){
+            $this->addError('', Yii::t('app', "商品g_id不存在"));
+            return false;
+        }
+
+        if(!$goods = $this->updateGoodsBase($data['base'], $goods)){
+            return false;
+        }
+
+        $detailObject = $goods->g_detail;
+        if($detailObject && (!$goodsDetail = $this->updateGoodsDetail($data['detail'], $goods))){
+            return false;
+        }
+        if(!$detailObject && (!$goodsDetail = $this->createGoodsDetail($data['detail'], $goods))){
+            return false;
+        }
+        if(!$metas = $this->updateGoodsMetas($data['meta']['g_metas'], $goods)){
+            return false;
+        }
+        console($goods->toArray());
+    }
+    protected function updateGoodsMetas($metasData, Goods $goods, $asArray = true){
+        $t = Yii::$app->db->beginTransaction();
+        try {
+            $metas = ArrayHelper::index($goods->g_metas, 'gm_id');
+            foreach($metasData as $metaData){
+                if(!array_key_exists($metaData['gm_id'], $metas))continue;
+                if(!$meta = $this->updateGoodsMeta($metas[$metaData['gm_id']], $metaData, $goods))return false;
+                $metas[$metaData['gm_id']] = $meta;
+            }
+            $t->commit();
+            return $metas;
+        } catch (\Exception $e) {
+            Yii::error($e);
+            $this->addError(Errno::EXCEPTION, Yii::t('app', "修该商品多项元属性失败"));
+            return false;
+        }
+    }
+
+    protected function updateGoodsMeta($meta, $metaData, Goods $goods){
+        if(!empty($metaData)){
+            if(!$meta->load($metaData, '') || !$meta->validate()){
+                $this->addError('', $this->getOneErrMsg($meta));
+                return false;
+            }
+        }
+        return $meta;
+    }
+
+    protected function updateGoodsDetail($detailData, Goods $goods){
+        if(!empty($detailData)){
+            $detailObj = $goods->g_detail;
+            if(!$detailObj->load($detailData, '') || !$detailObj->validate()){
+                $this->addError('', $this->getOneErrMsg($detailObj));
+                return false;
+            }
+            if(false === $detailObj->update()){
+                $this->addError(Errno::DB_FAIL_UPDATE, Yii::t('app', "更新商品详细数据失败"));
+                return false;
+            }
+        }
+        $goods->g_detail = $detailObj;
+        return $detailObj;
+    }
+    protected function updateGoodsBase($baseData, Goods $goods){
+        if(!empty($baseData)){
+            $goods->scenario = 'update';
+            if(!$goods->load($baseData, '') || !$goods->validate()){
+                $this->addError('', $this->getOneErrMsg($goods));
+                return false;
+            }
+            if(false === $goods->update()){
+                $this->addError(Errno::DB_FAIL_UPDATE, Yii::t('app', "更新商品基础数据失败"));
+                return false;
+            }
+        }
         return $goods;
     }
 

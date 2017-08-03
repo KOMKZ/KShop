@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
 class GoodsDetail extends ActiveRecord
 {
     public static function tableName(){
-        return "{{%godos_detail}}";
+        return "{{%goods_detail}}";
     }
     public function rules(){
         return [
@@ -19,5 +19,5 @@ class GoodsDetail extends ActiveRecord
             ['g_intro_text', 'string']
         ];
     }
-    
+
 }
