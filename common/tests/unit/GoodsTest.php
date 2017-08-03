@@ -33,15 +33,15 @@ class ClassificationTest extends \Codeception\Test\Unit
     }
 
     public function testUpdateGoods(){
+        // return ;
         Yii::$app->db->beginTransaction();
-        $draftGoods = GoodsQuery::find()
+        $goods = GoodsQuery::find()
                                 ->where(['g_status' => Goods::STATUS_DRAFT])
                                 ->one();
-        if(!$draftGoods){
+        if(!$goods){
             $this->debug("当前没有处于草稿的商品");
         }
         $data = [
-            'g_id' => $draftGoods['g_id'],
             'base' => [
                 'g_primary_name' => '苹果IPhone7',
                 'g_secondary_name' => '苹果IPhone7',
@@ -72,10 +72,22 @@ class ClassificationTest extends \Codeception\Test\Unit
                         'gm_value' => '中国大陆',
                     ],
                 ],
-            ]
+            ],
+            'g_del_meta_ids' => [],
+            'g_del_atr_ids' => [6],
             'attrs' => [
                 'g_attrs' => [
-
+                    [
+                        // 颜色
+                        'gr_id' => 1,
+                        'g_atr_opts' => [
+                            [
+                                'g_opt_id' => 3,
+                                'g_opt_name' => '玫瑰金',
+                                'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
+                            ],
+                        ]
+                    ],
                 ]
             ],
             'sku' => [
@@ -107,12 +119,13 @@ class ClassificationTest extends \Codeception\Test\Unit
                     'g_id' => $goods->g_id,
                 ],
             ]
-
-
-
-
         ];
-        console($draftGoods->toArray());
+        $gModel = new GoodsModel();
+        $result = $gModel->updateGoods($data, $goods);
+        if(!$result){
+            $this->debug($result);
+        }
+        console($goods->toArray());
     }
 
 
