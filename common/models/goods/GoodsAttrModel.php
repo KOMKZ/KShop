@@ -19,7 +19,17 @@ use common\helpers\ArrayHelper;
  */
 class GoodsAttrModel extends Model
 {
-    public function createGoodsMeta($data, $goods, $asArray = true){
+    public static function deleteGoodsMetas($condition = null, $params = []){
+        return GoodsMeta::updateAll(['gm_status' => GoodsMeta::STATUS_DELETE], $condition, $params);
+    }
+
+    public static function deleteGoodsAttrs($condition = null, $params = []){
+        return GoodsRealAttr::updateAll(['gr_status' => GoodsRealAttr::STATUS_DELETE], $condition, $params);
+    }
+
+
+
+    public function createGoodsMetas($data, $goods, $asArray = true){
         list($newMetas, $oldMetas) = $this->parseMetaNewAndOld($data['metas']);
         $metas = [];
         foreach($newMetas as $meta){
@@ -30,7 +40,7 @@ class GoodsAttrModel extends Model
                 return false;
             }
             $meta['g_atr_id'] = $metaObject->g_atr_id;
-            $metas[] = $attr;
+            $metas[] = $meta;
         }
 
         $metaDefs = [];

@@ -73,13 +73,13 @@ class ClassificationTest extends \Codeception\Test\Unit
                     ],
                 ],
             ],
-            'g_del_meta_ids' => [],
-            'g_del_atr_ids' => [6],
+            'g_del_meta_ids' => [1],
+            'g_del_atr_ids' => [1],
             'attrs' => [
                 'g_attrs' => [
                     [
                         // 颜色
-                        'gr_id' => 1,
+                        'gr_id' => 2,
                         'g_atr_opts' => [
                             [
                                 'g_opt_id' => 3,
@@ -88,6 +88,21 @@ class ClassificationTest extends \Codeception\Test\Unit
                             ],
                         ]
                     ],
+                    [
+                        // 是否带logo
+                        'g_atr_name' => '套餐',
+                        'g_atr_opt_img' => 0,
+                        'g_atr_code' => 'package',
+                        'g_atr_type' => 'sku',
+                        'g_atr_opts' => [
+                            [
+                                'g_opt_name' => '电信套餐',
+                            ],
+                            [
+                                'g_opt_name' => '联通套餐',
+                            ],
+                        ]
+                    ]
                 ]
             ],
             'sku' => [
@@ -123,7 +138,7 @@ class ClassificationTest extends \Codeception\Test\Unit
         $gModel = new GoodsModel();
         $result = $gModel->updateGoods($data, $goods);
         if(!$result){
-            $this->debug($result);
+            $this->debug($gModel->getOneError());
         }
         console($goods->toArray());
     }
@@ -142,50 +157,7 @@ class ClassificationTest extends \Codeception\Test\Unit
         console($result);
     }
 
-    public function testCreateSku(){
-        return ;
-        Yii::$app->db->beginTransaction();
-        $gModel = new GoodsModel();
-        $goods  = GoodsQuery::find()
-                                ->where(['g_id' => 1])
-                                ->one();
-        // 商品的sku信息
-        $skuData = [
-            [
-                'g_sku_value' => '4:1;5:1',
-                'g_sku_stock_num' => 100,
-                'g_sku_price' => '499900',
-                'g_sku_sale_price' => '529900',
-                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
-                'g_sku_create_uid' => 1,
-                'g_id' => $goods->g_id,
-            ],
-            [
-                'g_sku_value' => '4:2;5:1',
-                'g_sku_stock_num' => 100,
-                'g_sku_price' => '579900',
-                'g_sku_sale_price' => '599900',
-                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
-                'g_sku_create_uid' => 1,
-                'g_id' => $goods->g_id,
-            ],
-            [
-                'g_sku_value' => '4:3;5:1',
-                'g_sku_stock_num' => 100,
-                'g_sku_price' => '678800',
-                'g_sku_sale_price' => '698800',
-                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
-                'g_sku_create_uid' => 1,
-                'g_id' => $goods->g_id,
-            ],
-        ];
-        $gModel = new GoodsModel();
-        $skus = $gModel->createMultiGoodsSku($skuData, $goods);
-        if(!$skus){
-            $this->debug($gModel->getOneError());
-        }
-        console($skus);
-    }
+
 
 
     public function testCreateGoods(){
@@ -268,6 +240,51 @@ class ClassificationTest extends \Codeception\Test\Unit
         }
         // console($goods->toArray());
         $this->assertNotEmpty($goods);
+    }
+
+    public function testCreateSku(){
+        return ;
+        Yii::$app->db->beginTransaction();
+        $gModel = new GoodsModel();
+        $goods  = GoodsQuery::find()
+                                ->where(['g_id' => 1])
+                                ->one();
+        // 商品的sku信息
+        $skuData = [
+            [
+                'g_sku_value' => '4:1;5:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '499900',
+                'g_sku_sale_price' => '529900',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+            [
+                'g_sku_value' => '4:2;5:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '579900',
+                'g_sku_sale_price' => '599900',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+            [
+                'g_sku_value' => '4:3;5:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '678800',
+                'g_sku_sale_price' => '698800',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+        ];
+        $gModel = new GoodsModel();
+        $skus = $gModel->createMultiGoodsSku($skuData, $goods);
+        if(!$skus){
+            $this->debug($gModel->getOneError());
+        }
+        console($skus);
     }
 
     public function testCreateGoodsClassification()

@@ -47,7 +47,16 @@ class GoodsRealAttr extends ActiveRecord
     }
 
 
-
+    public function scenarios(){
+        return [
+            'default' => [
+                'g_atr_id', 'g_id', 'gr_status',
+            ],
+            'update' => [
+                'g_status', 'g_primary_name', 'g_secondary_name', 'g_start_at', 'g_end_at'
+            ]
+        ];
+    }
 
 
 

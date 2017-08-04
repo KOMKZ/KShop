@@ -59,6 +59,14 @@ class Goods extends ActiveRecord
         $this->populateRelation('g_detail', $value);
     }
 
+    public function getG_attrs(){
+        $gaTable = GoodsAttr::tableName();
+        $grTable = GoodsRealAttr::tableName();
+        return $this
+               ->hasMany(GoodsRealAttr::className(), ['g_id' => 'g_id'])
+               ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$grTable}.g_atr_id")
+               ->andWhere(['=', "{$grTable}.gr_status", GoodsRealAttr::STATUS_VALID]);
+    }
 
     public function getG_vaild_sku_ids(){
         if(!$this->_g_valid_sku_ids){
@@ -73,7 +81,8 @@ class Goods extends ActiveRecord
         return $this
                ->hasMany(GoodsRealAttr::className(), ['g_id' => 'g_id'])
                ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$grTable}.g_atr_id")
-               ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_SKU]);
+               ->andWhere(['=', "{$gaTable}.g_atr_type", GoodsAttr::ATR_TYPE_SKU])
+               ->andWhere(['=', "{$grTable}.gr_status", GoodsRealAttr::STATUS_VALID]);
     }
 
     public function getG_metas(){
@@ -82,7 +91,12 @@ class Goods extends ActiveRecord
         return $this
                ->hasMany(GoodsMeta::className(), ['g_id' => 'g_id'])
                ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$gmTable}.g_atr_id")
-               ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_META]);
+               ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_META])
+               ->andWhere(['=', "{$gmTable}.gm_status", GoodsMeta::STATUS_VALID]);
+    }
+
+    public function setG_metas($value){
+        $this->populateRelation('g_metas', $value);
     }
 
     public function getG_option_attrs(){
@@ -91,7 +105,8 @@ class Goods extends ActiveRecord
         return $this
                ->hasMany(GoodsRealAttr::className(), ['g_id' => 'g_id'])
                ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$grTable}.g_atr_id")
-               ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_OPTION]);
+               ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_OPTION])
+               ->andWhere(['=', "{$grTable}.gr_status", GoodsRealAttr::STATUS_VALID]);
     }
 
 
