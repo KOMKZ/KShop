@@ -8,6 +8,7 @@ use common\models\goods\ar\Goods;
 use common\models\goods\ar\GoodsAttr;
 use common\models\goods\ar\GoodsDetail;
 use common\models\goods\query\GoodsAttrQuery;
+use common\models\goods\query\GoodsSkuQuery;
 use common\helpers\ArrayHelper;
 use common\models\goods\ar\GoodsSku;
 use common\models\staticdata\Errno;
@@ -89,13 +90,63 @@ class GoodsModel extends Model
                 }
                 $skus[] = $asArray ? $sku->toArray() : $sku;
             }
-            return $skus;
             $t->commit();
+            return $skus;
         } catch (\Exception $e) {
             Yii::error($e);
-            $this->addError(Errno::EXCEPTION, Yii::t('创建商品sku失败'));
+            $this->addError(Errno::EXCEPTION, Yii::t('app', '创建商品sku异常'));
             return false;
         }
+    }
+
+    public function updateMultiGoodsSku($skusData, Goods $goods){
+        $t = Yii::$app->db->beginTransaction();
+        try {
+            // 分析出新的还有旧的
+            $oldSkus = $newSkus = [];
+            $validSkus = $goods->g_vaild_sku_ids;
+            $currentSkus = ArrayHelper::index($goods->g_skus, 'g_sku_value');
+            foreach($skusData as $skuData){
+                if(empty($skuData['g_sku_value']) || empty($validSkus[$skuData['g_sku_value']]))continue;
+                if(array_key_exists($skuData['g_sku_value'], $currentSkus)){
+                    $oldSkus[] = $skuData;
+                }else{
+                    $newSkus[] = $skuData;
+                }
+            }
+            if($newSkus && !$this->createMultiGoodsSku($newSkus, $goods)){
+                return false;
+            }
+            if(!empty($oldSkus)){
+                foreach($oldSkus as $skuData){
+                    if(false === $this->updateGoodsSku($currentSkus[$skuData['g_sku_value']], $skuData, $goods)){
+                        return false;
+                    }
+                }
+            }
+            $goods->refresh();
+            $t->commit();
+            //maybe change
+            return true;
+        } catch (\Exception $e) {
+            Yii::error($e);
+            $this->addError(Errno::EXCEPTION, Yii::t("app", "更新产品sku异常"));
+            return false;
+        }
+    }
+
+    public function updateGoodsSku(GoodsSku $sku, $skuData, Goods $goods){
+        if(empty($sku->g_sku_id)){
+            return false;
+        }
+        if(!$sku->load($skuData, '') || !$sku->validate()){
+            return false;
+        }
+        if(false === $sku->update(false)){
+            $this->addError(Errno::DB_FAIL_UPDATE, Yii::t('app', "更新产品sku失败"));
+            return false;
+        }
+        return $sku;
     }
 
     public function createGoodsSku($skuData, Goods $goods){
@@ -108,7 +159,7 @@ class GoodsModel extends Model
             $this->addError('', Yii::t('app', '无效的g_sku_value值:' . $skuData['g_sku_value']));
             return false;
         }
-        $sku->g_sku_id = static::buildGSkuId($goods->g_id, $sku->g_sku_value);
+        // $sku->g_sku_id = static::buildGSkuId($goods->g_id, $sku->g_sku_value);
         $sku->g_sku_value_name = $goods->g_vaild_sku_ids[$sku->g_sku_value]['name'];
         $sku->g_sku_created_at = time();
         if(!$sku->insert(false)){
@@ -276,10 +327,21 @@ class GoodsModel extends Model
             return false;
         }
 
+        // 确保sku实例此时是争取的
+        self::ensureSkuValid($goods);
+
 
 
         console($goods->toArray());
+    }
 
+    public static function ensureSkuValid($goods){
+        $validSkuMap = static::createSkuIds($goods, ArrayHelper::toArray($goods->g_sku_attrs));
+        return GoodsSku::updateAll(['g_sku_status' => GoodsSku::STATUS_INVALID], [
+            'and',
+            ['=', 'g_id', $goods->g_id],
+            ['not in', 'g_sku_value', array_keys($validSkuMap)]
+        ]);
     }
 
     protected function updateGoodsAttrs($attrData, Goods $goods, $asArray = true){
@@ -299,15 +361,35 @@ class GoodsModel extends Model
         }
     }
 
-    protected function updateGoodsAttr($attr, $attrData, Goods $goods){
-        if(!empty($attr)){
-            console($attr);
-            if(!$attr->load($attrData, '') || !$attr->validate()){
-                $this->addError('', $this->getOneErrMsg($attr));
+    protected function updateGoodsAttr($realAttr, $attrData, Goods $goods){
+        if(!empty($realAttr)){
+            // 商品属性约定不能修改，只能修改商品属性值
+            if(empty($attrData['g_atr_opts'])){
+                return $realAttr;
+            }
+            // 解析得到新的属性还有旧的属性
+            $oldOpts = $newOpts = [];
+            foreach ($attrData['g_atr_opts'] as $optionData) {
+                if(!empty($optionData['g_opt_id'])){
+                    $oldOpts[] = $optionData;
+                }else{
+                    $newOpts[] = $optionData;
+                }
+            }
+            $attrModel = new GoodsAttrModel();
+            if($oldOpts && !$attrModel->updateAttrOptions($oldOpts, $realAttr, $goods, false)){
+                list($code, $error) = $attrModel->getOneError();
+                $this->addError('', $error);
                 return false;
             }
+            if($newOpts && !$newOptions = $attrModel->createAttrOptions($newOpts, $realAttr->g_attr, $goods, false, $realAttr->next_opt_value)){
+                list($code, $error) = $attrModel->getOneError();
+                $this->addError('', $error);
+                return false;
+            }
+            $realAttr->refresh();
         }
-        return $attr;
+        return $realAttr;
     }
 
     protected function updateGoodsMetas($metasData, Goods $goods, $asArray = true){

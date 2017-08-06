@@ -7,6 +7,7 @@ use common\models\goods\ar\GoodsClassification;
 use common\models\goods\ar\GoodsRealAttr;
 use common\models\goods\ar\GoodsAttr;
 use common\models\goods\ar\GoodsDetail;
+use common\models\goods\ar\GoodsSku;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use common\models\goods\GoodsModel;
@@ -47,7 +48,16 @@ class Goods extends ActiveRecord
             'g_metas',
             'g_option_attrs',
             'g_vaild_sku_ids',
+            'g_skus',
             'g_detail'
+        ]);
+    }
+
+    public function getG_skus(){
+        return $this->hasMany(GoodsSku::className(), [
+            'g_id' => 'g_id'
+        ])->andWhere([
+            'in', 'g_sku_status', [GoodsSku::STATUS_ON_SALE, GoodsSku::STATUS_ON_NOT_SALE]
         ]);
     }
 

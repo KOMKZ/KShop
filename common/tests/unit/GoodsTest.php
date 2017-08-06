@@ -32,116 +32,9 @@ class ClassificationTest extends \Codeception\Test\Unit
         console($data);
     }
 
-    public function testUpdateGoods(){
-        // return ;
-        Yii::$app->db->beginTransaction();
-        $goods = GoodsQuery::find()
-                                ->where(['g_status' => Goods::STATUS_DRAFT])
-                                ->one();
-        if(!$goods){
-            $this->debug("当前没有处于草稿的商品");
-        }
-        $data = [
-            'base' => [
-                'g_primary_name' => '苹果IPhone7',
-                'g_secondary_name' => '苹果IPhone7',
-                'g_cls_id' => 4,
-                'g_status' => 'draft',
-                'g_update_uid' => 2,
-                'g_start_at' => time(),
-                'g_end_at' => time() + 3600,
-            ],
-            'detail' => [
-                'g_intro_text' => 'IPhone7非常长的富文本介绍',
-            ],
-            'meta' => [
-                'g_metas' => [
-                    [
-                        // 型号
-                        'gm_id' => 1,
-                        'gm_value' => "苹果IPhone7"
-                    ],
-                    [
-                        'g_atr_code' => 'resolution',
-                        'g_atr_name' => '分辨率',
-                        'gm_value' => '1334*750',
-                    ],
-                    [
-                        'g_atr_code' => 'made_in',
-                        'g_atr_name' => '商品产地',
-                        'gm_value' => '中国大陆',
-                    ],
-                ],
-            ],
-            'g_del_meta_ids' => [1],
-            'g_del_atr_ids' => [1],
-            'attrs' => [
-                'g_attrs' => [
-                    [
-                        // 颜色
-                        'gr_id' => 2,
-                        'g_atr_opts' => [
-                            [
-                                'g_opt_id' => 3,
-                                'g_opt_name' => '玫瑰金',
-                                'g_opt_img' => 'https://img11.360buyimg.com/n9/s40x40_jfs/t3148/124/1614329694/101185/b709b251/57d0c55cNa20597da.jpg'
-                            ],
-                        ]
-                    ],
-                    [
-                        // 是否带logo
-                        'g_atr_name' => '套餐',
-                        'g_atr_opt_img' => 0,
-                        'g_atr_code' => 'package',
-                        'g_atr_type' => 'sku',
-                        'g_atr_opts' => [
-                            [
-                                'g_opt_name' => '电信套餐',
-                            ],
-                            [
-                                'g_opt_name' => '联通套餐',
-                            ],
-                        ]
-                    ]
-                ]
-            ],
-            'sku' => [
-                [
-                    'g_sku_value' => '4:1;5:1',
-                    'g_sku_stock_num' => 100,
-                    'g_sku_price' => '499899',
-                    'g_sku_sale_price' => '529899',
-                    'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
-                    'g_sku_update_uid' => 1,
-                    'g_id' => $goods->g_id,
-                ],
-                [
-                    'g_sku_value' => '4:2;5:1',
-                    'g_sku_stock_num' => 100,
-                    'g_sku_price' => '579899',
-                    'g_sku_sale_price' => '599899',
-                    'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
-                    'g_sku_update_uid' => 1,
-                    'g_id' => $goods->g_id,
-                ],
-                [
-                    'g_sku_value' => '4:3;5:3',
-                    'g_sku_stock_num' => 100,
-                    'g_sku_price' => '678799',
-                    'g_sku_sale_price' => '698799',
-                    'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
-                    'g_sku_create_uid' => 2,
-                    'g_id' => $goods->g_id,
-                ],
-            ]
-        ];
-        $gModel = new GoodsModel();
-        $result = $gModel->updateGoods($data, $goods);
-        if(!$result){
-            $this->debug($gModel->getOneError());
-        }
-        console($goods->toArray());
-    }
+
+
+
 
 
     public function testDeleteGoods(){
@@ -285,6 +178,191 @@ class ClassificationTest extends \Codeception\Test\Unit
             $this->debug($gModel->getOneError());
         }
         console($skus);
+    }
+
+
+    public function testUpdateGoods(){
+        return ;
+        Yii::$app->db->beginTransaction();
+        $goods = GoodsQuery::find()
+                                ->where(['g_status' => Goods::STATUS_DRAFT])
+                                ->one();
+        if(!$goods){
+            $this->debug("当前没有处于草稿的商品");
+        }
+        $data = [
+            'base' => [
+                'g_primary_name' => '苹果IPhone7',
+                'g_secondary_name' => '苹果IPhone7',
+                'g_cls_id' => 4,
+                'g_status' => 'draft',
+                'g_update_uid' => 2,
+                'g_start_at' => time(),
+                'g_end_at' => time() + 3600,
+            ],
+            'detail' => [
+                'g_intro_text' => 'IPhone7非常长的富文本介绍',
+            ],
+            'meta' => [
+                'g_metas' => [
+                    [
+                        // 型号
+                        'gm_id' => 1,
+                        'gm_value' => "苹果IPhone7"
+                    ],
+                    [
+                        'g_atr_code' => 'resolution',
+                        'g_atr_name' => '分辨率',
+                        'gm_value' => '1334*750',
+                    ],
+                    [
+                        'g_atr_code' => 'made_in',
+                        'g_atr_name' => '商品产地',
+                        'gm_value' => '中国大陆',
+                    ],
+                ],
+            ],
+            'g_del_meta_ids' => [1],
+            'g_del_atr_ids' => [1],
+            'attrs' => [
+                'g_attrs' => [
+                    [
+                        // 颜色
+                        'gr_id' => 2,
+                        'g_atr_opts' => [
+                            [
+                                'g_opt_id' => 3,
+                                'g_opt_name' => '玫瑰金',
+                                'g_opt_img' => 'https://img13.360buyimg.com/n9/s40x40_jfs/t3271/198/1628975622/101259/6ea4ec2c/57d0c513N881221b4.jpg'
+                            ],
+                            [
+                                'g_opt_name' => '红色特色版',
+                                'g_opt_img' => 'https://img13.360buyimg.com/n9/s40x40_jfs/t4642/110/753072126/121222/5556881f/58d484a0N1d9d2ebf.jpg'
+                            ],
+                        ]
+                    ],
+                    [
+                        // 是否带logo
+                        'g_atr_name' => '套餐',
+                        'g_atr_opt_img' => 0,
+                        'g_atr_code' => 'package',
+                        'g_atr_type' => 'sku',
+                        'g_atr_opts' => [
+                            [
+                                'g_opt_name' => '电信套餐',
+                            ],
+                            [
+                                'g_opt_name' => '联通套餐',
+                            ],
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $gModel = new GoodsModel();
+        $result = $gModel->updateGoods($data, $goods);
+        if(!$result){
+            $this->debug($gModel->getOneError());
+        }
+
+
+        $goods = GoodsQuery::find()
+                                ->where(['g_status' => Goods::STATUS_DRAFT])
+                                ->one();
+        if(!$goods){
+            $this->debug("当前没有处于草稿的商品");
+        }
+        $data = [
+            [
+                'g_sku_value' => '4:1;5:1;18:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '499899',
+                'g_sku_sale_price' => '529899',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+            [
+                'g_sku_value' => '4:2;5:1;18:2',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '579899',
+                'g_sku_sale_price' => '599899',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+            [
+                'g_sku_value' => '4:3;5:3;18:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '678799',
+                'g_sku_sale_price' => '698799',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+        ];
+        $gModel = new GoodsModel();
+        $skus = $gModel->createMultiGoodsSku($data, $goods);
+        if(!$skus){
+            $this->debug($gModel->getOneError());
+        }
+
+        console($goods->toArray());
+    }
+
+    public function testUpdateSku(){
+        // return ;
+        Yii::$app->db->beginTransaction();
+        $goods = GoodsQuery::find()
+                                ->where(['g_status' => Goods::STATUS_DRAFT])
+                                ->one();
+        if(!$goods){
+            $this->debug("当前没有处于草稿的商品");
+        }
+        $data = [
+            [
+                'g_sku_value' => '4:3;5:3;18:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '678599',
+                'g_sku_sale_price' => '698599',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+            [
+                'g_sku_value' => '4:3;5:3;18:2',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '678599',
+                'g_sku_sale_price' => '698599',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+            [
+                'g_sku_value' => '4:2;5:1;18:2',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '579699',
+                'g_sku_sale_price' => '599699',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+            [
+                'g_sku_value' => '4:2;5:1;18:1',
+                'g_sku_stock_num' => 100,
+                'g_sku_price' => '579699',
+                'g_sku_sale_price' => '599699',
+                'g_sku_status' => GoodsSku::STATUS_ON_NOT_SALE,
+                'g_sku_create_uid' => 1,
+                'g_id' => $goods->g_id,
+            ],
+        ];
+        $gModel = new GoodsModel();
+        $skus = $gModel->updateMultiGoodsSku($data, $goods);
+        if(!$skus){
+            $this->debug($gModel->getOneError());
+        }
+        console($goods->toArray());
     }
 
     public function testCreateGoodsClassification()

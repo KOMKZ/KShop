@@ -38,5 +38,6 @@ return [
     'g_sku_status' => [
         \common\models\goods\ar\GoodsSku::STATUS_ON_SALE => Yii::t('app', "上架"),
         \common\models\goods\ar\GoodsSku::STATUS_ON_NOT_SALE => Yii::t('app', "下架"),
+        \common\models\goods\ar\GoodsSku::STATUS_INVALID => Yii::t('app', "失效"),
     ]
 ];

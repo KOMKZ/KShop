@@ -14,6 +14,18 @@ class GoodsRealOption extends ActiveRecord
         return "{{%goods_real_option}}";
     }
 
+
+    public function scenarios(){
+        return [
+            'default' => [
+                'g_id', 'g_atr_id', 'g_opt_name', 'g_opt_value', 'g_opt_img'
+            ],
+            'update' => [
+                'g_opt_name', 'g_opt_value', 'g_opt_img'
+            ]
+        ];
+    }
+
     public function rules(){
         return [
             ['g_id', 'required'],

@@ -35,6 +35,17 @@ class GoodsRealAttr extends ActiveRecord
             'g_attr'
         ]);
     }
+
+    public function getNext_opt_value(){
+        $max = GoodsOptionQuery::find()
+                               ->where([
+                                   'g_id' => $this->g_id,
+                                   'g_atr_id' => $this->g_atr_id
+                               ])
+                               ->max('g_opt_value');
+        return $max + 1;
+    }
+
     public function getG_atr_opts(){
         return $this->hasMany(GoodsRealOption::className(), [
             'g_id' => 'g_id',
@@ -52,9 +63,6 @@ class GoodsRealAttr extends ActiveRecord
             'default' => [
                 'g_atr_id', 'g_id', 'gr_status',
             ],
-            'update' => [
-                'g_status', 'g_primary_name', 'g_secondary_name', 'g_start_at', 'g_end_at'
-            ]
         ];
     }
 

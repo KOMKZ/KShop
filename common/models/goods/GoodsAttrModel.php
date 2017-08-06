@@ -12,6 +12,7 @@ use common\models\goods\ar\GoodsMeta;
 use common\models\goods\ar\GoodsRealOption;
 use common\models\goods\query\GoodsAttrQuery;
 use common\helpers\ArrayHelper;
+use common\models\staticdata\Errno;
 
 
 /**
@@ -115,13 +116,13 @@ class GoodsAttrModel extends Model
         }
         return $attrDefs;
     }
-    protected function createAttrOptions($options, GoodsAttr $attr, Goods $goods){
+    public function createAttrOptions($options, GoodsAttr $attr, Goods $goods, $asArray = true, $startValue = 1){
         if(is_string($options)){
             $options = [[
                 'g_opt_name' => $options,
             ]];
         }
-        $optionValue = 1;
+        $optionValue = $startValue;
         foreach($options as $key => $optionData){
             $optionData['g_id'] = $goods->g_id;
             $optionData['g_atr_id'] = $attr->g_atr_id;
@@ -151,6 +152,33 @@ class GoodsAttrModel extends Model
         $option->g_opt_created_at = time();
          if(!$option->insert(false)){
             $this->addError('', Yii::t('商品属性值创建失败'));
+            return false;
+        }
+        return $option;
+    }
+
+    public function updateAttrOptions($optionsData, GoodsRealAttr $attr, Goods $goods, $asArray = true){
+        $options = ArrayHelper::index($attr->g_atr_opts, "g_opt_id");
+        foreach($optionsData as $optionData){
+            if(!empty($options[$optionData['g_opt_id']]) && !$option = $this->updateAttrOption($options[$optionData['g_opt_id']], $optionData)){
+                return false;
+            }
+        }
+        return $options;
+    }
+
+    public function updateAttrOption(GoodsRealOption $option, $optionData){
+        if(empty($option['g_opt_id'])){
+            $this->addError('', Yii::t('app', "更新属性选项对象出错，g_opt_id不存在"));
+            return false;
+        }
+        $option->scenario = 'update';
+        if(!$option->load($optionData, '') || !$option->validate()){
+            $this->addError('', $this->getOneErrMsg($option));
+            return false;
+        }
+        if(false === $option->update(false)){
+            $this->addError(Errno::DB_FAIL_UPDATE, Yii::t('app', "更新商品元数据失败"));
             return false;
         }
         return $option;

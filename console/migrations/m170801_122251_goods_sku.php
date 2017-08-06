@@ -12,7 +12,7 @@ class m170801_122251_goods_sku extends Migration
         $tableName = $this->getTableName();
         $createTabelSql = "
         create table `{$tableName}`(
-            `g_sku_id` bigint(20) unsigned not null comment '主键',
+            `g_sku_id` bigint(20) unsigned not null auto_increment comment '主键',
             `g_sku_name` varchar(255) null default '' comment '商品sku名称',
             `g_sku_value_name` varchar(255) not null comment '商品sku值label',
             `g_id` int(10) unsigned not null comment '商品id',
