@@ -3,6 +3,7 @@ namespace common\models\goods\ar;
 
 use yii\db\ActiveRecord;
 use common\models\staticdata\ConstMap;
+use common\models\goods\ar\GoodsSource;
 /**
  *
  */
@@ -17,6 +18,20 @@ class GoodsSku extends ActiveRecord
         return "{{%goods_sku}}";
     }
 
+    public function fields(){
+        $fields = parent::fields();
+        return array_merge($fields, [
+            'g_sku_source',
+        ]);
+    }
+
+    public function getG_sku_source(){
+        return $this->hasMany(GoodsSource::className(), [
+            'gs_cls_id' => 'g_sku_id'
+        ])->andWhere([
+            '=', 'gs_cls_type', GoodsSource::CLS_TYPE_SKU
+        ]);
+    }
 
     public function rules(){
         return [

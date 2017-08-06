@@ -39,5 +39,13 @@ return [
         \common\models\goods\ar\GoodsSku::STATUS_ON_SALE => Yii::t('app', "上架"),
         \common\models\goods\ar\GoodsSku::STATUS_ON_NOT_SALE => Yii::t('app', "下架"),
         \common\models\goods\ar\GoodsSku::STATUS_INVALID => Yii::t('app', "失效"),
+    ],
+    'gs_type' => [
+        \common\models\goods\ar\GoodsSource::TYPE_IMG => Yii::t('app', '图像')
+    ],
+    'gs_cls_type' => [
+        \common\models\goods\ar\GoodsSource::CLS_TYPE_SKU => Yii::t('app', '商品sku资源'),
+        \common\models\goods\ar\GoodsSource::CLS_TYPE_GOODS => Yii::t('app', '商品资源'),
+        \common\models\goods\ar\GoodsSource::CLS_TYPE_OPTION => Yii::t('app', '商品属性值资源')
     ]
 ];

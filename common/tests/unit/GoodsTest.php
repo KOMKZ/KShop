@@ -311,7 +311,7 @@ class ClassificationTest extends \Codeception\Test\Unit
     }
 
     public function testUpdateSku(){
-        // return ;
+        return ;
         Yii::$app->db->beginTransaction();
         $goods = GoodsQuery::find()
                                 ->where(['g_status' => Goods::STATUS_DRAFT])
@@ -439,9 +439,5 @@ class ClassificationTest extends \Codeception\Test\Unit
             $this->debug($gAtrModel->getOneError());
         }
         $this->tester->assertEquals(count($attrs), $rowsNum);
-
-
-
-
     }
 }

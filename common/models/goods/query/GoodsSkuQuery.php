@@ -14,4 +14,12 @@ class GoodsSkuQuery extends Object
         return GoodsSku::find();
     }
 
+    public static function findByValue($values){
+        $query = GoodsSku::find()
+                         ->where([
+                             'g_sku_value' => $values
+                         ]);
+        return $query;
+    }
+
 }

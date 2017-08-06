@@ -6,7 +6,9 @@ use common\models\Model;
 use common\models\goods\GoodsAttrModel;
 use common\models\goods\ar\Goods;
 use common\models\goods\ar\GoodsAttr;
+use common\models\goods\ar\GoodsRealOption;
 use common\models\goods\ar\GoodsDetail;
+use common\models\goods\ar\GoodsSource;
 use common\models\goods\query\GoodsAttrQuery;
 use common\models\goods\query\GoodsSkuQuery;
 use common\helpers\ArrayHelper;
@@ -243,6 +245,33 @@ class GoodsModel extends Model
         }
         return $skuIds;
     }
+
+    public function createSource($data, $clsObject){
+        $clsType = null;
+        if($clsObject instanceof Goods){
+            $clsType = GoodsSource::CLS_TYPE_GOODS;
+            $clsId = $clsObject->g_id;
+        }elseif($clsObject instanceof GoodsSku){
+            $clsType = GoodsSource::CLS_TYPE_SKU;
+            $clsId = $clsObject->g_sku_id;
+        }elseif($clsObject instanceof GoodsRealOption){
+            $clsType = GoodsSource::CLS_TYPE_OPTION;
+            $clsId = $clsObject->g_opt_id;
+        }
+        $goodsSource = new GoodsSource();
+        if(!$goodsSource->load($data, '') || !$goodsSource->validate()){
+            return false;
+        }
+        $goodsSource->gs_cls_type = $clsType;
+        $goodsSource->gs_cls_id = $clsId;
+        $goodsSource->gs_created_at = time();
+        if(!$goodsSource->insert(false)){
+            $this->addError(Errno::DB_FAIL_INSERT, Yii::t('app', '创建商品相关资源失败'));
+            return false;
+        }
+        return $goodsSource;
+    }
+
     public function validateGoodsDetailData($data){
         $goodsDetail = new GoodsDetail();
         if(!$goodsDetail->load($data, '') || !$goodsDetail->validate()){

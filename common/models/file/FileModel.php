@@ -19,6 +19,23 @@ use common\models\file\query\FileTaskQuery;
  */
 class FileModel extends Model
 {
+
+    public function createFileBySource($fileData){
+        $file = $this->createFile($fileData);
+        if(!$file){
+            return false;
+        }
+        $file = $this->saveFile($file);
+        if(!$file){
+            return false;
+        }
+        $file = $this->saveFileInDb($file);
+        if(!$file){
+            return false;
+        }
+        return $file;
+    }
+
     /**
      * 通过复制保存文件在存储媒介中
      * 该方法暂时没有实现不同媒介之间的复制
@@ -300,8 +317,9 @@ class FileModel extends Model
         $typeList = implode('|', ConstMap::getConst('file_save_type', true));
         if(preg_match("/^({$typeList}):{1}(.+)/", $string, $matches)){
             $fileCondition = [];
+            $fileCondition['file_category'] = trim(dirname($matches[2]), '/');
             $fileCondition['file_save_type'] = $matches[1];
-            $fileCondition['file_prefix'] = self::buildPrefix(trim(dirname($matches[2]), '/'));
+            $fileCondition['file_prefix'] = self::buildPrefix($fileCondition['file_category']);
             $fileCondition['file_real_name'] = basename(trim($matches[2]));
             return $fileCondition;
         }else{
@@ -347,6 +365,16 @@ class FileModel extends Model
     public static function buildFileUrl(File $file){
         return self::getSaveMedium($file->file_save_type)->buildFileUrl($file);
     }
+
+    public static function buildFileUrlStatic($fileInfo){
+        $file = Yii::createObject(array_merge([
+            'class' => File::className(),
+            'file_is_private' => 0,
+        ], $fileInfo));
+        $file->file_medium_info = json_encode(self::getSaveMedium($file->file_save_type)->buildMediumInfo());
+        return static::buildFileUrl($file);
+    }
+
 
     public static function buildFileSavePath(File $file){
         return $file->file_prefix . '/' . $file->file_real_name;
