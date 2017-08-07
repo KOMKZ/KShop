@@ -29,6 +29,85 @@ class GoodsAttrModel extends Model
     }
 
 
+    public function updateGoodsAttrs($attrData, Goods $goods, $asArray = true){
+        $t = Yii::$app->db->beginTransaction();
+        try {
+            $attrs = ArrayHelper::index($goods->g_attrs, 'gr_id');
+            foreach($attrData as $attrItem){
+                if(!isset($attrItem['gr_id']) || !array_key_exists($attrItem['gr_id'], $attrs))continue;
+                if(!$attr = $this->updateGoodsAttr($attrs[$attrItem['gr_id']], $attrItem, $goods))return false;
+            }
+            $t->commit();
+            return $attrs;
+        } catch (\Exception $e) {
+            Yii::error($e);
+            $this->addError(Errno::EXCEPTION, Yii::t('app', "修该商品多项属性失败"));
+            return false;
+        }
+    }
+
+    public function updateGoodsAttr($realAttr, $attrData, Goods $goods){
+        if(!empty($realAttr)){
+            // 商品属性约定不能修改，只能修改商品属性值
+            if(empty($attrData['g_atr_opts'])){
+                return $realAttr;
+            }
+            // 解析得到新的属性还有旧的属性
+            $oldOpts = $newOpts = [];
+            foreach ($attrData['g_atr_opts'] as $optionData) {
+                if(!empty($optionData['g_opt_id'])){
+                    $oldOpts[] = $optionData;
+                }else{
+                    $newOpts[] = $optionData;
+                }
+            }
+            if($oldOpts && !$this->updateAttrOptions($oldOpts, $realAttr, $goods, false)){
+                list($code, $error) = $this->getOneError();
+                $this->addError('', $error);
+                return false;
+            }
+            if($newOpts && !$newOptions = $this->createAttrOptions($newOpts, $realAttr->g_attr, $goods, false, $realAttr->next_opt_value)){
+                list($code, $error) = $this->getOneError();
+                $this->addError('', $error);
+                return false;
+            }
+            $realAttr->refresh();
+        }
+        return $realAttr;
+    }
+
+    public function updateGoodsMetas($metasData, Goods $goods, $asArray = true){
+        $t = Yii::$app->db->beginTransaction();
+        try {
+            $metas = ArrayHelper::index($goods->g_metas, 'gm_id');
+            foreach($metasData as $metaData){
+                if(!isset($metaData['gm_id']) || !array_key_exists($metaData['gm_id'], $metas))continue;
+                if(!$meta = $this->updateGoodsMeta($metas[$metaData['gm_id']], $metaData, $goods))return false;
+                $metas[$metaData['gm_id']] = $meta;
+            }
+            $t->commit();
+            return $metas;
+        } catch (\Exception $e) {
+            Yii::error($e);
+            $this->addError(Errno::EXCEPTION, Yii::t('app', "修该商品多项元属性失败"));
+            return false;
+        }
+    }
+
+    public function updateGoodsMeta($meta, $metaData, Goods $goods){
+        if(!empty($metaData)){
+            if(!$meta->load($metaData, '') || !$meta->validate()){
+                $this->addError('', $this->getOneErrMsg($meta));
+                return false;
+            }
+            if(false === $meta->update(false)){
+                $this->addError(Errno::DB_FAIL_UPDATE, Yii::t('app', "更新商品元数据失败"));
+                return false;
+            }
+        }
+        return $meta;
+    }
+
 
     public function createGoodsMetas($data, $goods, $asArray = true){
         list($newMetas, $oldMetas) = $this->parseMetaNewAndOld($data['metas']);

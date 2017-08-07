@@ -274,7 +274,7 @@ class ClassificationTest extends \Codeception\Test\Unit
         }
         $data = [
             [
-                'g_sku_value' => '4:1;5:1;18:1',
+                'g_sku_value' => '4:1;5:1;13:1',
                 'g_sku_stock_num' => 100,
                 'g_sku_price' => '499899',
                 'g_sku_sale_price' => '529899',
@@ -283,7 +283,7 @@ class ClassificationTest extends \Codeception\Test\Unit
                 'g_id' => $goods->g_id,
             ],
             [
-                'g_sku_value' => '4:2;5:1;18:2',
+                'g_sku_value' => '4:2;5:1;13:2',
                 'g_sku_stock_num' => 100,
                 'g_sku_price' => '579899',
                 'g_sku_sale_price' => '599899',
@@ -292,7 +292,7 @@ class ClassificationTest extends \Codeception\Test\Unit
                 'g_id' => $goods->g_id,
             ],
             [
-                'g_sku_value' => '4:3;5:3;18:1',
+                'g_sku_value' => '4:3;5:3;13:1',
                 'g_sku_stock_num' => 100,
                 'g_sku_price' => '678799',
                 'g_sku_sale_price' => '698799',
@@ -321,7 +321,7 @@ class ClassificationTest extends \Codeception\Test\Unit
         }
         $data = [
             [
-                'g_sku_value' => '4:3;5:3;18:1',
+                'g_sku_value' => '4:3;5:3;13:1',
                 'g_sku_stock_num' => 100,
                 'g_sku_price' => '678599',
                 'g_sku_sale_price' => '698599',
@@ -330,7 +330,7 @@ class ClassificationTest extends \Codeception\Test\Unit
                 'g_id' => $goods->g_id,
             ],
             [
-                'g_sku_value' => '4:3;5:3;18:2',
+                'g_sku_value' => '4:3;5:3;13:2',
                 'g_sku_stock_num' => 100,
                 'g_sku_price' => '678599',
                 'g_sku_sale_price' => '698599',
@@ -339,7 +339,7 @@ class ClassificationTest extends \Codeception\Test\Unit
                 'g_id' => $goods->g_id,
             ],
             [
-                'g_sku_value' => '4:2;5:1;18:2',
+                'g_sku_value' => '4:2;5:1;13:2',
                 'g_sku_stock_num' => 100,
                 'g_sku_price' => '579699',
                 'g_sku_sale_price' => '599699',
@@ -348,7 +348,7 @@ class ClassificationTest extends \Codeception\Test\Unit
                 'g_id' => $goods->g_id,
             ],
             [
-                'g_sku_value' => '4:2;5:1;18:1',
+                'g_sku_value' => '4:2;5:1;13:1',
                 'g_sku_stock_num' => 100,
                 'g_sku_price' => '579699',
                 'g_sku_sale_price' => '599699',
@@ -364,7 +364,12 @@ class ClassificationTest extends \Codeception\Test\Unit
         }
         console($goods->toArray());
     }
-
+    public function test1(){
+        $goods = GoodsQuery::find()
+                                ->where(['g_status' => Goods::STATUS_DRAFT])
+                                ->one();
+                                console($goods->toArray());
+    }
     public function testCreateGoodsClassification()
     {
         return ;

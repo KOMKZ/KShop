@@ -4,6 +4,9 @@ namespace common\models\goods\ar;
 use yii\db\ActiveRecord;
 use common\models\staticdata\ConstMap;
 use common\models\goods\ar\GoodsSource;
+use common\models\goods\query\GoodsSkuQuery;
+use yii\helpers\ArrayHelper;
+
 /**
  *
  */
@@ -13,7 +16,7 @@ class GoodsSku extends ActiveRecord
     const STATUS_ON_NOT_SALE = 'on_not_sale';
     CONST STATUS_INVALID = 'invalid';
 
-
+    protected static $currentSkuValues = [];
     public static function tableName(){
         return "{{%goods_sku}}";
     }
@@ -22,7 +25,51 @@ class GoodsSku extends ActiveRecord
         $fields = parent::fields();
         return array_merge($fields, [
             'g_sku_source',
+            'g_opt_limits'
         ]);
+    }
+
+    public function getG_opt_limits(){
+        if(empty(static::$currentSkuValues)){
+            static::$currentSkuValues = GoodsSkuQuery::findValid()
+                                            ->select(['g_sku_value'])
+                                            ->andWhere([
+                                                '=', 'g_id', $this->g_id
+                                            ])
+                                            ->asArray()
+                                            ->all();
+            if(empty(static::$currentSkuValues)){
+                return [];
+            }
+            static::$currentSkuValues = array_map(function($value){
+                preg_match_all('/(?P<atr>[0-9]+):(?P<opt>[0-9]+)/', $value, $matches);
+                return array_combine($matches['atr'], $matches['opt']);
+            }, ArrayHelper::getColumn(static::$currentSkuValues, 'g_sku_value'));
+        }
+
+        preg_match_all('/(?P<atr>[0-9]+):(?P<opt>[0-9]+)/', $this->g_sku_value, $matches);
+        $curMap = array_combine($matches['atr'], $matches['opt']);
+        $validMap = [];
+        foreach($curMap as $curAtrId => $curOptId){
+            $candidate = [];
+            foreach(static::$currentSkuValues as $key => $item){
+                foreach($item as $atrId => $optId){
+                    if($curAtrId == $atrId)continue;
+                    if($curMap[$atrId] == $optId){
+                        $candidate[$atrId][] = $item[$curAtrId];
+                    }elseif(!isset($candidate[$atrId])){
+                        $candidate[$atrId] = [];
+                    }
+                }
+            }
+            $minimum = array_pop($candidate);
+            foreach($candidate as $item){
+                $minimum = array_uintersect($minimum, $item, function ($v1,$v2){if($v1===$v2){return 0;}if ($v1 > $v2) return 1;return -1;});
+            }
+            $validMap[$curAtrId] = implode(',', array_unique($minimum));
+        }
+        return $validMap;
+
     }
 
     public function getG_sku_source(){

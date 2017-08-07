@@ -80,7 +80,7 @@ class Goods extends ActiveRecord
 
     public function getG_vaild_sku_ids(){
         if(!$this->_g_valid_sku_ids){
-            return $this->_g_valid_sku_ids = GoodsModel::createSkuIds($this, ArrayHelper::toArray($this->g_sku_attrs));
+            return $this->_g_valid_sku_ids = GoodsModel::buildValidSkuIds($this, ArrayHelper::toArray($this->g_sku_attrs));
         }
         return $this->_g_valid_sku_ids;
     }
