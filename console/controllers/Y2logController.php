@@ -45,7 +45,11 @@ class Y2logController extends Controller{
             $this->help();
             exit();
         }
-        $file = Yii::getAlias('@' == $app[0] ? sprintf('%s/runtime/logs/%s', $app, $fileLog) : $app);
+        if(1 != $fileLog){
+            $file = Yii::getAlias('@' == $app[0] ? sprintf('%s/runtime/logs/%s', $app, $fileLog) : $app);
+        }else{
+            $file = Yii::getAlias($app);
+        }
         $tmpFile = '/tmp/y2log_' . time() . '.txt';
         touch($tmpFile);
         $tmpFp = fopen($tmpFile, 'r+');
@@ -65,11 +69,11 @@ class Y2logController extends Controller{
         $pos = -2; // Skip final new line character (Set to -1 if not present)
         $currentLine = '';
         $oneException = [];
-
+        $pattern = '/^([0-9\-\/]+\s[0-9:]+)/';
         while (-1 !== fseek($fp, $pos, SEEK_END)) {
             $char = fgetc($fp);
             if (PHP_EOL == $char) {
-                if(preg_match('/^([0-9\-]+\s[0-9:]+)/', $currentLine, $matches)){
+                if(preg_match($pattern, $currentLine, $matches)){
                     $time = strtotime($matches[1]);
                     if($time >= $begin){
                         array_unshift($oneException, $currentLine);
@@ -87,7 +91,7 @@ class Y2logController extends Controller{
             }
             $pos--;
         }
-        if(preg_match('/^([0-9\-]+\s[0-9:]+)/', $currentLine, $matches)){
+        if(preg_match($pattern, $currentLine, $matches)){
             $time = strtotime($matches[1]);
             if($time >= $begin){
                 array_unshift($oneException, $currentLine);
@@ -106,7 +110,7 @@ class Y2logController extends Controller{
         while (-1 !== fseek($tmpFp, $pos, SEEK_END)) {
             $char = fgetc($tmpFp);
             if (PHP_EOL == $char) {
-                if(preg_match('/^([0-9\-]+\s[0-9:]+)/', $currentLine, $matches)){
+                if(preg_match($pattern, $currentLine, $matches)){
                     array_unshift($oneException, $currentLine);
                     echo implode("\n", $oneException). "\n";
                     $oneException = [];
@@ -119,7 +123,7 @@ class Y2logController extends Controller{
             }
             $pos--;
         }
-        if(preg_match('/^([0-9\-]+\s[0-9:]+)/', $currentLine, $matches)){
+        if(preg_match($pattern, $currentLine, $matches)){
             array_unshift($oneException, $currentLine);
             echo implode("\n", $oneException). "\n";
             $oneException = [];

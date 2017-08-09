@@ -4,6 +4,7 @@ $config = \yii\helpers\ArrayHelper::merge(
     require($configDir .  '/application/app-main.php'),
     []
 );
+
 $localConfig = [];
 foreach(\yii\helpers\FileHelper::findFiles($configDir, [
     'filter' => function($path){
@@ -26,6 +27,7 @@ foreach(\yii\helpers\FileHelper::findFiles($configDir, [
     }
     $config['components'] = \yii\helpers\ArrayHelper::merge($config['components'], require($configFile));
 }
+
 foreach($localConfig as $configFile){
     $config['components'] = \yii\helpers\ArrayHelper::merge($config['components'], require($configFile));
 }

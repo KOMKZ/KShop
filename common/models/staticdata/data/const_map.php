@@ -47,5 +47,11 @@ return [
         \common\models\goods\ar\GoodsSource::CLS_TYPE_SKU => Yii::t('app', '商品sku资源'),
         \common\models\goods\ar\GoodsSource::CLS_TYPE_GOODS => Yii::t('app', '商品资源'),
         \common\models\goods\ar\GoodsSource::CLS_TYPE_OPTION => Yii::t('app', '商品属性值资源')
+    ],
+    'mail_content_type' => [
+        \common\models\mail\ar\Mail::CONTENT_TYPE_HTML => Yii::t('app', 'text/html'),
+    ],
+    'mail_list_type' => [
+        \common\models\mail\ar\Mail::LIST_TYPE_INLINE => Yii::t('app', '内联地址')
     ]
 ];

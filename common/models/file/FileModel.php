@@ -304,6 +304,11 @@ class FileModel extends Model
         return $file;
     }
 
+    public static function checkIsValidQueryid($queryId){
+        $typeList = implode('|', ConstMap::getConst('file_save_type', true));
+        return preg_match("/^({$typeList}):{1}(.+)/", $queryId);
+    }
+
     public static function checkSignature($signature, $data = []){
         return false;
     }
