@@ -23,9 +23,6 @@ class Mail extends ActiveRecord
         if(!empty($data['mail_meta_data'])){
             $data['mail_meta_data'] = json_decode($data['mail_meta_data'], true);
         }
-        if(!empty($data['mail_cron_params'])){
-            $data['mail_cron_params'] = json_decode($data['mail_cron_params'], true);
-        }
         if(!empty($data['mail_attachments'])){
             $data['mail_attachments'] = json_decode($data['mail_attachments'], true);
         }
@@ -66,10 +63,8 @@ class Mail extends ActiveRecord
             ['mail_attachments', 'validateAttachments'],
             ['mail_attachments', 'filter', 'filter' => 'json_encode'],
 
-            ['mail_cron_params', 'validateCronParams'],
-            ['mail_cron_params', 'default', 'value' => []],
-            ['mail_cron_params', 'filter', 'filter' => [MailModel::className(), 'filterCronParams']],
-            ['mail_cron_params', 'filter', 'filter' => 'json_encode']
+            ['mail_create_uid', 'required']
+
         ];
     }
 
@@ -92,7 +87,5 @@ class Mail extends ActiveRecord
         }
     }
 
-    public function validateCronParams($attr){
 
-    }
 }

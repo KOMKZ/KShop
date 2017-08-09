@@ -716,16 +716,16 @@
         },
         {
             "name": "workerman/workerman",
-            "version": "v3.4.6",
+            "version": "v3.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/walkor/Workerman.git",
-                "reference": "b4ea10d42a1e9c87ab82b78a7c4b681f105016b0"
+                "reference": "2818bf310cb903a940f6b5a38f5e520c776db056"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/walkor/Workerman/zipball/b4ea10d42a1e9c87ab82b78a7c4b681f105016b0",
-                "reference": "b4ea10d42a1e9c87ab82b78a7c4b681f105016b0",
+                "url": "https://api.github.com/repos/walkor/Workerman/zipball/2818bf310cb903a940f6b5a38f5e520c776db056",
+                "reference": "2818bf310cb903a940f6b5a38f5e520c776db056",
                 "shasum": ""
             },
             "require": {
@@ -760,7 +760,7 @@
                 "asynchronous",
                 "event-loop"
             ],
-            "time": "2017-07-24T09:40:15+00:00"
+            "time": "2017-08-08T08:51:56+00:00"
         },
         {
             "name": "yiisoft/yii2",
@@ -1534,16 +1534,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "3.2.1",
+            "version": "3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "183824db76118b9dddffc7e522b91fa175f75119"
+                "reference": "4aada1f93c72c35e22fb1383b47fee43b8f1d157"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/183824db76118b9dddffc7e522b91fa175f75119",
-                "reference": "183824db76118b9dddffc7e522b91fa175f75119",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/4aada1f93c72c35e22fb1383b47fee43b8f1d157",
+                "reference": "4aada1f93c72c35e22fb1383b47fee43b8f1d157",
                 "shasum": ""
             },
             "require": {
@@ -1575,7 +1575,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2017-08-04T20:55:59+00:00"
+            "time": "2017-08-08T06:39:58+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",

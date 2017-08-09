@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 use common\models\file\FileModel;
 use common\models\file\query\FileQuery;
 use yii\base\InvalidParamException;
+
 /**
  *
  */
@@ -37,8 +38,70 @@ class MailModel extends Model
         unset($mailData['mail_meta_data']['addresses']);
         foreach($addresses as $address){
             $mailData['mail_meta_data']['address'] = $address;
+            if($now){
+                list($result, $sendResult) = static::sendMail($mailData);
+                console($result, $sendResult);
+            }else{
+
+            }
         }
         console($mailData);
+    }
+    public static function sendMail($mailData){
+        $sendResult = [
+            'status' => 0,
+            'error' => '',
+        ];
+        $result = [];
+        try {
+            // todo check metainfo
+            list(, $settingName) = explode(':', $mailData['mail_meta_data']['sender_info']);
+            $senderInfo = SetModel::get($settingName);
+            $mail = new \PHPMailer;
+            $mail->isSMTP();
+            $mail->Host = $senderInfo['host'];
+            $mail->SMTPAuth = (boolean)$senderInfo['smtp_auth'];
+            $mail->Username = $senderInfo['sender'];
+            $mail->Password = $senderInfo['sender_pwd'];
+            $mail->SMTPSecure = $senderInfo['smtp_secure'];
+            $mail->Port = $senderInfo['port'];
+
+            $mail->setFrom($senderInfo['sender']);
+            $mail->addAddress('784248377@qq.com');
+            $mail->addAddress('m13715194169_1@163.com');
+            $mail->Subject = "测试邮件";
+            $mail->CharSet = $senderInfo['connect_charset'];
+            switch ($mailData['mail_content_type']) {
+                case 'text/html':
+                    $mail->isHTML(true);
+                    break;
+                default:
+                    throw new InvalidParamException(Yii::t('app', "{$mailData['mail_content_type']}不合法"));
+                    break;
+            }
+            $mail->addAddress($mailData['mail_meta_data']['address']);
+            $mail->Subject = $mailData['mail_title'];
+            $mail->Body = empty($mailData['mail_type']) ? $mailData['mail_content'] :
+                          static::renderEmailBodyByTpl($mailData['mail_type'], ArrayHelper::getValue($mailData, 'mail_meta_data.content_params'));
+            foreach($mailData['mail_attachments'] as $fileItem){
+                if(file_exists($fileItem['file'])){
+                    $mail->addAttachment($fileItem['file'], $fileItem['name']);
+                }
+            }
+            if(!$mail->send()){
+                $sendResult['error'] = $mail->ErrorInfo;
+                $sendResult['status'] = Errno::EMAIL_SEND_FAIL;
+            }
+        } catch (\Exception $e) {
+            Yii::error($e);
+            $sendResult['error'] = $e->getMessage();
+            $sendResult['status'] = Errno::EXCEPTION;
+        }
+
+        return [$result, $sendResult];
+    }
+    public static function sendMailToQueue($mailData){
+
     }
     protected function parseAddressList($data){
         switch ($data['type']) {
@@ -50,9 +113,7 @@ class MailModel extends Model
                 break;
         }
     }
-    public static function buildRealMail(){
 
-    }
 
     public static function filterMetaData($metaData){
         $data = [
@@ -75,14 +136,13 @@ class MailModel extends Model
                 // $file->getFileDiskFullSavePath(), $file->file_save_name, ['inline' => true]
                 $attachments[$key]['file'] = $file->getFileDiskFullSavePath();
                 $attachments[$key]['name'] = $file->file_save_name;
+            }else{
+                $attachments[$key]['name'] = basename($item['file']);
             }
         }
         return $attachments;
     }
 
-    public static function filterCronParams($params){
-        return $params;
-    }
 
 
 

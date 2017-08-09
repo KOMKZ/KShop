@@ -28,7 +28,7 @@ class MailTest extends \Codeception\Test\Unit
     public function testSend(){
         // return ;
         Yii::$app->db->beginTransaction();
-        $mail = MailQuery::find()->where(['mail_id' => 20])->one();
+        $mail = MailQuery::find()->where(['mail_id' => 2])->one();
         $mailModel = new MailModel();
         $result = $mailModel->send($mail, true);
         if(!$result){
@@ -58,9 +58,7 @@ class MailTest extends \Codeception\Test\Unit
             'mail_create_uid' => 1,
             'mail_is_cron' => 0,
             'mail_attachments' => [
-                ['file' => 'disk:test/7b924ab4b3013136909d1d8483cfc6cf.jpg'],
-                ['file' => 'disk:test/80133f06f3827d3b2d8ce0624650cc10.jpg'],
-                ['file' => 'disk:test/83ea3bddcbb3b44700e99bf6fe05bdb2.jpg']
+                ['file' => '/tmp/1.jpg'],
             ]
         ];
         $mail = $mailModel->createMail($data);
