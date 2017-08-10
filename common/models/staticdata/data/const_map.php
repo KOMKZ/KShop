@@ -1,6 +1,14 @@
 <?php
 
 return [
+    'u_status' => [
+        \common\models\user\ar\User::STATUS_ACTIVE => Yii::t('app', '可用'),
+        \common\models\user\ar\User::STATUS_NO_AUTH => Yii::t('app', "没有验证")
+    ],
+    'u_auth_status' => [
+        \common\models\user\ar\User::NOT_AUTH => Yii::t('app', '未验证'),
+        \common\models\user\ar\User::HAD_AUTH => Yii::t('app', "已验证")
+    ],
     'file_save_type' => [
         \common\models\file\drivers\Disk::NAME => \Yii::t('app', '本地存储'),
         \common\models\file\drivers\Oss::NAME => \Yii::t('app', 'Oss存储'),

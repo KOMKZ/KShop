@@ -22,7 +22,7 @@ class m170810_083410_user extends Migration
             `u_auth_status` char(12) not null comment '用户校验状态',
             `u_created_at` integer(10) not null comment '创建时间',
             `u_updated_at` integer(10) not null comment '更新时间',
-            primary key (u_id),
+            primary key (u_id)
         )CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE=InnoDB;
         ";
         $this->execute($createTabelSql);
