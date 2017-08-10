@@ -9,9 +9,8 @@
 
 ## Email
 
-* 实现邮件model
-* 实现邮件publish-worker发送逻辑,使用amqp
 * 实现定时邮件
+* 附件过大的邮件将导致邮件队列的worker一直被占用,从而导致其他轻邮件无法及时发送.
 
 
 ## User's Action Log
@@ -106,6 +105,12 @@
 设置模块 https://github.com/yii2mod/yii2-settings
 
 # Features
+
+## Email
+2017-08-10 08:19:12
+
+* 实现邮件publish-worker发送逻辑,使用amqp
+* 实现邮件model
 
 ## Product
 2017-08-08 09:16:24
