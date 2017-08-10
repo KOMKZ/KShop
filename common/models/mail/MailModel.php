@@ -4,12 +4,15 @@ namespace common\models\mail;
 use Yii;
 use common\models\Model;
 use common\models\mail\ar\Mail;
+use common\models\mail\ar\MailResult;
 use common\models\staticdata\Errno;
 use common\models\set\SetModel;
 use yii\helpers\ArrayHelper;
 use common\models\file\FileModel;
 use common\models\file\query\FileQuery;
 use yii\base\InvalidParamException;
+use PhpAmqpLib\Message\AMQPMessage;
+
 
 /**
  *
@@ -39,14 +42,41 @@ class MailModel extends Model
         foreach($addresses as $address){
             $mailData['mail_meta_data']['address'] = $address;
             if($now){
+                $beginTime = microtime(true);
                 list($result, $sendResult) = static::sendMail($mailData);
-                console($result, $sendResult);
+                $consume = sprintf('%.3f', microtime(true) - $beginTime);
+                list(, $settingName) = explode(':', $mailData['mail_meta_data']['sender_info']);
+                $senderInfo = SetModel::get($settingName);
+                static::saveSendResult([
+                    'mail_id' => $mailData['mail_id'],
+                    'mail_sender' => $senderInfo['sender'],
+                    'mail_receipt' => $mailData['mail_meta_data']['address'],
+                    'mail_status' => $sendResult['status'],
+                    'mail_error' => $sendResult['error'],
+                    'mail_send_at' => time(),
+                    'mail_updated_at' => time(),
+                    'mail_consume' => (float)$consume
+                ]);
             }else{
-
+                static::sendEmailAsyc($mailData);
             }
         }
-        console($mailData);
+        return $mail;
     }
+
+
+    protected static function sendEmailAsyc($data){
+        $connection = Yii::$app->amqpConn;
+        $channel = $connection->channel();
+        $msg = new AMQPMessage(json_encode($data), ['delivery_mode' => 2]);
+        $channel->basic_publish($msg, '', 'email-job');
+        return true;
+    }
+
+    public static function saveSendResult($data){
+        return Yii::$app->db->createCommand()->insert(MailResult::tableName(), $data)->execute();
+    }
+
     public static function sendMail($mailData){
         $sendResult = [
             'status' => 0,
@@ -70,7 +100,7 @@ class MailModel extends Model
             $mail->addAddress('784248377@qq.com');
             $mail->addAddress('m13715194169_1@163.com');
             $mail->Subject = "测试邮件";
-            $mail->CharSet = $senderInfo['connect_charset'];
+            $mail->CharSet = $senderInfo['content_charset'];
             switch ($mailData['mail_content_type']) {
                 case 'text/html':
                     $mail->isHTML(true);

@@ -27,14 +27,14 @@ class MailTest extends \Codeception\Test\Unit
     }
     public function testSend(){
         // return ;
-        Yii::$app->db->beginTransaction();
+        // Yii::$app->db->beginTransaction();
         $mail = MailQuery::find()->where(['mail_id' => 2])->one();
         $mailModel = new MailModel();
-        $result = $mailModel->send($mail, true);
+        $result = $mailModel->send($mail, false);
         if(!$result){
             console($this->debug($mailModel->getOneError()));
         }
-        console($result);
+        // console($result);
     }
     public function testCreate(){
         return ;
@@ -52,8 +52,8 @@ class MailTest extends \Codeception\Test\Unit
                     ]
                 ]
             ],
-            'mail_title' => '测试邮件',
-            'mail_content' => "测试邮件内容",
+            'mail_title' => '测试邮件' . mt_rand(11111, 99999),
+            'mail_content' => "测试邮件内容" . mt_rand(11111, 99999),
             'mail_content_type' => Mail::CONTENT_TYPE_HTML,
             'mail_create_uid' => 1,
             'mail_is_cron' => 0,
@@ -65,6 +65,6 @@ class MailTest extends \Codeception\Test\Unit
         if(!$mail){
             $this->debug($mailModel->getOneError());
         }
-        console($mail->toArray());
+        // console($mail->toArray());
     }
 }
