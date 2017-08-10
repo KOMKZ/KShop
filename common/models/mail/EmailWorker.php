@@ -29,7 +29,7 @@ class EmailWorker
             'mail_updated_at' => time(),
             'mail_consume' => (float)$consume
         ]);
-        echo implode(',', $sendResult) . "\n
+        echo implode(',', $sendResult) . "\n";
         return $msg->delivery_info['channel']->basic_ack($msg->delivery_info['delivery_tag']);
     }
 
