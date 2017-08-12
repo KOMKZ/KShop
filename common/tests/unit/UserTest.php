@@ -24,16 +24,17 @@ class UserTest extends \Codeception\Test\Unit
     public function debug($data){
         console($data);
     }
+
     public function testCreate(){
-        // return ;
+        return ;
         Yii::$app->db->beginTransaction();
         $data = [
             'u_username' => 'lartik',
-            'password' => md5('philips'),
-            'password_confirm' => md5('123456'),
+            'password' => 'philips',
+            'password_confirm' => 'philips',
             'u_email' => '784248377@qq.com',
-            'u_auth_status' => User::NOT_AUTH,
-            'u_status' => User::STATUS_NO_AUTH,
+            'u_auth_status' => User::HAD_AUTH,
+            'u_status' => User::STATUS_ACTIVE,
         ];
         $uModel = new UserModel();
         $user = $uModel->createUser($data);

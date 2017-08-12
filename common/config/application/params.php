@@ -20,5 +20,10 @@ return [
         'port' => '',
         'user' => '',
         'pwd' => '',
+    ],
+    'jwt' => [
+        'secret_key' => '',
+        'allow_algs' => ['HS512'],
+        'encode_alg' => 'HS512'
     ]
 ];

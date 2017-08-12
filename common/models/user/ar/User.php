@@ -1,9 +1,16 @@
 <?php
 namespace common\models\user\ar;
 
+use Yii;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use common\models\staticdata\ConstMap;
+use yii\helpers\ArrayHelper;
+use common\models\user\query\UserQuery;
+use common\models\set\SetModel;
+use common\models\user\UserModel;
+use Firebase\JWT\JWT;
+use yii\behaviors\TimestampBehavior;
 
 /**
  *
@@ -21,6 +28,26 @@ class User extends ActiveRecord implements IdentityInterface
     public $password;
 
     public $password_confirm;
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'u_created_at',
+                'updatedAtAttribute' => 'u_updated_at'
+            ]
+        ];
+    }
+
+    public function fields(){
+        $fields = parent::fields();
+        ArrayHelper::removeValue($fields, 'u_password_hash');
+        ArrayHelper::removeValue($fields, 'u_auth_key');
+        ArrayHelper::removeValue($fields, 'u_password_reset_token');
+        ArrayHelper::removeValue($fields, 'u_access_token');
+        return $fields;
+    }
 
     public function rules(){
         return [
@@ -42,6 +69,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['password', 'required', 'on' => 'create'],
             ['password', 'required', 'on' => 'update', 'skipOnEmpty' => true],
 
+            ['u_access_token', 'default', 'value' => ''],
+
             ['password', 'string', 'min' => 6, 'max' =>  50],
 
             ['password_confirm', 'required', 'on' => 'create'],
@@ -57,12 +86,21 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findIdentity($id)
     {
-        return static::findOne(['u_id' => $id, 'u_status' => self::STATUS_ACTIVE]);
+        return UserQuery::findActive()->andWhere(['=', 'u_id', $id]);
     }
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        try {
+            $payload = UserModel::parseAccessToken($token, $type);
+            $user = UserQuery::findActive()->andWhere(['=', 'u_email', $payload->data->user_info->u_email])->one();
+            if($user->u_access_token != $payload->jti){
+                return null;
+            }
+            return $user;
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public static function findByUsername($username)

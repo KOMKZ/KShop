@@ -17,6 +17,7 @@ class m170810_083410_user extends Migration
             `u_auth_key` varchar(255) not null comment '用户校验key',
             `u_password_hash` varchar(255) not null comment '用户密码hash值',
             `u_password_reset_token` varchar(255) not null comment '用户重设密码token',
+            `u_access_token` varchar(255) not null default '' comment '用户访问token',
             `u_email` varchar(255) not null comment '用户邮件',
             `u_status` char(12) not null comment '用户状态',
             `u_auth_status` char(12) not null comment '用户校验状态',
