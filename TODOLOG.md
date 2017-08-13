@@ -13,6 +13,12 @@
 * 附件过大的邮件将导致邮件队列的worker一直被占用,从而导致其他轻邮件无法及时发送.
 
 
+## User
+
+* 继续实现其他的httpauth
+* 将工厂方法分散到类中来实现
+* 。/
+
 ## User's Action Log
 
 * 实现各个操作的行为日志
@@ -106,7 +112,14 @@
 
 # Features
 
+## User
+
+2017-08-12 06:46:26 
+
+* bearerAuth认证的实现，token的生成使用jwt, 登录时保存jwt的id在user的access_token中，登出时销毁该id。
+
 ## Email
+
 2017-08-10 08:19:12
 
 * 实现邮件publish-worker发送逻辑,使用amqp
