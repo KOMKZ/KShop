@@ -14,7 +14,7 @@ class m170812_070332_user_message extends Migration
         create table `{$tableName}`(
             `um_id` int(10) unsigned not null auto_increment comment '主键',
             `u_id` int(10) unsigned not null  comment '消息所属用户',
-            `um_msg_id` int(10) unsigned not null comment '消息主体id',
+            `um_msg_id` int(10) unsigned null default 0 comment '消息主体id',
             `um_status` char(10) not null comment '消息状态',
             `um_from_uid` int(10) unsigned not null default 0 comment '来源用户',
             `um_type` char(12) not null comment '消息的类型',

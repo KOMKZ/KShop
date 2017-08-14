@@ -61,5 +61,17 @@ return [
     ],
     'mail_list_type' => [
         \common\models\mail\ar\Mail::LIST_TYPE_INLINE => Yii::t('app', '内联地址')
+    ],
+    'message_type' => [
+        \common\models\message\Message::TYPE_ONE => Yii::t('app', '私信')
+        ,\common\models\message\Message::TYPE_BOARD => Yii::t('app', '广播消息')
+    ]
+    ,'message_content_type' => [
+        \common\models\message\Message::CONTENT_TYPE_PLAIN => Yii::t('app', '纯文本'),
+        \common\models\message\Message::CONTENT_TYPE_TEMPLATE => Yii::t('app', '模板')
+    ]
+    ,'um_status' => [
+        \common\models\user\ar\UserMessage::STATUS_UNREAD => Yii::t('app', '未读')
+        ,\common\models\user\ar\UserMessage::STATUS_HAD_READ => Yii::t('app', '已读')
     ]
 ];
