@@ -1,8 +1,10 @@
 <?php
 namespace common\models\message;
 
+use Yii;
 use common\models\Model;
 use common\models\message\MsgModel;
+use common\models\message\ar\MessageTpl;
 use common\models\staticdata\ConstMap;
 /**
  *
@@ -22,8 +24,6 @@ class Message extends Model
 
     public $tpl_code = "";
 
-    protected $tpl = null;
-
     public $tpl_params = [];
 
     public $create_uid = null;
@@ -37,11 +37,13 @@ class Message extends Model
             ['type', 'required'],
             ['type', 'in', 'range' => ConstMap::getConst('message_type', true)],
 
-            ['content', 'required'],
+            ['content', 'validateContent', 'skipOnEmpty' => false],
             ['content', 'string'],
 
             ['content_type', 'required'],
             ['content_type', 'in', 'range' => ConstMap::getConst('message_content_type', true)],
+
+            ['tpl_code', 'exist', 'targetClass' => MessageTpl::className(), 'targetAttribute' => 'mtpl_code'],
 
             ['create_uid', 'required'],
             //todo check exists
@@ -49,6 +51,13 @@ class Message extends Model
             ['receipt_uid', 'required']
             //todo check esists
         ];
+    }
+
+
+    public function validateContent($attr){
+        if(empty($this->$attr) && empty($this->tpl_code)){
+            $this->addError($attr, Yii::t('app', "content和tpl_code不能同时为空"));
+        }
     }
     public function getFinalContent(){
         return MsgModel::buildFinalContent($this);

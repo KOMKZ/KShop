@@ -1,11 +1,13 @@
 <?php
 namespace common\models\message;
 
+use Yii;
 use common\models\Model;
 use common\models\message\ar\MessageMap;
 use common\models\user\ar\UserMessage;
 use common\models\message\Message;
-
+use common\models\message\ar\MessageTpl;
+use common\models\message\query\MessageTplQuery;
 /**
  *
  */
@@ -57,14 +59,34 @@ class MsgModel extends Model
     }
 
     protected static function renderTplMsg(Message $msg){
-        console($msg);
+        $messageTpl = MessageTplQuery::find()->andWhere(['mtpl_code' => $msg])->one();
+        if(!$messageTpl){
+            throw new \Exception(Yii::t('app', "数据不存在"));
+        }
+        $globalParams = [
+            'u_username' => 'lartik'
+        ];
+        $globalParams['current_time'] = date('Y-m-d H:i:s', time());
+        $paramsMap = array_merge($globalParams, $msg->tpl_params);
+        $content = preg_replace_callback('/(%(.+?)%)/', function($matches) use ($paramsMap){
+            if(array_key_exists($matches[2], $paramsMap)){
+                return $paramsMap[$matches[2]];
+            }else{
+                throw new \Exception(Yii::t('app', "不存在模板变量定义的{$matches[2]}"));
+            }
+        }, $messageTpl->mtpl_content);
+        console($content);
     }
+
 
     protected static function renderPlainMsg(Message $msg){
         return $msg->content;
     }
 
-
+    public function createTpl($data){
+        $data['mtpl_created_at'] = time();
+        return Yii::$app->db->createCommand()->insert(MessageTpl::tableName(), $data)->execute();
+    }
 
 
 
