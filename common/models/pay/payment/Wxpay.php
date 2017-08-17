@@ -50,6 +50,67 @@ class Wxpay extends Model
         ];
     }
 
+    /**
+     * 下载对账单
+     * @param  [type] $billDate [description]
+     * @param  [type] $billType [description]
+     * @return [type]           [description]
+     */
+    public function billDownload($filter){
+        $baseDir = Yii::getAlias('@app/runtime/bill/wx');
+        if(!is_dir($baseDir)){
+            mkdir($baseDir, 0777);
+        }
+
+        @list($year, $month, $day) = explode('-', $filter['date']);
+        $currentDate = '';
+        $request = new \WxPayDownloadBill();
+        if($day){
+            $billDir = $baseDir . '/' . $currentDate;
+            if(!is_dir($billDir)){
+                mkdir($billDir, 0777);
+            }
+            $targetFile = $billDir . '/' . 'bill.csv';
+
+            $currentDate = preg_replace('/\-/', '', $filter['date']);
+            $request = new \WxPayDownloadBill();
+            $request->SetBill_date($currentDate);
+            $request->SetBill_type($filter['type']);
+            return WxPayApi::downloadBill($request);
+        }
+        $endDate = sprintf("%d%02d31", $year, $month);
+        $day = 1;
+        $currentDate=sprintf("%d%02d%02d", $year, $month, $day);
+        $billDir = $baseDir . '/' . sprintf("%d%02d", $year, $month);
+        if(!is_dir($billDir)){
+            mkdir($billDir, 0777);
+        }
+        $targetFile = $billDir . '/' . 'bill.csv';
+        file_put_contents($targetFile, '');
+        while($currentDate != $endDate){
+            $request->SetBill_date($currentDate);
+            $request->SetBill_type($filter['type']);
+            $result = WxPayApi::downloadBill($request);
+            if(preg_match_all('/(.+)/', $result, $matches)){
+                array_pop($matches[0]);
+                array_pop($matches[0]);
+                array_shift($matches[0]);
+                file_put_contents($targetFile, implode("\n", $matches[0]), FILE_APPEND);
+            }
+            $day++;
+            if($day > 31){
+                $day = 1;
+                $month++;
+            }
+            if($month > 12){
+                $month = 1;
+                $year++;
+            }
+            $currentDate=sprintf("%d%02d%02d", $year, $month, $day);
+        }
+        return $targetFile;
+    }
+
     public function sayFail($data = []){
         $notify = new \WxPayNotify();
         $notify->SetReturn_code("FAIL");

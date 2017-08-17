@@ -6,6 +6,7 @@ use common\models\Model;
 use common\models\pay\payment\Wxpay;
 use common\models\pay\payment\Alipay;
 use yii\base\InvalidArgumentException;
+use common\models\pay\ar\ThirdBill;
 /**
  *
  */
@@ -24,5 +25,8 @@ class PayModel extends Model
                 throw new InvalidArgumentException(Yii::t('app', "{$type}不支持的支付类型"));
                 break;
         }
+    }
+    public static function saveBillInDb($data){
+        return Yii::$app->db->createCommand()->insert(ThirdBill::tableName(), $data)->execute();
     }
 }

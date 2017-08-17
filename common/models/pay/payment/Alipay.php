@@ -35,6 +35,39 @@ class Alipay extends Model
         $this->_aopClient->postCharset = $this->postCharset;
         $this->_aopClient->format = $this->format;
     }
+
+    public function billDownload($filter = []){
+        $baseDir = Yii::getAlias('@app/runtime/bill/ali');
+        if(!is_dir($baseDir)){
+            mkdir($baseDir, 0777);
+        }
+        $logFile = Yii::getAlias('@app/runtime/logs/alibill.log');
+        $request = new \AlipayDataDataserviceBillDownloadurlQueryRequest ();
+        $request->setBizContent("{" .
+            "\"bill_type\":\"" . $filter['type'] . "\"," .
+            "\"bill_date\":\"" . $filter['date'] . "\"" .
+            "  }");
+        $result = $this->getAopClient()->execute($request);
+        $responseNode = str_replace(".", "_", $request->getApiMethodName()) . "_response";
+        if('Success' == $result->$responseNode->msg){
+            $url = $result->$responseNode->bill_download_url;
+            $billDir = $baseDir . '/' . $filter['date'];
+            if(!is_dir($billDir)){
+                mkdir($billDir, 0777);
+            }
+            $targetFile = $billDir . '/' . 'bill.zip';
+            $bash = sprintf('curl "%s" -o %s -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36" --compressed 2>> /dev/null 1>> %s',
+                           $url, $targetFile, $logFile);
+            shell_exec($bash);
+            return $targetFile;
+        }else{
+            $this->addError('', $result->$responseNode->sub_code);
+            return false;
+        }
+    }
+    public function getAopClient(){
+        return $this->_aopClient;
+    }
     public function handleNotify($notifyData, $params = []){
         $result = [
             'code' => 1,
