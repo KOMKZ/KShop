@@ -24,7 +24,7 @@ class UserTest extends \Codeception\Test\Unit
     public function debug($data){
         console($data);
     }
-
+    
     public function testCreate(){
         return ;
         Yii::$app->db->beginTransaction();

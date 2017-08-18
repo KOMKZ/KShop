@@ -3,6 +3,7 @@ namespace common\models\pay\payment;
 
 use Yii;
 use common\models\Model;
+use yii\helpers\FileHelper;
 /**
  *
  */
@@ -39,7 +40,7 @@ class Alipay extends Model
     public function billDownload($filter = []){
         $baseDir = Yii::getAlias('@app/runtime/bill/ali');
         if(!is_dir($baseDir)){
-            mkdir($baseDir, 0777);
+            FileHelper::createDirectory($baseDir, 0777);
         }
         $logFile = Yii::getAlias('@app/runtime/logs/alibill.log');
         $request = new \AlipayDataDataserviceBillDownloadurlQueryRequest ();
@@ -56,8 +57,9 @@ class Alipay extends Model
                 mkdir($billDir, 0777);
             }
             $targetFile = $billDir . '/' . 'bill.zip';
-            $bash = sprintf('curl "%s" -o %s -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36" --compressed 2>> /dev/null 1>> %s',
+            $bash = sprintf('curl "%s" -o %s -H "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36" -L --compressed 2>> /dev/null 1>> %s',
                            $url, $targetFile, $logFile);
+
             shell_exec($bash);
             return $targetFile;
         }else{

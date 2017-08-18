@@ -13,7 +13,7 @@ class PayController extends Controller{
     public function actionDownloadAliBill(){
         $alipay = Yii::$app->alipay;
         $filter = [
-            'date' => '2017-07',
+            'date' => '2017-05',
             'type' => 'trade'
         ];
         $file = $alipay->billDownload($filter);

@@ -145,6 +145,7 @@ class GoodsModel extends Model
         }
         return $sku;
     }
+
     public static function buildGSkuId($gid, $skuValue){
         return $gid . preg_replace('/[;:]/', '', $skuValue);
     }
