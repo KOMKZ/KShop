@@ -19,7 +19,16 @@ use common\models\file\query\FileTaskQuery;
  */
 class FileModel extends Model
 {
-
+    /**
+     * 从一个文件路径来上传文件到文件存储中
+     * 内部流程如下：
+     * 1. 创建文件对象
+     * 2. 上传到对应的存储中
+     * 3. 保存到数据库
+     * @param  array $fileData 文件数据
+     * @see \common\models\file\FileModel::createFile
+     * @return \common\models\file\ar\File
+     */
     public function createFileBySource($fileData){
         $file = $this->createFile($fileData);
         if(!$file){
@@ -70,14 +79,14 @@ class FileModel extends Model
      *   仅当is_tmp为1的时候有效，如定义3600,说明文件在服务器的有效时间是3600秒
      * - file_save_name: string, 文件的下载名称
      *   该属性将被用于设置文件下载时的响应头
-     * - file_source_path: string, 文件的源路径
+     * - file_source_path: string,required 文件的源路径
      *   注意文件路径必须携带完整的文件名称，包括文件后缀
      *   当参数isCopy传为true的时候，说明可以不需要源路径
-     * - file_category: string, 文件分类信息
+     * - file_category: string,required 文件分类信息
      *   文件分类如
      *   /user/image/ 将会被转成 user/image
      *   最中被计算为md5
-     * @return [type]       [description]
+     * @return \common\models\file\ar\File
      */
     public function createFile($data, $isCopy = false){
         if(!$file = $this->validateFileData($data)){
@@ -296,6 +305,11 @@ class FileModel extends Model
         return $file;
     }
 
+    /**
+     * 保存文件数据到数据数据库
+     * @param  \common\models\file\ar\File   $file 统一文件对象
+     * @return \common\models\file\ar\File
+     */
     public function saveFileInDb(File $file){
         if(!$file->insert(false)){
             $this->addError('', Yii::t('app', '数据库插入失败'));
@@ -304,6 +318,14 @@ class FileModel extends Model
         return $file;
     }
 
+    /**
+     * 检查文件api查询id是否符合规则
+     * api文件查询id满足以下规则属于合法：
+     * {$file_save_type}:{file_category/}{file_name}[.file_ext]
+     * 如：oss:abc.jpg
+     * @param  string $queryId 文件查询id
+     * @return [type]          [description]
+     */
     public static function checkIsValidQueryid($queryId){
         $typeList = implode('|', ConstMap::getConst('file_save_type', true));
         return preg_match("/^({$typeList}):{1}(.+)/", $queryId);
@@ -313,11 +335,27 @@ class FileModel extends Model
         return false;
     }
 
+    /**
+     * 检查文件上传任务对象是否已经失效
+     * @param  FileTask $fileTask 文件上传任务对象
+     * @return bool
+     * true说明有效，false无效
+     */
     public static function checkFileTaskIsExpired(FileTask $fileTask){
         return true;
         return time() < $fileTask->file_task_invalid_at;
     }
 
+    /**
+     * 解析文件api查询id得到文件信息
+     * 如：oss:test/abc.jpg解析之后得到的数据
+     * - file_save_type:oss
+     * - file_category:test
+     * - file_prefix:系统内置前缀 @see self::buildPrefix
+     * - file_real_name:abc.jpg
+     * @param  string $string 文件查询id
+     * @return [type]         [description]
+     */
     public static function parseQueryId($string){
         $typeList = implode('|', ConstMap::getConst('file_save_type', true));
         if(preg_match("/^({$typeList}):{1}(.+)/", $string, $matches)){
@@ -331,9 +369,23 @@ class FileModel extends Model
             return [];
         }
     }
+
+    /**
+     * 获取文件的分片临时目录
+     * @param  FileTask $fileTask 文件任务对象
+     * @return string 文件分片临时目录
+     */
     public static function getFileChunkDir(FileTask $fileTask){
         return Yii::getAlias('@app/runtime/file_chunk/') . $fileTask->file_task_code;
     }
+
+    /**
+     * 获取存储对象
+     * @param  string $type 文件存储类型
+     * @return object    文件存储对象
+     * @see common\models\file\driver\Oss
+     * @see common\models\file\driver\Disk
+     */
     public static function getSaveMedium($type){
         switch ($type) {
             case Disk::NAME:
@@ -345,6 +397,12 @@ class FileModel extends Model
                 break;
         }
     }
+    /**
+     * 创建分片目录
+     * @param  FileTask $fileTask 文件分片任务对象
+     * @return string            返回创建完成的分片目录
+     * @see self::getFileChunkDir
+     */
     public static function buildFileChunkDir(FileTask $fileTask){
         $baseDir = dirname(self::getFileChunkDir($fileTask));
         if(!is_dir($baseDir)){
@@ -360,17 +418,47 @@ class FileModel extends Model
         }
         return $chunkDir;
     }
+    /**
+     * 构建文件的保存前缀
+     * 目前的规则时对文件file_category进行md5计算，注意相同分类的文件将被分在同一个prefix目录下
+     * @param  string $value 需要计算prefix的值，一般来说时file_category
+     * @return string
+     */
     public static function buildPrefix($value){
         return md5($value);
     }
+    /**
+     * 构建文件查询id
+     * @see self::parseQueryId
+     * @param  File   $file 统一文件对象
+     * 构成规则：
+     * {$file_save_type}:{file_category/}{file_name}[.file_ext]
+     * @return stirng       文件查询id
+     */
     public static function buildFileQueryId(File $file){
         return $file->file_save_type . ':' .
                $file->file_category . '/' . $file->file_real_name;
     }
+
+    /**
+     * 获取统一文件对象的访问地址
+     * @see \common\models\file\drivers\Oss::buildFileUrl
+     * @see \common\models\file\drivers\Disk::buildFileUrl
+     * @param  \common\models\file\ar\File   $file 统一文件对象
+     * @return 文件url地址       文件访问url
+     */
     public static function buildFileUrl(File $file){
         return self::getSaveMedium($file->file_save_type)->buildFileUrl($file);
     }
 
+    /**
+     * 通过数组数据获取文件的访问地址
+     * 同 common\models\file\FileModel::buildFileUrl不同的时，这里参数不要传入统一文件对象，就能够获取文件的访问url，唯一不同的时，这个方法只能获取
+     * 公开文件的url,即file_is_private = 0
+     * @param  array $fileInfo 文件信息
+     * @see common\models\file\FileModel::parseQueryId
+     * @return string           文件访问url
+     */
     public static function buildFileUrlStatic($fileInfo){
         $file = Yii::createObject(array_merge([
             'class' => File::className(),
@@ -380,11 +468,22 @@ class FileModel extends Model
         return static::buildFileUrl($file);
     }
 
-
+    /**
+     * 构建文件在各个存储中的实际存储路径
+     * disk为本地硬盘的存储，oss存储没有路径，但是路径可以用于模拟分类
+     * @param  File   $file 统一文件独享
+     * @return string       返回文件存储路径
+     */
     public static function buildFileSavePath(File $file){
         return $file->file_prefix . '/' . $file->file_real_name;
     }
 
+    /**
+     * 构建文件存储的文件名称
+     * 如果文件名不存在file_ext将没有文件后缀，本方法不会解析文件流来获取文件后缀
+     * @param  File   $file 统一文件对象
+     * @return string       文件名称
+     */
     protected static function buildFileRealName(File $file){
         return             $file->file_real_name ? $file->file_real_name : md5(
                              $file->file_md5_value .

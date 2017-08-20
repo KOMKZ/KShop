@@ -11,13 +11,48 @@ use yii\helpers\FileHelper;
  */
 class Disk extends Model implements SaveMediumInterface
 {
+    /**
+     * 存储类型的名称
+     * @var string
+     */
     CONST NAME = 'disk';
+
+    /**
+     * 本地存储的根目录
+     * @see \common\models\file\drivers\setBase
+     * @var string
+     */
     protected $base = '';
+
+    /**
+     * 本地存储目录的权限设置
+     * @var integer
+     */
     public $dirMode = 0755;
+
+    /**
+     * 本地存储文件的权限设置
+     * @var integer
+     */
     public $fileMode = 0755;
+
+    /**
+     * 本地存储文件的域名设置
+     * @var string
+     */
     public $host = "";
+
+    /**
+     * 本地存储文件域名路径设置
+     * @var string
+     */
     public $urlRoute = "";
 
+    /**
+     * 本地存储根目录set方法
+     * 这个参数时必须设置的，不设置的话会抛出错误
+     * @param string 路径
+     */
     public function setBase($value){
         if(!is_dir($value)){
             throw new InvalidConfigException(Yii::t('app',"{$value} 路径不存在"));
@@ -29,14 +64,34 @@ class Disk extends Model implements SaveMediumInterface
         $this->base = rtrim($value, '/');
     }
 
+    /**
+     * 构建文件的访问url
+     * @param  \common\models\file\ar\File   $file   统一文件对象
+     * @param  array  $params [description]
+     * @return string         文件访问url
+     */
     public function buildFileUrl(File $file, $params = []){
         $apiUrlManager = Yii::$app->apiurl;
         $apiUrlManager->hostInfo = $this->host;
         return $apiUrlManager->createAbsoluteUrl([$this->urlRoute, 'query_id' => $file->file_query_id]);
     }
+
+    /**
+     * 通过直接复制来保存一个统一文件对象
+     * @param  File   $targetFile 目标文件对象
+     * @param  File   $originFile 原始文件对象
+     * @return [type]             目标文件对象
+     */
     public function saveByCopy(File $targetFile, File $originFile){
         return $targetFile;
     }
+
+    /**
+     * 保存一个统一文件对象到本地存储中
+     * 注意该对象最好是通过\common\models\file\FileModel::createFile创建得到
+     * @param  File   $file 统一文件对象
+     * @return File
+     */
     public function save(File $file){
         $savePath = $this->base . '/' . $file->getFileSavePath();
         $saveDir = dirname($savePath);
@@ -48,7 +103,10 @@ class Disk extends Model implements SaveMediumInterface
         chmod($savePath, $this->fileMode);
         return $file;
     }
-
+    /**
+     * 构造本地存储的存储元信息
+     * @return array 
+     */
     public function buildMediumInfo(){
         return [
             'base' => $this->base,

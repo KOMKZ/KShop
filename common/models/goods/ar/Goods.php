@@ -53,6 +53,10 @@ class Goods extends ActiveRecord
         ]);
     }
 
+    /**
+     * 获取有效的商品sku
+     * @return [type] [description]
+     */
     public function getG_skus(){
         return $this->hasMany(GoodsSku::className(), [
             'g_id' => 'g_id'
@@ -61,14 +65,23 @@ class Goods extends ActiveRecord
         ]);
     }
 
+    /**
+     * 获取商品详细数据
+     * @return [type] [description]
+     */
     public function getG_detail(){
         return $this->hasOne(GoodsDetail::className(), ['g_id' => 'g_id']);
     }
+
 
     public function setG_detail($value){
         $this->populateRelation('g_detail', $value);
     }
 
+    /**
+     * 获取商品属性
+     * @return [type] [description]
+     */
     public function getG_attrs(){
         $gaTable = GoodsAttr::tableName();
         $grTable = GoodsRealAttr::tableName();
@@ -78,6 +91,10 @@ class Goods extends ActiveRecord
                ->andWhere(['=', "{$grTable}.gr_status", GoodsRealAttr::STATUS_VALID]);
     }
 
+    /**
+     * 获取有效的商品sku值及显示名称
+     * @return [type] [description]
+     */
     public function getG_vaild_sku_ids(){
         if(!$this->_g_valid_sku_ids){
             return $this->_g_valid_sku_ids = GoodsModel::buildValidSkuIds($this, ArrayHelper::toArray($this->g_sku_attrs));
@@ -85,6 +102,11 @@ class Goods extends ActiveRecord
         return $this->_g_valid_sku_ids;
     }
 
+
+    /**
+     * 获取商品sku属性
+     * @return [type] [description]
+     */
     public function getG_sku_attrs(){
         $gaTable = GoodsAttr::tableName();
         $grTable = GoodsRealAttr::tableName();
@@ -109,6 +131,10 @@ class Goods extends ActiveRecord
         $this->populateRelation('g_metas', $value);
     }
 
+    /**
+     * 获取选项值属性
+     * @return [type] [description]
+     */
     public function getG_option_attrs(){
         $gaTable = GoodsAttr::tableName();
         $grTable = GoodsRealAttr::tableName();

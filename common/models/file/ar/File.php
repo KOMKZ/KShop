@@ -29,10 +29,19 @@ class File extends ActiveRecord
         return FileModel::buildFileUrl($this);
     }
 
+    /**
+     * 获取文件保存地址
+     * 本方法主要用于上传时确定文件保存地址用
+     * @return [type] [description]
+     */
     public function getFileSavePath(){
         return FileModel::buildFileSavePath($this);
     }
 
+    /**
+     * 获取本地文件的完整路径
+     * @return [type] [description]
+     */
     public function getFileDiskFullSavePath(){
         $mediumInfo = json_decode($this->file_medium_info);
         return $mediumInfo->base . '/' . $this->getFileSavePath();

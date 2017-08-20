@@ -26,4 +26,7 @@ class GoodsSkuQuery extends Object
         return GoodsSku::find()->where(['in', 'g_sku_status', [GoodsSku::STATUS_ON_SALE, GoodsSku::STATUS_ON_NOT_SALE]]);
     }
 
+
+
+    
 }

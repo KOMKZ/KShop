@@ -20,15 +20,37 @@ use common\models\staticdata\Errno;
  */
 class GoodsAttrModel extends Model
 {
+
+    /**
+     * 根据筛选条件删除商品元数据
+     * 注意该删除是伪删除
+     * @param  array $condition 筛选数据的条件
+     * @param  array  $params    [description]
+     * @return integer            返回影响的函数
+     */
     public static function deleteGoodsMetas($condition = null, $params = []){
         return GoodsMeta::updateAll(['gm_status' => GoodsMeta::STATUS_DELETE], $condition, $params);
     }
 
+    /**
+     * 根据筛选条件删除商品属性
+     * 注意该删除是伪删除
+     * @param  array $condition 筛选数据的条件
+     * @param  array  $params    [description]
+     * @return integer            返回影响的函数
+     */
     public static function deleteGoodsAttrs($condition = null, $params = []){
         return GoodsRealAttr::updateAll(['gr_status' => GoodsRealAttr::STATUS_DELETE], $condition, $params);
     }
 
-
+    /**
+     * 更新商品多个属性
+     * @param  array  $attrData 属性数据
+     * @save \common\models\goods\ar\GoodsAttr::updateGoodsAttr 哪些数据可以修改
+     * @param  Goods   $goods    商品基础数据
+     * @param  boolean $asArray  是否返回为数组
+     * @return boolean|array     返回false或者多个更新之后的属性数据
+     */
     public function updateGoodsAttrs($attrData, Goods $goods, $asArray = true){
         $t = Yii::$app->db->beginTransaction();
         try {
@@ -46,6 +68,17 @@ class GoodsAttrModel extends Model
         }
     }
 
+    /**
+     * 修改单个属性数据
+     * 本方法会创建新的属性选项值，同时更新旧的数据选项值
+     * @param  \common\models\goods\ar\GoodsRealAttr $realAttr 真实商品属性对象
+     * @param  array $attrData 修改的商品属性数据
+     * - g_atr_opts: array, 属性选项值数组
+     * @see \common\models\goods\GoodsAttrModel::createAttrOptions 了解创建的数据结构
+     * @see \common\models\goods\GoodsAttrModel::updateAttrOptions 了解更新时的数据结构
+     * @param  Goods  $goods    商品属性数据对象
+     * @return \common\models\goods\ar\GoodsRealAttr           返回真实商品属性对象
+     */
     public function updateGoodsAttr($realAttr, $attrData, Goods $goods){
         if(!empty($realAttr)){
             // 商品属性约定不能修改，只能修改商品属性值
@@ -76,6 +109,14 @@ class GoodsAttrModel extends Model
         return $realAttr;
     }
 
+    /**
+     * 更新多个商品元数据
+     * @param  array  $metasData 多个商品元数据
+     * @see \common\models\goods\GoodsAttrModel::updateGoodsMeta 了解具体的更新内容
+     * @param  Goods   $goods     商品基础信息对象
+     * @param  boolean $asArray   返回数据元素是否为数组
+     * @return array             false, 成功时返回元数据数据数组
+     */
     public function updateGoodsMetas($metasData, Goods $goods, $asArray = true){
         $t = Yii::$app->db->beginTransaction();
         try {
@@ -94,6 +135,16 @@ class GoodsAttrModel extends Model
         }
     }
 
+    /**
+     * 更新单个商品元数据
+     * @param  array $meta     单个商品元数据
+     * - gm_id: integer, 旧的元数据id，用于唯一确定
+     * - gm_value: string, 旧的元数据的值
+     * - gm_status: string, 旧的元数据的状态
+     * @param  [type] $metaData [description]
+     * @param  Goods  $goods    [description]
+     * @return \common\models\goods\ar\GoodsMeta           元数据属性对象
+     */
     public function updateGoodsMeta($meta, $metaData, Goods $goods){
         if(!empty($metaData)){
             if(!$meta->load($metaData, '') || !$meta->validate()){
@@ -108,7 +159,19 @@ class GoodsAttrModel extends Model
         return $meta;
     }
 
-
+    /**
+     * 创建多个商品元数据
+     * @param  array  $data    商品多个元数据
+     * 本方法通过gm_id判断出原属性和旧属性
+     * 单个元素定义如下：
+     * - gm_value: string,
+     * - gm_atr_code: string, 元属性代号
+     * - gm_atr_name: string, 原书行名称
+     * - gm_id: 元属性id
+     * @param  \common\models\goods\GoodsModel  $goods   商品基础信息对象
+     * @param  boolean $asArray 返回对象元素是否时数组
+     * @return [type]           [description]
+     */
     public function createGoodsMetas($data, $goods, $asArray = true){
         list($newMetas, $oldMetas) = $this->parseMetaNewAndOld($data['metas']);
         $metas = [];
@@ -144,6 +207,14 @@ class GoodsAttrModel extends Model
         return $metaDefs;
     }
 
+    /**
+     * 从提供的数据中区分出新的元属性和旧的元属性
+     * @param  [type] $metas 元属性数据
+     * @see \common\models\goods\GoodsModel::createGoodsMetas
+     * @return array
+     * - 0: 新数据
+     * - 1: 旧数据
+     */
     public function parseMetaNewAndOld($metas){
         $newMetas = [];
         $oldMeta = [];
@@ -157,7 +228,16 @@ class GoodsAttrModel extends Model
         return [$newMetas, $oldMeta];
     }
 
-
+    /**
+     * 创建多个商品属性
+     * @param  array  $data    多个商品属性数据
+     * @see \common\models\goods\GoodsAttrModel::createAttr 了解创建的数据结构
+     * 额外数据：
+     * - g_atr_opts: array 商品属性的选项值 @see \common\models\goods\GoodsAttrModel::createAttrOption
+     * @param  Goods   $goods   商品基础信息对象
+     * @param  boolean $asArray 返回数据元素是否是数组
+     * @return [type]           返回多个创建成功的属性数据
+     */
     public function createGoodsAttrs($data, Goods $goods, $asArray = true){
         list($newAttrs, $oldAttrs) = $this->parseAttrsNewAndOld($data['attrs']);
         $attrs = [];
@@ -195,6 +275,18 @@ class GoodsAttrModel extends Model
         }
         return $attrDefs;
     }
+
+    /**
+     * 创建属性的选项值
+     * @param  array    $options    选项值数组
+     * @see \common\models\goods\GoodsAttrModel::createAttrOption 了解可以创建的数据结构
+     * @param  GoodsAttr $attr       选项值需要关联属性对象
+     * @param  Goods     $goods      所属的商品数据对象
+     * @param  boolean   $asArray    [description]
+     * @param  integer   $startValue 选项值的起始数值
+     * 注意默认从1开始，更新时创建新的需要自己查处最大的值
+     * @return array                返回选项值数据数组
+     */
     public function createAttrOptions($options, GoodsAttr $attr, Goods $goods, $asArray = true, $startValue = 1){
         if(is_string($options)){
             $options = [[
@@ -246,6 +338,15 @@ class GoodsAttrModel extends Model
         return $options;
     }
 
+    /**
+     * [updateAttrOption description]
+     * @param  GoodsRealOption $option     [description]
+     * @param  array          $optionData 选项值数据
+     * - g_opt_id: integer,required 选项值id
+     * - g_opt_name: string,required 选项值名称
+     * - g_opt_img: string 选项值图片
+     * @return [type]                      [description]
+     */
     public function updateAttrOption(GoodsRealOption $option, $optionData){
         if(empty($option['g_opt_id'])){
             $this->addError('', Yii::t('app', "更新属性选项对象出错，g_opt_id不存在"));

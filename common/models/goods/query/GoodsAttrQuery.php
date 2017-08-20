@@ -13,7 +13,12 @@ class GoodsAttrQuery extends Object{
     public static function find(){
         return GoodsAttr::find();
     }
-
+    /**
+     * 通过分类查询得到属性对象
+     * @param  [type]  $clsId       [description]
+     * @param  boolean $returnQuery [description]
+     * @return [type]               [description]
+     */
     public static function findAttrsByClsid($clsId, $returnQuery = false){
         $clsObjects = GoodsClassificationQuery::findParentsById($clsId);
         $clsIds = array_keys(ArrayHelper::index($clsObjects, 'g_cls_id'));

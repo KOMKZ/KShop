@@ -11,6 +11,11 @@ class GoodsClassificationQuery extends Object{
     public static function find(){
         return GoodsClassification::find();
     }
+    /**
+     * 根据一个分类id获取该分类的所有父类
+     * @param  [type] $clsId [description]
+     * @return [type]        [description]
+     */
     public static function findParentsById($clsId){
         $parents = [];
         $one = GoodsClassification::find()
