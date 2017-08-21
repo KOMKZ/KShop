@@ -50,6 +50,10 @@ class Wxpay extends Model
         ];
     }
 
+    public function transfer($data){
+        
+    }
+
     /**
      * 下载对账单
      * @param  [type] $billDate [description]

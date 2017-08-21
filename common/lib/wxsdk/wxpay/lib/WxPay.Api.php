@@ -204,6 +204,42 @@ class WxPayApi
 		return $result;
 	}
 
+	public static function sendTransfer($inputObj, $timeOut = 30){
+		$url = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+
+		if(!$inputObj->IsPartner_trade_noSet() ||
+		   !$inputObj->IsOpenidSet() ||
+		   !$inputObj->IsCheck_nameSet() ||
+		   !$inputObj->IsAmountSet() ||
+		   !$inputObj->IsDescSet() ||
+		   !$inputObj->IsSpbill_create_ipSet()
+		){
+			throw new WxPayException("企业付款接口中，partner_trade_no、openid、check_name、amount、desc、spbill_create_ip这些参数不能为空！");
+		}
+
+		if(
+			'FORCE_CHECK' == $inputObj->GetCheck_name() &&
+			!$inputObj->IsRe_user_nameSet()
+		){
+			throw new WxPayException("企业付款接口中，设置强制校验收款人姓名则必须填写收款人姓名！");
+		}
+
+		$inputObj->SetMch_appid(WxPayConfig::$APPID);
+		$inputObj->SetMchid(WxPayConfig::$MCHID);//商户号
+		$inputObj->SetNonce_str(self::getNonceStr());//随机字符串
+		$inputObj->SetSign();//签名
+		$xml = $inputObj->ToXml();
+
+		$response = self::postXmlCurl($xml, $url, true, $timeOut);
+		if(substr($response, 0 , 5) == "<xml>"){
+			$obj = new \WxPayResults();
+			$obj->FromXml($response);
+			return $obj;
+		}
+		return '';
+
+	}
+
 	/**
 	 * 下载对账单，WxPayDownloadBill中bill_date为必填参数
 	 * appid、mchid、spbill_create_ip、nonce_str不需要填入

@@ -2982,3 +2982,121 @@ class WxPayBizPayUrl extends WxPayDataBase
 		return array_key_exists('product_id', $this->values);
 	}
 }
+
+
+class WxTransfer extends WxPayDataBase{
+	public function SetMch_appid($value){
+		$this->values['mch_appid'] = $value;
+	}
+	public function GetMch_appid(){
+		return $this->values['mch_appid'];
+	}
+	public function IsMch_appidSet(){
+		return array_key_exists('mch_appid', $this->values);
+	}
+
+	public function SetMchid($value){
+		$this->values['mchid'] = $value;
+	}
+	public function GetMchid(){
+		return $this->values['mchid'];
+	}
+	public function IsMchidSet(){
+		return array_key_exists('mchid', $this->values);
+	}
+
+
+	public function SetDevice_info($value){
+		$this->values['device_info'] = $value;
+	}
+	public function GetDevice_info(){
+		return $this->values['device_info'];
+	}
+	public function IsDevice_infoSet(){
+		return array_key_exists('device_info', $this->values);
+	}
+
+	public function SetNonce_str($value){
+		$this->values['nonce_str'] = $value;
+	}
+	public function GetNonce_str(){
+		return $this->values['nonce_str'];
+	}
+	public function IsNonce_strSet(){
+		return array_key_exists('nonce_str', $this->values);
+	}
+
+
+
+
+	public function SetPartner_trade_no($value){
+		$this->values['partner_trade_no'] = $value;
+	}
+	public function GetPartner_trade_no(){
+		return $this->values['partner_trade_no'];
+	}
+	public function IsPartner_trade_noSet(){
+		return array_key_exists('partner_trade_no', $this->values);
+	}
+
+
+	public function SetOpenid($value){
+		$this->values['openid'] = $value;
+	}
+	public function GetOpenid(){
+		return $this->values['openid'];
+	}
+	public function IsOpenidSet(){
+		return array_key_exists('openid', $this->values);
+	}
+
+	public function SetCheck_name($value){
+		$this->values['check_name'] = $value;
+	}
+	public function GetCheck_name(){
+		return $this->values['check_name'];
+	}
+	public function IsCheck_nameSet(){
+		return array_key_exists('check_name', $this->values);
+	}
+
+	public function SetRe_user_name($value){
+		$this->values['re_user_name'] = $value;
+	}
+	public function GetRe_user_name(){
+		return $this->values['re_user_name'];
+	}
+	public function IsRe_user_nameSet(){
+		return array_key_exists('re_user_name', $this->values);
+	}
+
+	public function SetAmount($value){
+		$this->values['amount'] = $value;
+	}
+	public function GetAmount(){
+		return $this->values['amount'];
+	}
+	public function IsAmountSet(){
+		return array_key_exists('amount', $this->values);
+	}
+
+	public function SetDesc($value){
+		$this->values['desc'] = $value;
+	}
+	public function GetDesc(){
+		return $this->values['desc'];
+	}
+	public function IsDescSet(){
+		return array_key_exists('desc', $this->values);
+	}
+
+	public function SetSpbill_create_ip($value){
+		$this->values['spbill_create_ip'] = $value;
+	}
+	public function GetSpbill_create_ip(){
+		return $this->values['spbill_create_ip'];
+	}
+	public function IsSpbill_create_ipSet(){
+		return array_key_exists('spbill_create_ip', $this->values);
+	}
+}
