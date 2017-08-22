@@ -13,14 +13,20 @@ class m170803_100401_transaction extends Migration
         $tableName = $this->getTableName();
         $createTabelSql = "
         create table `{$tableName}`(
-            `gm_id` int(10) unsigned not null auto_increment comment '主键',
-            `g_id` int(10) unsigned not null comment '商品id',
-            `g_atr_id` int(10) unsigned not null comment '商品属性id',
-            `gm_value` varchar(100) not null comment '商品元属性的值',
-            `gm_status` char(10) not null comment '商品属性状态',
-            `gm_created_at` int(10) not null comment '创建时间',
-            primary key `gm_id` (gm_id),
-            unique `g_id_and_g_atr_id` (g_id, g_atr_id)
+            `t_id` int(10) unsigned not null auto_increment comment '主键',
+            `t_number` char(20) not null comment '交易编号',
+            `t_succ_pay_type` char(12) not null default '' comment '成功支付的方式',
+            `t_pay_status` char(12) not null comment '支付状态',
+            `t_status` char(12) not null comment '交易状态',
+            `t_type` char(12) not null comment '交易类型',
+            `t_pay_at` int(10) unsigned not null default 0 comment '支付时间',
+            `t_invalid_at` int(10) unsigned not null default 0 comment '失效时间',
+            `t_created_at` int(10) unsigned not null comment '创建时间',
+            `t_module` char(12) not null comment '所属模块',
+            `t_app_no` char(20) not null comment '应用编号',
+            `t_belong_uid` int(10) unsigned not null default 0 comment '所属用户id',
+            `t_create_uid` int(10) unsigned not null default 0 comment '创建用户id',
+            primary key (t_id)
         );
         ";
         $this->execute($createTabelSql);

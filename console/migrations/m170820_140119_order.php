@@ -19,6 +19,7 @@ class m170820_140119_order extends Migration
           `od_comment_status` char(12) not null COMMENT '订单评论状态',
           `od_refund_status` char(12) not null COMMENT '订单退款状态',
           `od_status` char(12) not null COMMENT '订单状态',
+          `od_belong_storage` int(10) not null default 0 comment '订单所属仓库',
           `od_logistics_status` char(12) not COMMENT '订单物流状态',
           `od_succ_pay_type` char(12) not null default '' COMMENT '订单成功的支付方式',
           `od_pay_mode` char(12) not null COMMENT '订单付款方式，分期付款，货到付款，线上全额付款',
