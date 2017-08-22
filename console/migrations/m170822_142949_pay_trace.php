@@ -1,10 +1,9 @@
 <?php
 
 use yii\db\Migration;
-use common\models\pay\ar\PayTrace;
 
 
-class m170822_032919_pay_trace extends Migration
+class m170822_142949_pay_trace extends Migration
 {
     public function getTableName(){
         return preg_replace('/[\{\}]/', '', preg_replace("/%/", Yii::$app->db->tablePrefix, PayTrace::tableName()));

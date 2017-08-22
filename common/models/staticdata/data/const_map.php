@@ -74,4 +74,28 @@ return [
         \common\models\user\ar\UserMessage::STATUS_UNREAD => Yii::t('app', '未读')
         ,\common\models\user\ar\UserMessage::STATUS_HAD_READ => Yii::t('app', '已读')
     ]
+    ,'t_pay_status' => [
+        \common\models\trans\ar\Transaction::PAY_STATUS_NOPAY => Yii::t('app', '未支付')
+        ,\common\models\trans\ar\Transaction::PAY_STATUS_PAYED  => Yii::t('app', '已支付')
+    ]
+    ,'t_status' => [
+        \common\models\trans\ar\Transaction::STATUS_INIT => Yii::t('app', '提交状态')
+        ,\common\models\trans\ar\Transaction::STATUS_CANCEL => Yii::t('app', '取消状态')
+        ,\common\models\trans\ar\Transaction::STATUS_PAYED => Yii::t('app', '已经支付状态')
+        ,\common\models\trans\ar\Transaction::STATUS_ERROR => Yii::t('app', "错误状态")
+    ]
+    ,'t_type' => [
+        \common\models\trans\ar\Transaction::TYPE_CONSUME => Yii::t('app', "消费型交易")
+        ,\common\models\trans\ar\Transaction::TYPE_TRANSFER => Yii::t('app', "转账型交易")
+        ,\common\models\trans\ar\Transaction::TYPE_REFUND => Yii::t('app', "退款型交易")
+    ]
+    ,'currency_type' => [
+        // todo function
+        \common\models\pay\Currency::CNY => Yii::t('app', "人民币")
+    ]
+    ,'t_module' => [
+        \common\models\trans\ar\Transaction::MODULE_ORDER => Yii::t('app', "订单模块")
+    ]
+
+
 ];
