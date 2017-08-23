@@ -29,6 +29,8 @@ class m170822_134416_transaction extends Migration
             `t_timeout` int(10) unsigned not null comment '有效时间',
             `t_belong_uid` int(10) unsigned not null default 0 comment '所属用户id',
             `t_create_uid` int(10) unsigned not null default 0 comment '创建用户id',
+            `t_title` varchar(255) not null comment '交易名称',
+            `t_content` text null comment '交易相关数据',
             primary key (t_id)
         );
         ";

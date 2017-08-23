@@ -7,6 +7,9 @@ use common\models\pay\payment\Wxpay;
 use common\models\pay\payment\Alipay;
 use yii\base\InvalidArgumentException;
 use common\models\pay\ar\ThirdBill;
+use common\models\trans\ar\Transaction;
+use common\models\pay\ar\PayTrace;
+use common\models\staticdata\Errno;
 /**
  *
  */
@@ -15,6 +18,18 @@ class PayModel extends Model
     CONST NOTIFY_INVALID = 'notify_invalid';
     CONST NOTIFY_ORDER_INVALID = 'notify_order_invalid';
     CONST NOTIFY_EXCEPTION = 'notify_exception';
+
+    public static $map = [
+        Alipay::NAME => [
+            PayTrace::TYPE_DATA => Alipay::MODE_APP,
+            PayTrace::TYPE_URL => Alipay::MODE_URL
+        ],
+        Wxpay::NAME => [
+            PayTrace::TYPE_DATA => Wxpay::MODE_APP,
+            PayTrace::TYPE_URL => Wxpay::MODE_NATIVE
+        ]
+    ];
+
     public static function getPayment($type){
         switch ($type) {
             case Wxpay::NAME:
@@ -29,4 +44,67 @@ class PayModel extends Model
     public static function saveBillInDb($data){
         return Yii::$app->db->createCommand()->insert(ThirdBill::tableName(), $data)->execute();
     }
+
+    /**
+     * 创建一个第三方交易预支付订单
+     * @param  array      $data   第三方预支付订单数据
+     * - pt_pay_type: string,required 支付类型
+     * - pt_pre_order_type: string,required 预支付数据的类型
+     * url:
+     * 支付宝:链接, 微信:二维码数据
+     * data:
+     * 支付宝:订单字符串 微信:订单数据
+     * - pt_timeout: integer 预支付订单的失效时间
+     * 如果没有定义则使用交易的失效时间
+     * @param  Transaction $trans [description]
+     * @return [type]             [description]
+     */
+    public function createPreOrder($data, Transaction $trans){
+        $data['pt_belong_trans_number'] = $trans->t_number;
+        if(empty($data['pt_timeout'])) $data['pt_timeout'] = $trans->t_timeout;
+        $data['pt_status'] = PayTrace::STATUS_INIT;
+        $data['pt_pay_status'] = PayTrace::PAY_STATUS_NOPAY;
+        $payOrder = $this->createPayOrder($data);
+        if(!$payOrder){
+            return false;
+        }
+        $payment = static::getPayment($payOrder->pt_pay_type);
+        $payData = [
+            'trans_invalid_at' => $payOrder->pt_timeout,
+            'trans_start_at' => time(),
+            'trans_number' => $payOrder->pt_belong_trans_number,
+            'trans_title' => $trans->t_title,
+            'trans_total_fee' => $trans->t_fee,
+            'trans_detail' => $trans->t_content,
+        ];
+        $thirdPreOrder = $payment->createOrder($payData, static::$map[$payOrder->pt_pay_type][$payOrder->pt_pre_order_type]);
+        if(!$thirdPreOrder){
+            list($code, $error) = $payment->getOneError();
+            $this->addError($code, $error);
+            return false;
+        }
+        $thirdData = [
+            'pre_response' => $thirdPreOrder['response']
+        ];
+        $payOrder->pt_pre_order = $thirdPreOrder['master_data'];
+        $payOrder->pt_third_data = json_encode($thirdData);
+        $payOrder->update(false);
+        return $payOrder;
+    }
+
+
+
+    public function createPayOrder($data){
+        $payTrace = new PayTrace();
+        if(!$payTrace->load($data, '') || !$payTrace->validate()){
+            $this->addError('', $this->getOneErrMsg($payTrace));
+            return false;
+        }
+        if(!$payTrace->insert(false)){
+            $this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', "插入支付单数据失败"));
+            return false;
+        }
+        return $payTrace;
+    }
+
 }

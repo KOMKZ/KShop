@@ -81,6 +81,12 @@ class Transaction extends ActiveRecord
 
             ,['t_timeout', 'integer']
             ,['t_timeout', 'default', 'value' => SetModel::get('transaction.transaction_timeout') + time()]
+
+            ,['t_title', 'required']
+            ,['t_title', 'string']
+
+            ,['t_content', 'string']
+            ,['t_content', 'default', 'value' => '']
         ];
     }
 }

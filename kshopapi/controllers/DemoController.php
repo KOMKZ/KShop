@@ -29,7 +29,17 @@ class DemoController extends Controller
         $resultCode = $result->$responseNode->code;
         console($result);
     }
-    public function actionLoad(){
-        
+    public function actionWx(){
+        $wxpay = Yii::$app->wxpay;
+        $input = new \WxTransfer();
+        $input->SetPartner_trade_no('ceshitransfer' . mt_rand(000, 111));
+        $input->SetAmount(1);
+        $input->SetOpenid("oPADtwtvYaiIVrU0z29OekdYF4Ww");
+        $input->SetDesc("测试企业付款");
+        $input->SetCheck_name("FORCE_CHECK");
+        $input->SetSpbill_create_ip("192.168.1.1");
+        $input->SetRe_user_name("钟启财");
+        $result = \WxpayApi::sendTransfer($input);
+        console($result);
     }
 }

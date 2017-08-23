@@ -25,5 +25,8 @@ return [
         'secret_key' => '',
         'allow_algs' => ['HS512'],
         'encode_alg' => 'HS512'
+    ],
+    'transaction' => [
+        'transaction_timeout' => 1800
     ]
 ];

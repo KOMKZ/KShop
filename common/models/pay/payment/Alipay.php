@@ -4,6 +4,8 @@ namespace common\models\pay\payment;
 use Yii;
 use common\models\Model;
 use yii\helpers\FileHelper;
+use common\models\pay\PayModel;
+
 /**
  *
  */
@@ -260,6 +262,19 @@ class Alipay extends Model
 
     }
 
+    /**
+     *
+     * @param  [type] $data [description]
+     * - trans_return_url:
+     * - trans_invalid_at:
+     * - trans_start_at:
+     * - trans_number:
+     * - trans_title:
+     * - trans_total_fee:
+     * - trans_detail:
+     * @param  [type] $type [description]
+     * @return [type]       [description]
+     */
     public function createOrder($data, $type){
         try {
             switch ($type) {

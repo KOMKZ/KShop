@@ -84,6 +84,20 @@ return [
         ,\common\models\trans\ar\Transaction::STATUS_PAYED => Yii::t('app', '已经支付状态')
         ,\common\models\trans\ar\Transaction::STATUS_ERROR => Yii::t('app', "错误状态")
     ]
+    ,'pt_pay_status' => [
+        \common\models\pay\ar\PayTrace::PAY_STATUS_NOPAY => Yii::t('app', '未支付')
+        ,\common\models\pay\ar\PayTrace::PAY_STATUS_PAYED  => Yii::t('app', '已支付')
+    ]
+    ,'pt_status' => [
+        \common\models\pay\ar\PayTrace::STATUS_INIT => Yii::t('app', '提交状态')
+        ,\common\models\pay\ar\PayTrace::STATUS_CANCEL => Yii::t('app', '取消状态')
+        ,\common\models\pay\ar\PayTrace::STATUS_PAYED => Yii::t('app', '已经支付状态')
+        ,\common\models\pay\ar\PayTrace::STATUS_ERROR => Yii::t('app', "错误状态")
+    ]
+    ,'pt_pre_order_type' => [
+        \common\models\pay\ar\PayTrace::TYPE_DATA => Yii::t('app', "app调用数据")
+        ,\common\models\pay\ar\PayTrace::TYPE_URL => Yii::t('app', "pc端类url")
+    ]
     ,'t_type' => [
         \common\models\trans\ar\Transaction::TYPE_CONSUME => Yii::t('app', "消费型交易")
         ,\common\models\trans\ar\Transaction::TYPE_TRANSFER => Yii::t('app', "转账型交易")
@@ -95,6 +109,10 @@ return [
     ]
     ,'t_module' => [
         \common\models\trans\ar\Transaction::MODULE_ORDER => Yii::t('app', "订单模块")
+    ]
+    ,'payment' => [
+        \common\models\pay\payment\Alipay::NAME => Yii::t('app', "支付宝")
+        ,\common\models\pay\payment\Wxpay::NAME => Yii::t('app', "微信")
     ]
 
 
