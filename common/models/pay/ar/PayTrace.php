@@ -4,6 +4,7 @@ namespace common\models\pay\ar;
 use yii\db\ActiveRecord;
 use yii\behaviors\TimestampBehavior;
 use common\models\staticdata\ConstMap;
+use yii\helpers\ArrayHelper;
 
 /**
  *
@@ -22,6 +23,9 @@ class PayTrace extends ActiveRecord
     CONST TYPE_DATA = 'data';
     CONST TYPE_URL = 'url';
 
+    CONST EVENT_AFTER_PAYED = "after_payed";
+
+
     public static function tableName(){
         return "{{%pay_trace}}";
     }
@@ -35,6 +39,12 @@ class PayTrace extends ActiveRecord
                 'updatedAtAttribute' => 'pt_updated_at'
             ]
         ];
+    }
+
+    public function setThird_data(Array $value){
+        $thirdData = ($thirdData = json_decode($this->pt_third_data, true)) ? $thirdData : [];
+        $thirdData = ArrayHelper::merge($thirdData, $value);
+        $this->pt_third_data = json_encode($thirdData);
     }
 
     public function rules(){

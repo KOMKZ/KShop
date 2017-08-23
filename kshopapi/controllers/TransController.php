@@ -14,8 +14,9 @@ use common\models\pay\query\PayTraceQuery;
  */
 class TransController extends Controller{
     public function actionNotify($type){
-       $notifyData = Yii::$app->request->getBodyParams();
-       $notifyData = [
+        Yii::$app->db->beginTransaction();
+        $notifyData = Yii::$app->request->getBodyParams();
+        $notifyData = [
             'gmt_create' => '2017-08-23 17:47:30',
             'charset' => 'utf-8',
             'gmt_payment' => '2017-08-23 17:48:47',
@@ -39,20 +40,27 @@ class TransController extends Controller{
             'buyer_pay_amount' => '0.01',
             'sign_type' => 'RSA2',
             'seller_id' => '2088102178864092',
-       ];
-       $payment = PayModel::getPayment($type);
-       $transData = $payment->handleNotify($notifyData, []);
-       if($transData['code'] > 0){
-           $payment->sayFail([]);
-           exit();
-       }
-       $payOrder = PayTraceQuery::find()->andWhere(['pt_belong_trans_number' => $transData['trans_number']])->one();
-       console($payOrder->toArray());
-       // todo
-       // 1 记录notify数据
-       // 2 业务查询
-       // 3 触发事件
-       $payment->saySucc([]);
-       exit();
+        ];
+        $payment = PayModel::getPayment($type);
+        try {
+            $transData = $payment->handleNotify($notifyData, []);
+            if($transData['code'] > 0){
+               $payment->sayFail([]);
+               exit();
+            }
+            $payOrder = PayTraceQuery::find()->andWhere(['pt_belong_trans_number' => $transData['trans_number']])->one();
+            $payModel = new PayModel();
+            if(!$payOrder || !$payModel->updatePayOrderPayed($payOrder, ['notification' => $notifyData])){
+               $payment->sayFail([]);
+               exit();
+            }
+            PayModel::triggerPayed($payOrder);
+            $payment->saySucc([]);
+            exit();
+        } catch (\Exception $e) {
+            Yii::error($e);
+            $payment->sayFail([]);
+            exit();
+        }
     }
 }

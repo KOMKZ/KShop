@@ -27,6 +27,8 @@ class Transaction extends ActiveRecord
 
     const MODULE_ORDER = 'order';
 
+    const EVENT_AFTER_PAYED = 'after_payed';
+
     public static function tableName(){
         return "{{%transaction}}";
     }

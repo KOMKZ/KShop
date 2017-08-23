@@ -83,14 +83,41 @@ class PayModel extends Model
             $this->addError($code, $error);
             return false;
         }
-        $thirdData = [
+        $payOrder->pt_pre_order = $thirdPreOrder['master_data'];
+        $payOrder->third_data = [
             'pre_response' => $thirdPreOrder['response']
         ];
-        $payOrder->pt_pre_order = $thirdPreOrder['master_data'];
-        $payOrder->pt_third_data = json_encode($thirdData);
-        $payOrder->update(false);
+        if(false === $payOrder->update(false)){
+            $this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', "修改支付单失败"));
+            return false;
+        }
         return $payOrder;
     }
+
+    /**
+     * [updatePayOrderPayed description]
+     * @param  PayTrace $payOrder [description]
+     * @param  [type]   $data     [description]
+     * - notification: array
+     * @return [type]             [description]
+     */
+    public static function updatePayOrderPayed(PayTrace $payOrder, $data){
+        if(!empty($data['notification'])){
+            $payOrder->third_data = ['pay_succ_notification' => $data['notification']];
+        }
+        $payOrder->pt_pay_status = PayTrace::PAY_STATUS_PAYED;
+        $payOrder->pt_status = PayTrace::STATUS_PAYED;
+        if(false === $payOrder->update(false)){
+            $this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', "修改支付单支失败"));
+            return false;
+        }
+        return $payOrder;
+    }
+
+    public static function triggerPayed(PayTrace $payOrder){
+        $payOrder->trigger(PayTrace::EVENT_AFTER_PAYED);
+    }
+
 
 
 
