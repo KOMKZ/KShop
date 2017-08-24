@@ -60,38 +60,49 @@ class PayModel extends Model
      * @return [type]             [description]
      */
     public function createPreOrder($data, Transaction $trans){
-        $data['pt_belong_trans_number'] = $trans->t_number;
-        if(empty($data['pt_timeout'])) $data['pt_timeout'] = $trans->t_timeout;
-        $data['pt_status'] = PayTrace::STATUS_INIT;
-        $data['pt_pay_status'] = PayTrace::PAY_STATUS_NOPAY;
-        $payOrder = $this->createPayOrder($data);
-        if(!$payOrder){
+        $t = Yii::$app->db->beginTransaction();
+        try {
+            $data['pt_belong_trans_number'] = $trans->t_number;
+            if(empty($data['pt_timeout'])) $data['pt_timeout'] = $trans->t_timeout;
+            $data['pt_status'] = PayTrace::STATUS_INIT;
+            $data['pt_pay_status'] = PayTrace::PAY_STATUS_NOPAY;
+            $payOrder = $this->createPayOrder($data);
+            if(!$payOrder){
+                return false;
+            }
+            $payment = static::getPayment($payOrder->pt_pay_type);
+            $payData = [
+                'trans_invalid_at' => $payOrder->pt_timeout,
+                'trans_start_at' => time(),
+                'trans_number' => $payOrder->pt_belong_trans_number,
+                'trans_title' => $trans->t_title,
+                'trans_total_fee' => $trans->t_fee,
+                'trans_detail' => $trans->t_content,
+                'trans_product_id' => $trans->t_app_no,
+            ];
+            $thirdPreOrder = $payment->createOrder($payData, static::$map[$payOrder->pt_pay_type][$payOrder->pt_pre_order_type]);
+            if(!$thirdPreOrder){
+                list($code, $error) = $payment->getOneError();
+                $this->addError($code, $error);
+                return false;
+            }
+            $payOrder->pt_pre_order = $thirdPreOrder['master_data'];
+            $payOrder->third_data = [
+                'pre_response' => $thirdPreOrder['response']
+            ];
+            if(false === $payOrder->update(false)){
+                $this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', "修改支付单失败"));
+                return false;
+            }
+            $t->commit();
+            return $payOrder;
+        } catch (\Exception $e) {
+            $t->rollback();
+            Yii::error($e);
+            $this->addError(Errno::EXCEPTION, Yii::t('app', "创建支付单异常"));
             return false;
         }
-        $payment = static::getPayment($payOrder->pt_pay_type);
-        $payData = [
-            'trans_invalid_at' => $payOrder->pt_timeout,
-            'trans_start_at' => time(),
-            'trans_number' => $payOrder->pt_belong_trans_number,
-            'trans_title' => $trans->t_title,
-            'trans_total_fee' => $trans->t_fee,
-            'trans_detail' => $trans->t_content,
-        ];
-        $thirdPreOrder = $payment->createOrder($payData, static::$map[$payOrder->pt_pay_type][$payOrder->pt_pre_order_type]);
-        if(!$thirdPreOrder){
-            list($code, $error) = $payment->getOneError();
-            $this->addError($code, $error);
-            return false;
-        }
-        $payOrder->pt_pre_order = $thirdPreOrder['master_data'];
-        $payOrder->third_data = [
-            'pre_response' => $thirdPreOrder['response']
-        ];
-        if(false === $payOrder->update(false)){
-            $this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', "修改支付单失败"));
-            return false;
-        }
-        return $payOrder;
+
     }
 
     /**

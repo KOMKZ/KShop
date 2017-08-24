@@ -51,7 +51,7 @@ class Wxpay extends Model
     }
 
     public function transfer($data){
-        
+
     }
 
     /**
@@ -314,7 +314,7 @@ class Wxpay extends Model
             $input->SetTime_expire(date("YmdHis", $data['trans_invalid_at']));
             $input->SetNotify_url($this->notifyUrl);
             $input->SetTrade_type("APP");
-            $input->SetProduct_id($data['trans_module_number']);
+            $input->SetProduct_id($data['trans_product_id']);
             $result = WxPayApi::unifiedOrder($input);
             return $result;
         } catch (\Exception $e) {
@@ -347,7 +347,8 @@ class Wxpay extends Model
         $input->SetTime_expire(date("YmdHis", $data['trans_invalid_at']));
         $input->SetNotify_url($this->notifyUrl);
         $input->SetTrade_type("NATIVE");
-        $input->SetProduct_id($data['trans_module_number']);
+        $input->SetProduct_id($data['trans_product_id']);
+        $input->SetAttach($data['trans_detail']);
         $result = WxPayApi::unifiedOrder($input);
         return $result;
     }

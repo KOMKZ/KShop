@@ -5,6 +5,7 @@ use common\models\trans\TransModel;
 use common\models\trans\ar\Transaction;
 use common\models\pay\ar\PayTrace;
 use common\models\pay\payment\Alipay;
+use common\models\pay\payment\Wxpay;
 use common\models\pay\PayModel;
 
 
@@ -71,7 +72,7 @@ class TransTest extends \Codeception\Test\Unit
         }
         $payModel = new PayModel();
         $payData = [
-            'pt_pay_type' => Alipay::NAME,
+            'pt_pay_type' => Wxpay::NAME,
             'pt_pre_order_type' => PayTrace::TYPE_URL,
             'pt_timeout' => $trans->t_timeout,
         ];
