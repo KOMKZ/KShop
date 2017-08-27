@@ -51,7 +51,7 @@ class TransTest extends \Codeception\Test\Unit
     }
 
     public function testCreatePayOrder(){
-        // return true;
+        return true;
         // Yii::$app->db->beginTransaction();
         // todo fix 重复创建
         $data = [
@@ -72,7 +72,7 @@ class TransTest extends \Codeception\Test\Unit
         }
         $payModel = new PayModel();
         $payData = [
-            'pt_pay_type' => Wxpay::NAME,
+            'pt_pay_type' => Alipay::NAME,
             'pt_pre_order_type' => PayTrace::TYPE_URL,
             'pt_timeout' => $trans->t_timeout,
         ];

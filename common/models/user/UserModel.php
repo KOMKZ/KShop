@@ -10,11 +10,42 @@ use yii\web\ForbiddenHttpException;
 use common\models\set\SetModel;
 use Firebase\JWT\JWT;
 use yii\helpers\ArrayHelper;
+use common\models\trans\ar\Transaction;
+use common\models\user\ar\UserBillRecord;
+
 /**
  *
  */
 class UserModel extends Model
 {
+    /**
+     * 用户所属交易成功支付响应处理
+     * @param  [type] $event [description]
+     * @return [type]        [description]
+     */
+    public static function handleReceivePayedEvent($event){
+        $trans = $event->sender;
+        $user = $event->belongUser;
+        // 插入用户账单
+        static::createUserBill($user, $trans);
+    }
+
+    public static function createUserBill(User $user, Transaction $trans){
+        $billData = [
+            'u_id' => $user->u_id,
+            'u_bill_type' => $trans->t_type,
+            'u_bill_fee' => $trans->t_fee,
+            'u_bill_fee_type' => $trans->t_fee_type,
+            'u_bill_related_id' => $trans->t_app_no,
+            'u_bill_related_type' => $trans->t_module,
+            'u_bill_trade_no' => $trans->t_number,
+            'u_bill_created_at' => time()
+        ];
+        return Yii::$app->db->createCommand()
+                            ->insert(UserBillRecord::tableName(), $billData)
+                            ->execute();
+    }
+
     public function createUser($data){
         $user = new User();
         if(!$user->load($data, '') || !$user->validate()){

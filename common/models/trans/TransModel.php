@@ -5,6 +5,8 @@ use common\models\Model;
 use common\models\staticdata\Errno;
 use common\models\trans\ar\Transaction;
 use common\models\trans\query\TransactionQuery;
+use common\models\trans\event\AfterPayedEvent;
+use common\models\user\query\UserQuery;
 /**
  *
  */
@@ -31,6 +33,11 @@ class TransModel extends Model
         return $this->createTrans($data);
     }
 
+    /**
+     * 支付单成功支付时关联交易响应处理
+     * @param  [type] $event [description]
+     * @return [type]        [description]
+     */
     public static function handleReceivePayedEvent($event){
         $payOrder = $event->sender;
         $trans = TransactionQuery::findConsume()
@@ -49,11 +56,15 @@ class TransModel extends Model
         if(false === $trans->update(false)){
             throw new \Exception(Yii::t('app', "更改交易失败"));
         }
-        static::triggerTransPayed($trans);
+        // 查找交易所属用户，分发给其他模块
+        $event = new AfterPayedEvent();
+        $event->belongUser = UserQuery::findActive()->andWhere(['=', 'u_id', $trans->t_belong_uid])->one();
+        $event->payOrder = $payOrder;
+        static::triggerTransPayed($trans, $event);
     }
 
-    public static function triggerTransPayed(Transaction $trans){
-        $trans->trigger(Transaction::EVENT_AFTER_PAYED);
+    public static function triggerTransPayed(Transaction $trans, $event = null){
+        $trans->trigger(Transaction::EVENT_AFTER_PAYED, $event);
     }
 
     protected static function buildTradeNumber(){

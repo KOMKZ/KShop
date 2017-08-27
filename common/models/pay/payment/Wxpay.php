@@ -12,6 +12,7 @@ use WxPayCloseOrder;
 use WxPayResults;
 use common\models\Model;
 use yii\base\InvalidArgumentException;
+use common\models\pay\PayModel;
 /**
  *
  */
@@ -142,10 +143,12 @@ class Wxpay extends Model
             'type' => static::NAME
         ];
         $xml = empty($notifyData) ? $GLOBALS['HTTP_RAW_POST_DATA'] : $notifyData;
+
         try {
             $result['notify_data_origin'] = $xml;
             $data = WxPayResults::Init($xml);
             $result['notify_data_parse'] = $data;
+
             if(empty($data['out_trade_no'])){
                 $result['errno'] = PayModel::NOTIFY_INVALID;
                 $result['error'] = Yii::t('app', "微信通知数据out_trade_no不存在");
