@@ -15,9 +15,9 @@ class GoodsSkuQuery extends Object
     }
 
     public static function findByValue($values){
-        $query = GoodsSku::find()
-                         ->where([
-                             'g_sku_value' => $values
+        $query = self::find()
+                         ->andWhere([
+                             'in', 'g_sku_value', $values
                          ]);
         return $query;
     }
@@ -28,5 +28,5 @@ class GoodsSkuQuery extends Object
 
 
 
-    
+
 }

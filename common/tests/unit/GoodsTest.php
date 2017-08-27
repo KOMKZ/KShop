@@ -58,7 +58,7 @@ class ClassificationTest extends \Codeception\Test\Unit
         Yii::$app->db->beginTransaction();
         $data = [
             'g_cls_id' => 3,
-            'g_status' => Goods::STATUS_DRAFT,
+            'g_status' => Goods::ON_SALE,
             'g_primary_name' => 'IPhone7',
             'g_secondary_name' => 'IPhone7',
             'g_start_at' => time(),

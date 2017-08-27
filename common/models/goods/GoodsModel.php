@@ -208,6 +208,7 @@ class GoodsModel extends Model
         }
         // $sku->g_sku_id = static::buildGSkuId($goods->g_id, $sku->g_sku_value);
         $sku->g_sku_value_name = $goods->g_vaild_sku_ids[$sku->g_sku_value]['name'];
+        $sku->g_sku_name = $sku->g_sku_name ? $sku->g_sku_name : $goods->g_primary_name;
         $sku->g_sku_created_at = time();
         if(!$sku->insert(false)){
             $this->addError(Errno::DB_FAIL_INSERT, Yii::t('app', '创建商品sku失败'));

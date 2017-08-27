@@ -114,6 +114,10 @@ return [
         \common\models\pay\payment\Alipay::NAME => Yii::t('app', "支付宝")
         ,\common\models\pay\payment\Wxpay::NAME => Yii::t('app', "微信")
     ]
+    ,'ct_object_status' => [
+        \common\models\order\ar\CartItem::ITEM_STATUS_VALID => Yii::t('app', '有效')
+        ,\common\models\order\ar\CartItem::ITEM_STATUS_INVALID => Yii::t('app', '无效')
+    ]
 
 
 ];

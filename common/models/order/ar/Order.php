@@ -12,4 +12,8 @@ class Order extends ActiveRecord
     public static function tableName(){
         return "{{%order}}";
     }
+
+    public function getOrigin_price(){
+        
+    }
 }

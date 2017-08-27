@@ -23,7 +23,8 @@
         "php-amqplib/php-amqplib": ">=2.6.1",
         "workerman/workerman": "^3.3",
         "firebase/php-jwt": "~3.0.0",
-        "league/csv": "^8.0"
+        "league/csv": "^8.0",
+        "omnilight/yii2-shopping-cart": "^1.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

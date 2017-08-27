@@ -29,6 +29,15 @@ class GoodsSku extends ActiveRecord
         ]);
     }
 
+    public function getCart_item_info(){
+        // todo json 使用这些保存为当时的信息
+        return '';
+    }
+
+    public function getCart_item_title(){
+        return $this->g_sku_name . ',' . $this->g_sku_value_name;
+    }
+
     public function getG_opt_limits(){
         if(empty(static::$currentSkuValues)){
             static::$currentSkuValues = GoodsSkuQuery::findValid()
