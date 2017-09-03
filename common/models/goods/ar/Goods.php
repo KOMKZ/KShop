@@ -73,6 +73,9 @@ class Goods extends ActiveRecord
         return $this->hasOne(GoodsDetail::className(), ['g_id' => 'g_id']);
     }
 
+    public function getG_storage(){
+        return 0;
+    }
 
     public function setG_detail($value){
         $this->populateRelation('g_detail', $value);

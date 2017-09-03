@@ -118,6 +118,29 @@ return [
         \common\models\order\ar\CartItem::ITEM_STATUS_VALID => Yii::t('app', '有效')
         ,\common\models\order\ar\CartItem::ITEM_STATUS_INVALID => Yii::t('app', '无效')
     ]
+    ,'od_type' => [
+        \common\models\order\ar\Order::OD_TYPE_GOODS => Yii::t('app', "商品订单")
+    ]
+    ,'od_pay_status' => [
+        \common\models\order\ar\Order::PAY_STATUS_NOPAY => Yii::t('app', "未支付")
+        ,\common\models\order\ar\Order::PAY_STATUS_PAYED => Yii::t('app', '已经支付')
+    ]
+    ,'od_comment_status' => [
+        \common\models\order\ar\Order::COMMENT_STATUS_NOCOMMENT => Yii::t('app', '没有评论')
+        ,\common\models\order\ar\Order::COMMENT_STATUS_COMMENTED => Yii::t('app', '已经评论')
+    ]
+    ,'od_refund_status' => [
+        \common\models\order\ar\Order::RF_STATUS_NORF => Yii::t('app', "没有发生退款")
+    ]
+    ,'od_status' => [
+        \common\models\order\ar\Order::STATUS_SUBMIT => Yii::t('app', "提交状态")
+    ]
+    ,'od_logistics_status' => [
+        \common\models\order\ar\Order::LG_STATUS_INIT => Yii::t('app', "初始状态")
+    ]
+    ,'od_pay_mode' => [
+        \common\models\order\ar\Order::MODE_FULL_ONLINE_PAY => Yii::t('app', "付款模式")
+    ]
 
 
 ];

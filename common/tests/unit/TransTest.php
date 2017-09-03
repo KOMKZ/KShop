@@ -51,7 +51,7 @@ class TransTest extends \Codeception\Test\Unit
     }
 
     public function testCreatePayOrder(){
-        return true;
+        // return true;
         // Yii::$app->db->beginTransaction();
         // todo fix 重复创建
         $data = [

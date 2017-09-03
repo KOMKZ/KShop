@@ -6,6 +6,7 @@ use common\models\staticdata\ConstMap;
 use common\models\goods\ar\GoodsSource;
 use common\models\goods\query\GoodsSkuQuery;
 use yii\helpers\ArrayHelper;
+use common\models\goods\ar\Goods;
 
 /**
  *
@@ -27,6 +28,10 @@ class GoodsSku extends ActiveRecord
             'g_sku_source',
             'g_opt_limits'
         ]);
+    }
+
+    public function getGoods(){
+        return $this->hasOne(Goods::className(), ['g_id' => 'g_id']);
     }
 
     public function getCart_item_info(){

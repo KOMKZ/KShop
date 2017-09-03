@@ -3,7 +3,7 @@
 use yii\db\Migration;
 use common\models\order\ar\Order;
 
-class m170820_140119_order extends Migration
+class m170829_144441_order extends Migration
 {
     public function getTableName(){
         return preg_replace('/[\{\}]/', '', preg_replace("/%/", Yii::$app->db->tablePrefix, Order::tableName()));
@@ -12,10 +12,12 @@ class m170820_140119_order extends Migration
         $tableName = $this->getTableName();
         $createTabelSql = "
         CREATE TABLE `{$tableName}` (
-          `od_id` int(3) unsigned NOT NULL COMMENT '订单主键',
+          `od_id` int(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单主键',
           `od_type` char(12) not null COMMENT '订单类型',
           `od_title` varchar(255) not null COMMENT '订单标题',
           `od_pay_status` char(12) not null COMMENT '订单支付状态',
+          `od_price` int(10) unsigned not null default 0 comment '订单价格',
+          `od_origin_price` int(10) unsigned not null default 0 '订单原始价格',
           `od_comment_status` char(12) not null COMMENT '订单评论状态',
           `od_refund_status` char(12) not null COMMENT '订单退款状态',
           `od_status` char(12) not null COMMENT '订单状态',
