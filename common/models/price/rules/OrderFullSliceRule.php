@@ -1,8 +1,8 @@
 <?php
 namespace common\models\price\rules;
 
-use common\models\price\rule\OrderPriceRule;
-use common\modles\price\rule\PriceRuleInterface;
+use common\models\price\rules\OrderPriceRule;
+use common\models\price\rules\PriceRuleInterface;
 
 /**
  *

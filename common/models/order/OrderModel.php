@@ -41,8 +41,37 @@ class OrderModel extends Model
             $orderGoods->og_discount_data = '';
             $order->addOrderGoods($orderGoods);
         }
+        $discountParams = [
+            [
+                'class' => '\common\models\price\rules\OrderFullSliceRule',
+                'fullValue' => 500000,
+                'sliceValue' => 20000
+            ]
+        ];
+        $price = $this->caculateDiscountPrice($order, $discountParams);
+
+
         return $order;
     }
+
+    public static function caculateOrderPrice(Order $order){
+        $orderGoods = $order->order_goods;
+        $orderFinalPrice = 0;
+        foreach($orderGoods as $oneOrderGoods){
+            $orderFinalPrice += $oneOrderGoods->og_g_sku_price;
+        }
+        return $orderFinalPrice;
+    }
+
+    public static function caculateDiscountPrice(Order $order, $discountParams = []){
+        $price = static::caculateOrderPrice($order);
+        foreach($discountParams as $discountDef){
+            $discountDef['order'] = $order;
+            $discount = Yii::createObject($discountDef);
+            console($discount);
+        }
+    }
+
 
 
     // 立即购买
