@@ -17,7 +17,7 @@ class m170829_144441_order extends Migration
           `od_title` varchar(255) not null COMMENT '订单标题',
           `od_pay_status` char(12) not null COMMENT '订单支付状态',
           `od_price` int(10) unsigned not null default 0 comment '订单价格',
-          `od_origin_price` int(10) unsigned not null default 0 '订单原始价格',
+          `od_origin_price` int(10) unsigned not null default 0 comment '订单原始价格',
           `od_comment_status` char(12) not null COMMENT '订单评论状态',
           `od_refund_status` char(12) not null COMMENT '订单退款状态',
           `od_status` char(12) not null COMMENT '订单状态',
