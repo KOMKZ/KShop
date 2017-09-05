@@ -134,12 +134,12 @@ class OrderTest extends \Codeception\Test\Unit
                 $goodsSku
             ],
             'discount_data' => [
-                'user_coupon_price_disouct' => [
-                    ['id' => 'CR123456'],
-                    ['id' => 'CR123457']
+                'user_coupon_price_discount' => [
+                    ['id' => 'CR000001'],
+                    ['id' => 'CR000002']
                 ],
                 'global_order_price_discount' => [
-                    ['id' => 'order_full_slice'],
+                    // ['id' => 'order_full_slice'],
                 ]
             ]
         ];

@@ -44,6 +44,20 @@ class OrderModel extends Model
             $orderGoods->og_discount_data = '';
             $order->addOrderGoods($orderGoods);
         }
+        $discountWarn = [];
+        try {
+            $discountData = $this->buildValidDiscountData($order, $customer, $orderData['discount_data']);
+        } catch (\Exception $e) {
+            $discountWarn[] = $e->getMessage();
+        }
+        if($discountWarn){
+            $discountData = [];
+        }
+        $orderPriceItem = $this->buildOrderPriceItem($order, $discountData);
+        console($orderPriceItem);
+
+
+
         $discountCandications = $this->buildValidDiscountCandications($order, $customer);
         console($orderData['discount_data'], $discountCandications);
 
@@ -63,7 +77,39 @@ class OrderModel extends Model
         $order->od_price = $order->caculateOrderPrice();
         return $order;
     }
-    public function buildValidDiscountCandications(Order $order, User $user, $appendCantUse = true){
+
+    public function buildValidDiscountData($order, User $user, $userSelectDiscountData = []){
+        $candications = $this->buildValidDiscountCandications($order, $user, false, true);
+        // 全局优惠
+        $globalOrderDiscount = $candications[PriceRule::TYPE_GLOBAL_ORDER_PRICE_DISCOUNT];
+        $selectGlobalOrderDiscount = ArrayHelper::getValue($userSelectDiscountData, PriceRule::TYPE_GLOBAL_ORDER_PRICE_DISCOUNT, []);
+        $validDiscount = [];
+        foreach($selectGlobalOrderDiscount as $discountItem){
+            $targetDiscount = ArrayHelper::getValue($globalOrderDiscount, $discountItem['id'], null);
+            if(!$targetDiscount){
+                throw new \Exception(Yii::t('app', "所选的的折扣不存在"));
+            }
+            $validDiscount[] = $targetDiscount;
+        }
+        console($globalOrderDiscount);
+        // 用户可以选择优惠， 如优惠券
+        $couponOrderDiscount = $candications[PriceRule::TYPE_USER_COUPON_PRICE_DISCOUNT];
+        $selectCouponOrderDiscount = ArrayHelper::getValue($userSelectDiscountData, PriceRule::TYPE_USER_COUPON_PRICE_DISCOUNT, []);
+        foreach($selectCouponOrderDiscount as $couponItem){
+            $targetDiscount = ArrayHelper::getValue($couponOrderDiscount, $couponItem['id'], null);
+            if(!$targetDiscount){
+                throw new \Exception(Yii::t('app', "优惠码不存在"));
+            }
+            $validDiscount[] = $targetDiscount;
+        }
+        // 互斥性检查
+        foreach($validDiscount as $targetDiscount){
+            $targetDiscount->checkExist && $targetDiscount->checkExistRule($validDiscount);
+        }
+        return $validDiscount;
+    }
+
+    public function buildValidDiscountCandications(Order $order, User $user, $appendCantUse = true, $returnObject = false){
 
         $price = static::caculateOrderPrice($order);
         // 全局规则
@@ -79,7 +125,7 @@ class OrderModel extends Model
             if(!$appendCantUse && !$discount->checkCanUse()){
                 continue;
             }
-            $discountData = $discount->toArray();
+            $discountData = $returnObject ? $discount : $discount->toArray();
             $candications[PriceRule::TYPE_GLOBAL_ORDER_PRICE_DISCOUNT][$discountData['id']] = $discountData;
         }
         // 优惠码
@@ -100,11 +146,31 @@ class OrderModel extends Model
             if(!$appendCantUse && !$discount->checkCanUse()){
                 continue;
             }
-            $discountData = $discount->toArray();
+            $discountData = $returnObject ? $discount : $discount->toArray();
             $candications[PriceRule::TYPE_USER_COUPON_PRICE_DISCOUNT][$discountData['couponCode']] = $discountData;
         }
         return $candications;
     }
+
+    public static function buildOrderPriceItem(Order $order, $discountData = []){
+        $priceItem = [];
+        foreach($discountData as $discount){
+            $priceItem[] = [
+                'fee' => $discount->newPrice - $discount->originPrice,
+                'description' => $discount->description,
+                'type' => $discount->type
+            ];
+        }
+        $priceItem[] = [
+            'fee' => $discount->originPrice,
+            'description' => Yii::t('app', '商品金额'),
+            'type' => 'goods_total_fee'
+        ];
+        return $priceItem;
+    }
+
+
+
     public static function caculateOrderPrice(Order $order){
         $orderGoods = $order->order_goods;
         $orderFinalPrice = 0;

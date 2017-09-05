@@ -14,8 +14,11 @@ class PriceRule extends Model
     use ArrayableTrait;
     const TYPE_GLOBAL_ORDER_PRICE_DISCOUNT = 'global_order_price_discount';
     const TYPE_USER_COUPON_PRICE_DISCOUNT = 'user_coupon_price_discount';
+    public function checkExistRule($otherDiscountData = []){
+        return true;
+    }
 
-    public function getName(){
+    public function getClass(){
         return static::className();
     }
     public function getId(){

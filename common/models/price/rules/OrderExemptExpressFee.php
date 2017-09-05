@@ -18,6 +18,7 @@ class OrderExemptExpressFee extends OrderPriceRule implements PriceRuleInterface
         parent::__construct($config);
         $this->validate();
     }
+    
     public function getNewPrice(){
         return $this->originPrice - $this->sliceValue;
     }

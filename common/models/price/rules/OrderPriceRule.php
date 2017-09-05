@@ -13,6 +13,7 @@ class OrderPriceRule extends PriceRule
     protected $order = null;
     public $originPrice = null;
     public $autoShow = true;
+    public $checkExist = false;
     public function setOrder($value){
         $this->order = $value;
     }
@@ -27,7 +28,7 @@ class OrderPriceRule extends PriceRule
     }
     public function fields(){
         return array_merge(parent::fields(), [
-            'name',
+            'class',
             'autoShow',
             'description',
             'type',
