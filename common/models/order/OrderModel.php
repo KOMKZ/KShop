@@ -10,6 +10,9 @@ use common\models\order\ar\OrderGoods;
 use common\models\order\Cart;
 use common\models\user\ar\User;
 use yii\helpers\ArrayHelper;
+use common\models\set\SetModel;
+use common\models\price\rules\OrderCouponSlice;
+use common\models\price\rules\PriceRule;
 /**
  *
  */
@@ -41,19 +44,67 @@ class OrderModel extends Model
             $orderGoods->og_discount_data = '';
             $order->addOrderGoods($orderGoods);
         }
-        $discountParams = [
-            [
-                'class' => '\common\models\price\rules\OrderFullSliceRule',
+        $discountCandications = $this->buildValidDiscountCandications($order, $customer);
+        console($orderData['discount_data'], $discountCandications);
+
+
+        $discountParams = SetModel::get('global_order_price_discount');
+        $userCouponParams = (array)ArrayHelper::getValue($orderData, 'discount_data.use_coupons', []);
+        foreach($userCouponParams as $couponItem){
+            // 优惠券是应该获取的
+            $discountParams[] = [
+                'class' => OrderCouponSlice::className(),
                 'fullValue' => 500000,
-                'sliceValue' => 20000
-            ]
-        ];
-        $price = $this->caculateDiscountPrice($order, $discountParams);
-
-
+                'sliceValue' => 50000,
+                'couponCode' => $couponItem['code']
+            ];
+        }
+        $this->addOrderDiscountCandication($order, $discountParams);
+        $order->od_price = $order->caculateOrderPrice();
         return $order;
     }
+    public function buildValidDiscountCandications(Order $order, User $user, $appendCantUse = true){
 
+        $price = static::caculateOrderPrice($order);
+        // 全局规则
+        $discountItems = SetModel::get('global_order_price_discount');
+        $candications = [
+            PriceRule::TYPE_GLOBAL_ORDER_PRICE_DISCOUNT => [],
+            PriceRule::TYPE_USER_COUPON_PRICE_DISCOUNT => []
+        ];
+        foreach($discountItems as $discountDef){
+            $discountDef['order'] = $order;
+            $discountDef['originPrice'] = $price;
+            $discount = Yii::createObject($discountDef);
+            if(!$appendCantUse && !$discount->checkCanUse()){
+                continue;
+            }
+            $discountData = $discount->toArray();
+            $candications[PriceRule::TYPE_GLOBAL_ORDER_PRICE_DISCOUNT][$discountData['id']] = $discountData;
+        }
+        // 优惠码
+        $couponItems = SetModel::get('user_coupon_faker');
+        foreach($couponItems as $coupon){
+            $discountDef = [
+                'class' => OrderCouponSlice::className(),
+                'order' => $order,
+                'id' => $coupon['oc_code'],
+                'originPrice' => $price,
+                'fullValue' => $coupon['oc_params']['full_value'],
+                'sliceValue' => $coupon['oc_params']['slice_value'],
+                'beginAt' => $coupon['oc_begin'],
+                'endAt' => $coupon['oc_end'],
+                'couponCode' => $coupon['oc_code']
+            ];
+            $discount = Yii::createObject($discountDef);
+            if(!$appendCantUse && !$discount->checkCanUse()){
+                continue;
+            }
+            $discountData = $discount->toArray();
+            $candications[PriceRule::TYPE_USER_COUPON_PRICE_DISCOUNT][$discountData['couponCode']] = $discountData;
+        }
+        return $candications;
+    }
     public static function caculateOrderPrice(Order $order){
         $orderGoods = $order->order_goods;
         $orderFinalPrice = 0;
@@ -63,13 +114,17 @@ class OrderModel extends Model
         return $orderFinalPrice;
     }
 
-    public static function caculateDiscountPrice(Order $order, $discountParams = []){
+    public function addOrderDiscountCandication(Order $order, $discountParams = []){
         $price = static::caculateOrderPrice($order);
         foreach($discountParams as $discountDef){
             $discountDef['order'] = $order;
+            $discountDef['originPrice'] = $price;
             $discount = Yii::createObject($discountDef);
-            console($discount);
+            if($discount->checkCanUse($price)){
+                $order->addOrderDiscountCandication($discount->toArray());
+            }
         }
+        return $order;
     }
 
 

@@ -26,6 +26,9 @@ return [
         'allow_algs' => ['HS512'],
         'encode_alg' => 'HS512'
     ],
+    'global_order_price_discount' => [
+
+    ],
     'transaction' => [
         'transaction_timeout' => 1800
     ]

@@ -32,6 +32,7 @@ class Order extends ActiveRecord
     public $goods_sku_data;
 
     private $_orderGoods = [];
+    private $_discountCandication = [];
 
     public function fields(){
         $fields = parent::fields();
@@ -65,6 +66,17 @@ class Order extends ActiveRecord
 
     public function addOrderGoods(OrderGoods $orderGoods){
         array_push($this->_orderGoods, $orderGoods);
+    }
+
+    public function addOrderDiscountCandication($discount){
+        // todo 验证
+        array_push($this->_discountCandication, $discount);
+    }
+
+    public function caculateOrderPrice(){
+        $originPrice = OrderModel::caculateOrderPrice($this);
+
+        console($this->_discountCandication);
     }
 
     public function validateGoods_sku_data($attr){

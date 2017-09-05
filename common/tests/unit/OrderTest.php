@@ -132,6 +132,15 @@ class OrderTest extends \Codeception\Test\Unit
         $orderData = [
             'goods_sku_data' => [
                 $goodsSku
+            ],
+            'discount_data' => [
+                'user_coupon_price_disouct' => [
+                    ['id' => 'CR123456'],
+                    ['id' => 'CR123457']
+                ],
+                'global_order_price_discount' => [
+                    ['id' => 'order_full_slice'],
+                ]
             ]
         ];
         $order = $orderModel->buildOrderData($user, $orderData);
