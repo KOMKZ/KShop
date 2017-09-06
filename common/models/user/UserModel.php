@@ -13,6 +13,7 @@ use yii\helpers\ArrayHelper;
 use common\models\trans\ar\Transaction;
 use common\models\user\ar\UserBillRecord;
 use common\models\user\ar\UserReceiverAddr;
+use common\models\user\query\UserReceAddrQuery;
 /**
  *
  */
@@ -49,7 +50,8 @@ class UserModel extends Model
             return false;
         }
         $receiverAddr->rece_belong_uid = $user->u_id;
-        $hasDefaultAddr = UserReceiverAddrQuery::find()->where()->count();
+        $hasDefaultAddr = UserReceAddrQuery::find()->where(['rece_belong_uid' => $user->u_id])->count();
+        $receiverAddr->rece_default_addr = $hasDefaultAddr ? 'no' : "yes";
         if(!$receiverAddr->insert(false)){
             $this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', "新建收获地址失败"));
             return false;

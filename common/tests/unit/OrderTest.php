@@ -9,6 +9,7 @@ use common\models\goods\GoodsModel;
 use common\models\goods\ar\Goods;
 use common\models\goods\ar\GoodsSku;
 use common\models\goods\query\GoodsSkuQuery;
+use common\models\user\query\UserReceAddrQuery;
 use common\models\order\OrderModel;
 
 
@@ -127,12 +128,16 @@ class OrderTest extends \Codeception\Test\Unit
     public function testCreateOrder(){
         $goodsSkuValue = $this->createGoods();
         $goodsSku = GoodsSkuQuery::find()->where(['g_id' => 1, 'g_sku_value' => $goodsSkuValue])->one();
+        $goodsSku01 = GoodsSkuQuery::find()->where(['g_id' => 1, 'g_sku_value' => '4:2;5:1'])->one();
         $user = UserQuery::findActive()->andWhere(['u_id' => 1])->one();
+        $defaultReceAddr = UserReceAddrQuery::find()->where(['rece_belong_uid' => $user->u_id, 'rece_default_addr' => 'yes'])->one();
         $orderModel = new OrderModel();
         $orderData = [
             'goods_sku_data' => [
-                ['sku' => $goodsSku, 'number' => 2]
+                ['sku' => $goodsSku, 'number' => 2],
+                ['sku' => $goodsSku01]
             ],
+            'receiver_addr_id' => $defaultReceAddr->rece_addr_id,
             'discount_data' => [
                 'user_coupon_price_discount' => [
                     ['id' => 'CR000001'],
@@ -143,7 +148,14 @@ class OrderTest extends \Codeception\Test\Unit
                 ]
             ]
         ];
+        // 创建预数据
         $order = $orderModel->createOrderPreData($user, $orderData);
+        if(!$order){
+            $this->debug($orderModel->getOneError());
+            return false;
+        }
+        // 提交订单数据
+        $order = $orderModel->createOrder($user, $orderData);
         if(!$order){
             $this->debug($orderModel->getOneError());
             return false;

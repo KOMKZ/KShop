@@ -12,7 +12,7 @@ class m170829_144441_order extends Migration
         $tableName = $this->getTableName();
         $createTabelSql = "
         CREATE TABLE `{$tableName}` (
-          `od_id` int(3) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单主键',
+          `od_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单主键',
           `od_type` char(12) not null COMMENT '订单类型',
           `od_title` varchar(255) not null COMMENT '订单标题',
           `od_pay_status` char(12) not null COMMENT '订单支付状态',

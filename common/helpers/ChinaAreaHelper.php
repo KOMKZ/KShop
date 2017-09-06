@@ -48,7 +48,7 @@ class ChinaAreaHelper extends BaseFileHelper
         $pMap = array_combine($areas['id0'], $areas['name0']);
         $pString = ArrayHelper::getValue($pMap, $pid, '');
         if(!$pString){
-            return implode('-', $result);
+            return implode('', $result);
         }
 
         $result[] = $pString;
@@ -56,7 +56,7 @@ class ChinaAreaHelper extends BaseFileHelper
         $cMap = array_combine($areas['id' . $pid], $areas['name' . $pid]);
         $cString = ArrayHelper::getValue($cMap, $cid, '');
         if(!$cString){
-            return implode('-', $result);
+            return implode('', $result);
         }
 
         $result[] = $cString;
@@ -64,10 +64,10 @@ class ChinaAreaHelper extends BaseFileHelper
         $aMap = array_combine($areas['id' . $cid], $areas['name' . $cid]);
         $aString = ArrayHelper::getValue($aMap, $aid, '');
         if(!$aString){
-            return implode('-', $result);
+            return implode('', $result);
         }
         $result[] = $aString;
-        return implode('-', $result);
+        return implode('', $result);
     }
     protected static function getAreas(){
         if(empty(static::$areas)){

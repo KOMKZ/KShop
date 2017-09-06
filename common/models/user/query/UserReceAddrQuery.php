@@ -6,7 +6,7 @@ use common\models\user\ar\UserReceiverAddr;
 /**
  *
  */
-class UserReceiverAddrQuery extends Object
+class UserReceAddrQuery extends Object
 {
     public static function find(){
         return UserReceiverAddr::find();

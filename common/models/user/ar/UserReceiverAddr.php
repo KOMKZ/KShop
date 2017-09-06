@@ -15,7 +15,11 @@ class UserReceiverAddr extends ActiveRecord
     public static function tableName(){
         return "{{%user_receiver_addr}}";
     }
-
+    public function fields(){
+        return array_merge(parent::fields(), [
+            'rece_full_addr'
+        ]);
+    }
     public function behaviors()
     {
         return [
@@ -26,7 +30,9 @@ class UserReceiverAddr extends ActiveRecord
             ]
         ];
     }
-
+    public function getRece_full_addr(){
+        return sprintf("%s%s", ChinaAreaHelper::parseAreaIdAsString($this->rece_location_id), $this->rece_location_string);
+    }
     public function rules(){
         return [
             ['rece_name', 'required']
@@ -51,7 +57,7 @@ class UserReceiverAddr extends ActiveRecord
             ,['rece_tag', 'default', 'value' => '']
             ,['rece_tag', 'string']
 
-            
+
 
         ];
     }

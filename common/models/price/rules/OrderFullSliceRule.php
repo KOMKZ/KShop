@@ -13,7 +13,6 @@ use common\models\price\rules\OrderCouponSlice;
 class OrderFullSliceRule extends OrderPriceRule implements PriceRuleInterface
 {
     public $fullValue = null;
-    public $sliceValue = null;
     public $priceName = "元";
     public $checkExist = true;
     public function __construct($config = []){

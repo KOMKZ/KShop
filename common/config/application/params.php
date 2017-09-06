@@ -39,7 +39,7 @@ return [
     ],
     'user_coupon_faker' => [
         ['oc_code' => 'CR000001', 'oc_begin' => time(), 'oc_end' => time() + 3600, 'oc_params' => ['full_value' => 500000, 'slice_value' => 50000]],
-        ['oc_code' => 'CR000002', 'oc_begin' => time(), 'oc_end' => time() + 3600, 'oc_params' => ['full_value' => 100000, 'slice_value' => 200]],
+        ['oc_code' => 'CR000002', 'oc_begin' => time(), 'oc_end' => time() + 3600, 'oc_params' => ['full_value' => 100000, 'slice_value' => 20000]],
     ],
     'transaction' => [
         'transaction_timeout' => 1800

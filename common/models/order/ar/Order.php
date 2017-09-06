@@ -37,9 +37,17 @@ class Order extends ActiveRecord
     private $_orderPriceItems = [];
     private $_orderDiscountData = [];
     private $_odExpress = null;
+    private $_odReceAddr = null;
     public $od_warn = [];
     public $od_valid_discount_data = [];
 
+    public function getOd_rece_addr(){
+        return $this->_odReceAddr;
+    }
+
+    public function setOd_rece_addr($value){
+        $this->_odReceAddr = $value;
+    }
 
     public function getOd_price_items(){
         return $this->_orderPriceItems;
@@ -69,6 +77,7 @@ class Order extends ActiveRecord
         $fields = parent::fields();
         return array_merge($fields, [
             'od_goods',
+            'od_rece_addr',
             'od_express',
             'od_valid_discount_data',
             'od_discount_data',

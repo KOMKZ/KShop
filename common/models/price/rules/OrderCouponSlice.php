@@ -12,7 +12,6 @@ use yii\base\InvalidConfigException;
 class OrderCouponSlice extends OrderPriceRule implements PriceRuleInterface
 {
     public $fullValue = null;
-    public $sliceValue = null;
     public $priceName = "元";
     public $couponCode = null;
     public $beginAt = null;

@@ -13,6 +13,7 @@ class OrderPriceRule extends PriceRule
     protected $order = null;
     public $originPrice = null;
     public $autoShow = true;
+    public $sliceValue = null;
     public $checkExist = false;
     public function setOrder($value){
         $this->order = $value;

@@ -13,11 +13,30 @@ use yii\helpers\ArrayHelper;
 use common\models\set\SetModel;
 use common\models\price\rules\OrderCouponSlice;
 use common\models\price\rules\PriceRule;
+use common\models\user\query\UserReceAddrQuery;
+use common\models\order\ar\OrderDiscount;
+use common\models\order\ar\OrderReceiverAddr;
 /**
  *
  */
 class OrderModel extends Model
 {
+    /**
+     *
+     * @param  User   $customer  [description]
+     * @param  [type] $orderData [description]
+     * - goods_sku_data: array, required 购买商品数据
+     *   - sku: \common\models\goods\ar\GoodsSku required 商品sku对象
+     *   - number: integer, optional default:1 购买sku的数量
+     * - receiver_addr_id: integer 收获地址id
+     * 如果没有传入收获地址，则会使用默认收获地址，如果没有默认收获地址，则会产生一个警告，对于提交订单的话怎会产生一个错误
+     * - discount_data: array 用户选择的折扣数据
+     *   - user_coupon_price_discount: array 用户选择的优惠码折扣数据
+     *      - id: string 折扣数据的唯一编号， 即优惠码编号
+     *   - global_order_price_discount: array 用户选择的全局优惠数据
+     *      - id: string 折扣数据的唯一编号
+     * @return [type]            [description]
+     */
     public function createOrderPreData(User $customer, $orderData){
         // 构造订单基础数据
         $order = $this->createOrderData($customer, $orderData);
@@ -45,6 +64,13 @@ class OrderModel extends Model
             $discountData = [];
         }
         $order->od_discount_data = $discountData;
+        // 构造收货人数据
+        $receiverAddr = $this->buildOrderReceiverAddrData($customer, ArrayHelper::getValue($orderData, 'receiver_addr_id'));
+        if(!$receiverAddr){
+            array_push($order->od_warn, Yii::t('app', "请制定收货地址或者设置一个默认地址"));
+        }else{
+            $order->od_rece_addr = $receiverAddr;
+        }
 
         // 构造物流数据
         $hasExpressDiscount = !empty(ArrayHelper::getValue($discountData, 'order_exempt_express_fee', null));
@@ -55,18 +81,83 @@ class OrderModel extends Model
         $orderPriceItems = $this->buildOrderPriceItem($order, $discountData);
         $orderPriceItemIndex = ArrayHelper::index($orderPriceItems, 'id');
         $finalPrice = ArrayHelper::getValue($orderPriceItemIndex, 'order_final_fee', null);
-        $originPrice = ArrayHelper::getValue($orderPriceItemIndex, 'order_origin_fee', null);
-        if(!in_array(null, [$finalPrice, $originPrice])){
+        $originPrice = ArrayHelper::getValue($orderPriceItemIndex, $order->od_number, null);
+        if(in_array(null, [$finalPrice, $originPrice])){
             $this->addError('', Yii::t('app', "订单数据错误"));
             return false;
         }
-        $order->od_price = $finalPrice['fee'];
-        $order->od_origin_price = $originPrice['fee'];
         $order->od_price_items = $orderPriceItems;
 
+        // 设置订单价格
+        $order->od_price = $finalPrice['fee'];
+        $order->od_origin_price = $originPrice['fee'];
         return $order;
     }
+    protected function buildOrderReceiverAddrData(User $customer, $receiverAddrId = null){
+        $receAddr = null;
+        if($receiverAddrId){
+            $receAddr = UserReceAddrQuery::find()
+                                          ->where(['rece_belong_uid' => $customer->u_id, 'rece_addr_id' => $receiverAddrId])
+                                          ->one();
+        }
+        $receAddr = UserReceAddrQuery::find()
+                                      ->where(['rece_belong_uid' => $customer->u_id, 'rece_default_addr' => 'yes'])
+                                      ->one();
+        return $receAddr;
+    }
 
+    public function createOrder(User $customer, $orderData){
+        $order = $this->createOrderPreData($customer, $orderData);
+        // 插入订单基本数据
+        if(!$order->insert(false)){
+            $this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', "创建订单失败"));
+            return false;
+        }
+        // 插入订单商品数据
+        foreach($order->od_goods as $orderGoods){
+            $orderGoods->od_id = $order->od_id;
+            if(!$orderGoods->insert(false)){
+                $this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', '插入订单商品失败'));
+                return false;
+            }
+        }
+        // 插入订单折扣数据
+        foreach($order->od_discount_data as $discountItem){
+            $data = [
+                'od_discount_data' => json_encode($discountItem),
+                'od_discount_data_id' => $discountItem['id'],
+                'od_discount_slice_value' =>  (int)$discountItem['sliceValue'],
+                'od_discount_created_at' => time(),
+                'od_discount_type' => $discountItem['type'],
+                'od_discount_class' => $discountItem['class'],
+                'od_id' => $order->od_id,
+                'od_discount_description' => $discountItem['description']
+            ];
+            if(!$this->createOrderDiscount($data)){
+                $this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', "插入订单折扣数据失败"));
+                return false;
+            }
+        }
+        // 插入订单收货数据
+        $receAddrData = $order->od_rece_addr->toArray();
+        unset(
+            $receAddrData['rece_status'],
+            $receAddrData['rece_created_at'],
+            $receAddrData['rece_default_addr']
+        );
+        $receAddrData['od_id'] = $order->od_id;
+        if(!$this->createOrderReceiverAddr($receAddrData)){
+            $this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', "插入订单收货数据失败"));
+            return false;
+        }
+
+    }
+    protected function createOrderDiscount($data){
+        return Yii::$app->db->createCommand()->insert(OrderDiscount::tableName(), $data)->execute();
+    }
+    protected function createOrderReceiverAddr($data){
+        return Yii::$app->db->createCommand()->insert(OrderReceiverAddr::tableName(), $data)->execute();
+    }
     protected function createOrderData(User $customer, $orderData){
         // 构建订单基础数据
         $coreData = [
@@ -228,7 +319,6 @@ class OrderModel extends Model
 
     public static function buildOrderExpressData(Order $order, $hasExpressDiscount = false){
         $expressData = [
-            'express_number' => 'abc123',
             'express_fee' => $hasExpressDiscount ? 0 : 1200,
             'express_title' => "快递费",
         ];
@@ -298,14 +388,7 @@ class OrderModel extends Model
 
 
 
-    // 创建订单
-    public function createOrder(Order $order){
-        if(!$order->insert(false)){
-            $this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', "插入订单失败"));
-            return false;
-        }
-        return $order;
-    }
+
 
     // 校验商品数据
     public function validateGoodsData($goodsData){
