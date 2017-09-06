@@ -18,8 +18,57 @@ use common\models\price\rules\PriceRule;
  */
 class OrderModel extends Model
 {
-    // 构造订单数据，不依赖数据库
-    public function buildOrderData(User $customer, $orderData){
+    public function createOrderPreData(User $customer, $orderData){
+        // 构造订单基础数据
+        $order = $this->createOrderData($customer, $orderData);
+        if(!$order){
+            return false;
+        }
+        // 构造订单商品数据
+        $orderGoodsResult = $this->createOrderGoodsData($order, ArrayHelper::getValue($orderData, 'goods_sku_data'));
+        if(empty($orderGoodsResult)){
+            $this->addError('', Yii::t('app', "没有购买任何商品"));
+            return false;
+        }
+        $order->od_goods = $orderGoodsResult;
+
+        // 构造订单有效折扣数据
+        $order->od_valid_discount_data = $this->buildValidDiscountCandications($order, $customer);
+
+        // 构造订单折扣数据
+        try {
+            $discountData = $this->createValidDiscountData($order, $customer, ArrayHelper::getValue($orderData, 'discount_data'));
+        } catch (\Exception $e) {
+            array_push($order->od_warn, $e->getMessage());
+        }
+        if(!empty($order->od_warn)){
+            $discountData = [];
+        }
+        $order->od_discount_data = $discountData;
+
+        // 构造物流数据
+        $hasExpressDiscount = !empty(ArrayHelper::getValue($discountData, 'order_exempt_express_fee', null));
+        $orderExpress = static::buildOrderExpressData($order, $hasExpressDiscount);
+        $order->od_express = $orderExpress;
+
+        // 构造价格清单数据
+        $orderPriceItems = $this->buildOrderPriceItem($order, $discountData);
+        $orderPriceItemIndex = ArrayHelper::index($orderPriceItems, 'id');
+        $finalPrice = ArrayHelper::getValue($orderPriceItemIndex, 'order_final_fee', null);
+        $originPrice = ArrayHelper::getValue($orderPriceItemIndex, 'order_origin_fee', null);
+        if(!in_array(null, [$finalPrice, $originPrice])){
+            $this->addError('', Yii::t('app', "订单数据错误"));
+            return false;
+        }
+        $order->od_price = $finalPrice['fee'];
+        $order->od_origin_price = $originPrice['fee'];
+        $order->od_price_items = $orderPriceItems;
+
+        return $order;
+    }
+
+    protected function createOrderData(User $customer, $orderData){
+        // 构建订单基础数据
         $coreData = [
             'od_belong_uid' => $customer->u_id,
             'od_number' => '',
@@ -31,10 +80,18 @@ class OrderModel extends Model
             return false;
         }
         $order->od_number = static::buildOrderNumber();
-        foreach($order->goods_sku_data as $goodsSku){
+        return $order;
+    }
+
+    protected function createOrderGoodsData(Order $order, $goodsData = []){
+        $orderGoodsResult = [];
+        foreach($goodsData as $skuData){
+            $goodsSku = $skuData['sku'];
             $orderGoods = new OrderGoods();
             $orderGoods->g_id = $goodsSku->g_id;
             $orderGoods->g_sku_value = $goodsSku->g_sku_value;
+            $orderGoods->og_g_bug_number = ArrayHelper::getValue($skuData, 'number', 1);
+            $orderGoods->og_g_sku_total_price = $goodsSku->g_sku_price * $orderGoods->og_g_bug_number;
             $orderGoods->g_sku_id = $goodsSku->g_sku_id;
             $orderGoods->og_g_sku_price = $goodsSku->g_sku_price;
             $orderGoods->og_g_sku_sale_price = $goodsSku->g_sku_sale_price;
@@ -42,43 +99,15 @@ class OrderModel extends Model
             $orderGoods->og_g_sku_value_name = $goodsSku->g_sku_value_name;
             $orderGoods->og_g_sku_data = '';
             $orderGoods->og_discount_data = '';
-            $order->addOrderGoods($orderGoods);
+            $orderGoodsResult[] = $orderGoods;
         }
-        $discountWarn = [];
-        try {
-            $discountData = $this->buildValidDiscountData($order, $customer, $orderData['discount_data']);
-        } catch (\Exception $e) {
-            $discountWarn[] = $e->getMessage();
-        }
-        if($discountWarn){
-            $discountData = [];
-        }
-        $orderPriceItem = $this->buildOrderPriceItem($order, $discountData);
-        console($orderPriceItem);
-
-
-
-        $discountCandications = $this->buildValidDiscountCandications($order, $customer);
-        console($orderData['discount_data'], $discountCandications);
-
-
-        $discountParams = SetModel::get('global_order_price_discount');
-        $userCouponParams = (array)ArrayHelper::getValue($orderData, 'discount_data.use_coupons', []);
-        foreach($userCouponParams as $couponItem){
-            // 优惠券是应该获取的
-            $discountParams[] = [
-                'class' => OrderCouponSlice::className(),
-                'fullValue' => 500000,
-                'sliceValue' => 50000,
-                'couponCode' => $couponItem['code']
-            ];
-        }
-        $this->addOrderDiscountCandication($order, $discountParams);
-        $order->od_price = $order->caculateOrderPrice();
-        return $order;
+        return $orderGoodsResult;
     }
 
-    public function buildValidDiscountData($order, User $user, $userSelectDiscountData = []){
+
+
+    // 根据用户所选数据构造最终有效的折扣数据
+    public function createValidDiscountData($order, User $user, $userSelectDiscountData = []){
         $candications = $this->buildValidDiscountCandications($order, $user, false, true);
         // 全局优惠
         $globalOrderDiscount = $candications[PriceRule::TYPE_GLOBAL_ORDER_PRICE_DISCOUNT];
@@ -89,9 +118,12 @@ class OrderModel extends Model
             if(!$targetDiscount){
                 throw new \Exception(Yii::t('app', "所选的的折扣不存在"));
             }
-            $validDiscount[] = $targetDiscount;
+            $validDiscount[$targetDiscount->id] = $targetDiscount;
         }
-        console($globalOrderDiscount);
+        $expressDiscount = ArrayHelper::getValue($globalOrderDiscount, 'order_exempt_express_fee', null);
+        if($expressDiscount){
+            $validDiscount[$expressDiscount->id] = $expressDiscount;
+        }
         // 用户可以选择优惠， 如优惠券
         $couponOrderDiscount = $candications[PriceRule::TYPE_USER_COUPON_PRICE_DISCOUNT];
         $selectCouponOrderDiscount = ArrayHelper::getValue($userSelectDiscountData, PriceRule::TYPE_USER_COUPON_PRICE_DISCOUNT, []);
@@ -100,7 +132,7 @@ class OrderModel extends Model
             if(!$targetDiscount){
                 throw new \Exception(Yii::t('app', "优惠码不存在"));
             }
-            $validDiscount[] = $targetDiscount;
+            $validDiscount[$targetDiscount->id] = $targetDiscount;
         }
         // 互斥性检查
         foreach($validDiscount as $targetDiscount){
@@ -109,6 +141,7 @@ class OrderModel extends Model
         return $validDiscount;
     }
 
+    // 构造用户有效的折扣数据
     public function buildValidDiscountCandications(Order $order, User $user, $appendCantUse = true, $returnObject = false){
 
         $price = static::caculateOrderPrice($order);
@@ -152,30 +185,63 @@ class OrderModel extends Model
         return $candications;
     }
 
+    // 构造价格清单数据
     public static function buildOrderPriceItem(Order $order, $discountData = []){
-        $priceItem = [];
+        $price = static::caculateOrderPrice($order);
+        $priceItems = [];
         foreach($discountData as $discount){
-            $priceItem[] = [
+            $priceItems[] = [
                 'fee' => $discount->newPrice - $discount->originPrice,
                 'description' => $discount->description,
-                'type' => $discount->type
+                'type' => $discount->type,
+                'id' => $discount->id,
             ];
         }
-        $priceItem[] = [
-            'fee' => $discount->originPrice,
+        $priceItems[] = [
+            'fee' => $price,
             'description' => Yii::t('app', '商品金额'),
-            'type' => 'goods_total_fee'
+            'type' => 'goods_total_fee',
+            'id' => $order->od_number
         ];
-        return $priceItem;
+        $orderExpress = $order->od_express;
+        if($orderExpress->express_fee > 0){
+            $priceItems[] = [
+                'fee' => $orderExpress->express_fee,
+                'description' => $orderExpress->express_title,
+                'type' => 'express_fee',
+                'id' => $orderExpress->express_number
+            ];
+        }
+        $finalFee = 0;
+        foreach($priceItems as $priceItem){
+            $finalFee += $priceItem['fee'];
+        }
+        $priceItems[] = [
+            'fee' => $finalFee,
+            'description' => Yii::t('app', "最终价格"),
+            'type' => 'order_final_fee',
+            'id' => 'order_final_fee'
+        ];
+
+        return $priceItems;
+    }
+
+    public static function buildOrderExpressData(Order $order, $hasExpressDiscount = false){
+        $expressData = [
+            'express_number' => 'abc123',
+            'express_fee' => $hasExpressDiscount ? 0 : 1200,
+            'express_title' => "快递费",
+        ];
+        return (object)$expressData;
     }
 
 
 
     public static function caculateOrderPrice(Order $order){
-        $orderGoods = $order->order_goods;
+        $orderGoods = $order->od_goods;
         $orderFinalPrice = 0;
         foreach($orderGoods as $oneOrderGoods){
-            $orderFinalPrice += $oneOrderGoods->og_g_sku_price;
+            $orderFinalPrice += $oneOrderGoods->og_g_sku_total_price;
         }
         return $orderFinalPrice;
     }

@@ -27,7 +27,25 @@ class UserTest extends \Codeception\Test\Unit
     public function debug($data){
         console($data);
     }
+    public function testCreateReceiverAddr(){
+        Yii::$app->db->beginTransaction();
+
+        $data = [
+            'rece_location_id' => '19:1607:3155',
+            'rece_name' => "lartikzhong",
+            'rece_location_string' => "半岛花园A区",
+            'rece_contact_number' => '13715194169',
+        ];
+        $uModel = new UserModel();
+        $user = UserQuery::findActive()->where(['u_id' => 1])->one();
+        $result = $uModel->createUserReceiverAddr($user, $data);
+        if(!$result){
+            $this->debug($uModel->getOneError());
+        }
+        console($result->toArray());
+    }
     public function testCreateBill(){
+        return true;
         $trans = TransactionQuery::find()->where(['t_id' => 1])->one();
         $user = UserQuery::findActive()->where(['u_id' => 1])->one();
         $uModel = new UserModel();

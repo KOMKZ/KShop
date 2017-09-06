@@ -131,7 +131,7 @@ class OrderTest extends \Codeception\Test\Unit
         $orderModel = new OrderModel();
         $orderData = [
             'goods_sku_data' => [
-                $goodsSku
+                ['sku' => $goodsSku, 'number' => 2]
             ],
             'discount_data' => [
                 'user_coupon_price_discount' => [
@@ -143,7 +143,7 @@ class OrderTest extends \Codeception\Test\Unit
                 ]
             ]
         ];
-        $order = $orderModel->buildOrderData($user, $orderData);
+        $order = $orderModel->createOrderPreData($user, $orderData);
         if(!$order){
             $this->debug($orderModel->getOneError());
             return false;

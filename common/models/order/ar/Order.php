@@ -29,20 +29,59 @@ class Order extends ActiveRecord
 
     const MODE_FULL_ONLINE_PAY = 'fullpay';
 
-    public $goods_sku_data;
+    // public $goods_sku_data;
 
     private $_orderGoods = [];
     private $_discountCandication = [];
+    private $_orderExpress = [];
+    private $_orderPriceItems = [];
+    private $_orderDiscountData = [];
+    private $_odExpress = null;
+    public $od_warn = [];
+    public $od_valid_discount_data = [];
+
+
+    public function getOd_price_items(){
+        return $this->_orderPriceItems;
+    }
+
+    public function setOd_price_items($value){
+        $this->_orderPriceItems = $value;
+    }
+
+    public function getOd_discount_data(){
+        return $this->_orderDiscountData;
+    }
+
+    public function setOd_discount_data($value){
+        $this->_orderDiscountData = $value;
+    }
+
+    public function getOd_express(){
+        return $this->_odExpress;
+    }
+
+    public function setOd_express($value){
+        $this->_odExpress = $value;
+    }
 
     public function fields(){
         $fields = parent::fields();
         return array_merge($fields, [
-            'order_goods'
+            'od_goods',
+            'od_express',
+            'od_valid_discount_data',
+            'od_discount_data',
+            'od_price_items'
         ]);
     }
 
-    public function getOrder_goods(){
+    public function getOd_goods(){
         return $this->_orderGoods;
+    }
+
+    public function setOd_goods($value){
+        $this->_orderGoods = $value;
     }
 
     public function behaviors()
@@ -64,9 +103,7 @@ class Order extends ActiveRecord
 
     }
 
-    public function addOrderGoods(OrderGoods $orderGoods){
-        array_push($this->_orderGoods, $orderGoods);
-    }
+
 
     public function addOrderDiscountCandication($discount){
         // todo 验证
@@ -78,22 +115,28 @@ class Order extends ActiveRecord
 
         console($this->_discountCandication);
     }
-
-    public function validateGoods_sku_data($attr){
-        $skuData = $this->$attr;
-        foreach($skuData as $skuObject){
-            if($skuObject instanceof GoodsSku)continue;
-            $this->addError('', Yii::t('app', "goods_sku_data中每个元素都必须是GoodsSku"));
-        }
+    public function setExpress($value){
+        $this->_orderExpress = $value;
     }
+    public function getExpress(){
+        return $this->_orderExpress;
+    }
+
+    // public function validateGoods_sku_data($attr){
+    //     $skuData = $this->$attr;
+    //     foreach($skuData as $skuData){
+    //         if($skuData['sku'] instanceof GoodsSku)continue;
+    //         $this->addError('', Yii::t('app', "goods_sku_data中每个元素都必须是GoodsSku"));
+    //     }
+    // }
 
     public function rules(){
         return [
             ['od_type', 'default', 'value' => self::OD_TYPE_GOODS]
             ,['od_type', 'in', 'range' => ConstMap::getConst('od_type', true)]
-            ,['goods_sku_data', 'required']
-            ,['goods_sku_data', TypeValidator::className(), 'expectType' => 'array']
-            ,['goods_sku_data', 'validateGoods_sku_data']
+            // ,['goods_sku_data', 'required']
+            // ,['goods_sku_data', TypeValidator::className(), 'expectType' => 'array']
+            // ,['goods_sku_data', 'validateGoods_sku_data']
 
             ,['od_title', 'default', 'value' => '']
 

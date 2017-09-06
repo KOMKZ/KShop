@@ -6,11 +6,18 @@ use yii\console\Controller;
 use yii\helpers\FileHelper;
 use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
+use common\helpers\ChinaAreaHelper;
 use PhpAmqpLib\Message\AMQPMessage;
 
 
 class ToolController extends Controller{
     public $is_test = false;
+    public function actionDemo(){
+        $string = ChinaAreaHelper::parseAreaIdAsString("19:1607:3155");
+        $string2 = ChinaAreaHelper::validateAreaId("19:1607:3155");
+        console($string, $string2);
+
+    }
     public function options($actionID)
     {
         return array_merge(

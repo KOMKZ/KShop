@@ -12,7 +12,7 @@ use Firebase\JWT\JWT;
 use yii\helpers\ArrayHelper;
 use common\models\trans\ar\Transaction;
 use common\models\user\ar\UserBillRecord;
-
+use common\models\user\ar\UserReceiverAddr;
 /**
  *
  */
@@ -28,6 +28,33 @@ class UserModel extends Model
         $user = $event->belongUser;
         // 插入用户账单
         static::createUserBill($user, $trans);
+    }
+
+    /**
+     *
+     * @param  [type] $user     [description]
+     * @param  [type] $addrData [description]
+     * - rece_name: string, required
+     * - rece_contact_number: string,  required
+     * - rece_location_id: string, required
+     * - rece_location_string: string, required
+     * - rece_tag: string, optional 默认为空
+     * - rece_default_addr: string, optional yes|no 默认为yes,如果没有数据的话, 如果有数据则是no
+     * @return integer  影响的函数
+     */
+    public function createUserReceiverAddr($user, $addrData){
+        $receiverAddr = new UserReceiverAddr();
+        if(!$receiverAddr->load($addrData, '') || !$receiverAddr->validate()){
+            $this->addError('', $this->getOneErrMsg($receiverAddr));
+            return false;
+        }
+        $receiverAddr->rece_belong_uid = $user->u_id;
+        $hasDefaultAddr = UserReceiverAddrQuery::find()->where()->count();
+        if(!$receiverAddr->insert(false)){
+            $this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', "新建收获地址失败"));
+            return false;
+        }
+        return $receiverAddr;
     }
 
     public static function createUserBill(User $user, Transaction $trans){
