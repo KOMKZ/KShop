@@ -28,7 +28,7 @@ class m170829_144745_order_goods extends Migration
           `og_created_at` int(10) unsigned not null comment '创建时间',
           `og_updated_at` int(10) unsigned not null comment '更新时间',
           primary key (og_id)
-        ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COMMENT='订单表'
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='订单表'
         ";
         $this->execute($createTabelSql);
         return true;

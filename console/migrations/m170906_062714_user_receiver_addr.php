@@ -23,7 +23,7 @@ class m170906_062714_user_receiver_addr extends Migration
           `rece_belong_uid` int(10) unsigned not null comment '所属用户id',
           `rece_created_at` int(10) unsigned not null comment '创建时间',
           primary key (rece_addr_id)
-        ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COMMENT='用户收货地址'
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户收货地址'
         ";
         $this->execute($createTabelSql);
         return true;

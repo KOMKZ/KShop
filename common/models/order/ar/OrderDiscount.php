@@ -11,4 +11,7 @@ class OrderDiscount extends ActiveRecord
     public static function tableName(){
         return "{{%order_discount}}";
     }
+
+
+
 }

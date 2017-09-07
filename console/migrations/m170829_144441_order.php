@@ -34,7 +34,7 @@ class m170829_144441_order extends Migration
           `od_invalid_at` int(10) unsigned not null default 0 comment '订单失效的时间',
           `od_updated_at` int(10) unsigned not null default 0 comment '订单更新时间',
           primary key (od_id)
-        ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COMMENT='订单表'
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='订单表'
         ";
         $this->execute($createTabelSql);
         return true;

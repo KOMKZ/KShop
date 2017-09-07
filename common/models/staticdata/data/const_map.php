@@ -141,6 +141,13 @@ return [
     ,'od_pay_mode' => [
         \common\models\order\ar\Order::MODE_FULL_ONLINE_PAY => Yii::t('app', "付款模式")
     ]
+    ,'od_express_status' => [
+        \common\models\order\ar\OrderExpress::STATUS_ORDER_INIT => Yii::t('app', "用户已经提交订单")
+
+    ]
+    ,'od_express_target_type' => [
+        \common\models\order\ar\OrderExpress::TTYPE_ORDER => Yii::t('app', '消费类型订单物流')
+    ]
 
 
 ];

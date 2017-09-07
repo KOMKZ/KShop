@@ -23,7 +23,7 @@ class m170906_151652_order_receiver_addr extends Migration
           `rece_tag` varchar(255) not null default '' comment '标签,关键词',
           `rece_belong_uid` int(10) unsigned not null comment '所属用户id',
           primary key (od_receaddr_id)
-        ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COMMENT='订单折扣数据'
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='订单折扣数据'
         ";
         $this->execute($createTabelSql);
         return true;

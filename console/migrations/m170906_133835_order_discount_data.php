@@ -22,7 +22,7 @@ class m170906_133835_order_discount_data extends Migration
           `od_discount_slice_value` int(10) unsigned not null default 0 comment '减少的费用',
           `od_discount_created_at` int(10) unsigned not null comment '创建时间',
           primary key (od_discount_id)
-        ) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8 COMMENT='订单折扣数据'
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='订单折扣数据'
         ";
         $this->execute($createTabelSql);
         return true;

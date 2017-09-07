@@ -11,6 +11,10 @@ use common\models\goods\ar\GoodsSku;
 use common\models\goods\query\GoodsSkuQuery;
 use common\models\user\query\UserReceAddrQuery;
 use common\models\order\OrderModel;
+use common\models\pay\payment\Alipay;
+use common\models\pay\payment\Wxpay;
+use common\models\pay\ar\PayTrace;
+
 
 
 class OrderTest extends \Codeception\Test\Unit
@@ -126,6 +130,7 @@ class OrderTest extends \Codeception\Test\Unit
     }
 
     public function testCreateOrder(){
+        Yii::$app->db->beginTransaction();
         $goodsSkuValue = $this->createGoods();
         $goodsSku = GoodsSkuQuery::find()->where(['g_id' => 1, 'g_sku_value' => $goodsSkuValue])->one();
         $goodsSku01 = GoodsSkuQuery::find()->where(['g_id' => 1, 'g_sku_value' => '4:2;5:1'])->one();
@@ -148,19 +153,28 @@ class OrderTest extends \Codeception\Test\Unit
                 ]
             ]
         ];
-        // 创建预数据
+        // 创建预数据 用于订单展示
         $order = $orderModel->createOrderPreData($user, $orderData);
         if(!$order){
             $this->debug($orderModel->getOneError());
             return false;
         }
-        // 提交订单数据
+        // 提交订单数据 用户选择订单
         $order = $orderModel->createOrder($user, $orderData);
         if(!$order){
             $this->debug($orderModel->getOneError());
             return false;
         }
-        console($order->toArray());
+        // 创建交易
+        $payData = $orderModel->createOrderPayData($order, [
+            'pt_pay_type' => Alipay::NAME,
+            'pt_pre_order_type' => PayTrace::TYPE_URL
+        ]);
+        if(!$payData){
+            $this->debug($orderModel->getOneError());
+            return false;
+        }
+        console($payData->toArray());
     }
 
 }

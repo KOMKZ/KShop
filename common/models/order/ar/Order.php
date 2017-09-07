@@ -8,6 +8,8 @@ use common\models\order\OrderModel;
 use yii\behaviors\TimestampBehavior;
 use common\validators\TypeValidator;
 use common\models\goods\ar\GoodsSku;
+use common\models\order\ar\OrderGoods;
+use common\models\order\ar\OrderDiscount;
 /**
  *
  */
@@ -58,7 +60,10 @@ class Order extends ActiveRecord
     }
 
     public function getOd_discount_data(){
-        return $this->_orderDiscountData;
+        if(!empty($this->_orderDiscountData)){
+            return $this->_orderDiscountData;
+        }
+        return $this->hasMany(OrderDiscount::className(), ['od_id' => 'od_id']);
     }
 
     public function setOd_discount_data($value){
@@ -66,7 +71,10 @@ class Order extends ActiveRecord
     }
 
     public function getOd_express(){
-        return $this->_odExpress;
+        if(!empty($this->_odExpress)){
+            return $this->_odExpress;
+        }
+        return $this->hasOne(OrderExpress::className(), ['od_id' => 'od_id']);
     }
 
     public function setOd_express($value){
@@ -86,8 +94,13 @@ class Order extends ActiveRecord
     }
 
     public function getOd_goods(){
-        return $this->_orderGoods;
+        if(!empty($this->_orderGoods)){
+            return $this->_orderGoods;
+        }
+        return $this->hasMany(OrderGoods::className(), ['od_id' => 'od_id']);
     }
+
+
 
     public function setOd_goods($value){
         $this->_orderGoods = $value;
