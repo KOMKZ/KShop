@@ -27,6 +27,12 @@ use common\models\trans\query\TransactionQuery;
  */
 class OrderModel extends Model
 {
+    public static function handleReceivePayedEvent($event){
+        $trans = $event->sender;
+        $payOrder = $event->payOrder;
+        $belongUser = $event->belongUser;
+        console($payOrder->toArray());
+    }
     /**
      *
      * @param  User   $customer  [description]

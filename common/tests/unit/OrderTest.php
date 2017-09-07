@@ -130,7 +130,7 @@ class OrderTest extends \Codeception\Test\Unit
     }
 
     public function testCreateOrder(){
-        Yii::$app->db->beginTransaction();
+        // Yii::$app->db->beginTransaction();
         $goodsSkuValue = $this->createGoods();
         $goodsSku = GoodsSkuQuery::find()->where(['g_id' => 1, 'g_sku_value' => $goodsSkuValue])->one();
         $goodsSku01 = GoodsSkuQuery::find()->where(['g_id' => 1, 'g_sku_value' => '4:2;5:1'])->one();

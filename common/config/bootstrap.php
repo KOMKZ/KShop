@@ -7,6 +7,7 @@ use common\models\trans\TransModel;
 use common\models\trans\ar\Transaction;
 use common\models\user\UserModel;
 use common\models\action\ActionModel;
+use common\models\order\OrderModel;
 Yii::setAlias('@common', dirname(__DIR__));
 Yii::setAlias('@kshopapi', dirname(dirname(__DIR__)) . '/kshopapi');
 Yii::setAlias('@kshopadmin', dirname(dirname(__DIR__)) . '/kshopadmin');
@@ -25,4 +26,5 @@ Event::on(User::className(), User::EVENT_AFTER_LOGOUT, [UserModel::className(), 
 Event::on(PayTrace::className(), PayTrace::EVENT_AFTER_PAYED, [TransModel::className(), "handleReceivePayedEvent"]);
 // 用户模块：绑定交易单支付成功处理事件
 Event::on(Transaction::className(), Transaction::EVENT_AFTER_PAYED, [UserModel::className(), 'handleReceivePayedEvent']);
+Event::on(Transaction::className(), Transaction::EVENT_AFTER_PAYED, [OrderModel::className(), 'handleReceivePayedEvent']);
 Event::on(Goods::className(), Goods::EVENT_AFTER_UPDATE, [ActionModel::className(), "handle"]);
