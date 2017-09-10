@@ -22,6 +22,7 @@ use common\models\trans\TransModel;
 use common\models\pay\PayModel;
 use common\models\trans\ar\Transaction;
 use common\models\trans\query\TransactionQuery;
+
 /**
  *
  */
@@ -106,7 +107,13 @@ class OrderModel extends Model
         return $order;
     }
 
-    // 构建订单收货人地址对象
+    /**
+     * 构建订单收货人地址对象
+     * @param  User   $customer       [description]
+     * @param  integer $receiverAddrId 用户收获对象id
+     * @see \common\models\user\ar\UserReceiverAddr
+     * @return \common\models\order\ar\OrderReceiverAddr    订单收获地址对象
+     */
     protected function buildOrderReceiverAddr(User $customer, $receiverAddrId = null){
         $receAddr = null;
         if($receiverAddrId){
@@ -131,6 +138,18 @@ class OrderModel extends Model
         $orderReceAddr->rece_belong_uid = $receAddr->rece_belong_uid;
         return $orderReceAddr;
     }
+    /**
+     * 创建订单支付数据
+     * 该方法将执行以下逻辑用于创建订单
+     * 1. 查询消费类型的订单的交易是否存在，如果不存在则创建交易，存在则使用原来的交易
+     * 2. 为该交易创建支付数据，注意支付数据在有效期内不会重复创建
+     * @param  Order  $order       订单对象
+     * @param  [type] $userPayData 用户订单支付数据
+     * - pt_pay_type: 支付类型
+     * - pt_pre_order_type : 支付单数据类型
+     * - pt_timeout: 支付单的有效时间
+     * @return [type]              [description]
+     */
     public function createOrderPayData(Order $order, $userPayData){
         $t = Yii::$app->db->beginTransaction();
         try {
@@ -162,6 +181,11 @@ class OrderModel extends Model
             return false;
         }
     }
+    /**
+     * 创建订单交易对象
+     * @param  Order  $order [description]
+     * @return [type]        [description]
+     */
     protected function creaetOrderTrans(Order $order){
         $transData = [
             't_status' => Transaction::STATUS_INIT,
@@ -183,6 +207,12 @@ class OrderModel extends Model
         }
         return $trans;
     }
+    /**
+     * 构造订单交易描述信息
+     * 商品名称*数量 + 订单编号，详细参见代码逻辑
+     * @param  Order  $order [description]
+     * @return [type]        [description]
+     */
     public static function buildOrderTransDes(Order $order){
         $des = [];
         foreach($order->od_goods as $odGoods){
@@ -197,6 +227,12 @@ class OrderModel extends Model
         return $des;
 
     }
+    /**
+     * 构造订单交易的标题
+     * 商品名称 + 商品sku参数，多个商品用等商品来表示
+     * @param  Order  $order [description]
+     * @return [type]        [description]
+     */
     public static function buildOrderTransTitle(Order $order){
         $title = "";
         foreach($order->od_goods as $odGoods){
@@ -209,6 +245,15 @@ class OrderModel extends Model
         }
         return $title;
     }
+
+    /**
+     * 创建订单对象
+     * 本方法会使用者 Order::createPreOrderData 来创建基础订单数据
+     * @param  User   $customer  [description]
+     * @param  [type] $orderData [description]
+     * @see Order::createOrderPreData 了解提交订单数据的限制性和相关验证
+     * @return [type]            [description]
+     */
     public function createOrder(User $customer, $orderData){
         $t = Yii::$app->db->beginTransaction();
         try {
@@ -261,6 +306,12 @@ class OrderModel extends Model
             return false;
         }
     }
+    /**
+     * 创建订单物流对象
+     * @param  [type] $data [description]
+     *
+     * @return [type]       [description]
+     */
     protected function createOrderExpress($data){
         $orderExpress = new OrderExpress();
         if(!$orderExpress->load($data, '') || !$orderExpress->validate()){
