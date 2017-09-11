@@ -130,10 +130,12 @@ return [
         ,\common\models\order\ar\Order::COMMENT_STATUS_COMMENTED => Yii::t('app', '已经评论')
     ]
     ,'od_refund_status' => [
-        \common\models\order\ar\Order::RF_STATUS_NORF => Yii::t('app', "没有发生退款")
+        \common\models\order\ar\Order::RF_STATUS_NORF => Yii::t('app', "没有发生退款"),
+        \common\models\order\ar\Order::RF_STATUS_CUSTOMER_SUBMIT => Yii::t('app', "客户提交退款申请")
     ]
     ,'od_status' => [
         \common\models\order\ar\Order::STATUS_SUBMIT => Yii::t('app', "提交状态")
+        , \common\models\order\ar\Order::STATUS_C_PAYED=> Yii::t('app', '用户已经付款')
     ]
     ,'od_logistics_status' => [
         \common\models\order\ar\Order::LG_STATUS_INIT => Yii::t('app', "初始状态")

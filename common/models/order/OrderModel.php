@@ -22,17 +22,43 @@ use common\models\trans\TransModel;
 use common\models\pay\PayModel;
 use common\models\trans\ar\Transaction;
 use common\models\trans\query\TransactionQuery;
+use common\models\order\query\OrderQuery;
+use common\models\order\event\AfterPayedEvent;
 
 /**
  *
  */
 class OrderModel extends Model
 {
+
+    public static function triggerOrderPayed(Order $order, $event = null){
+        $order->trigger(Order::EVENT_AFTER_PAYED, $event);
+    }
+
+
     public static function handleReceivePayedEvent($event){
         $trans = $event->sender;
         $payOrder = $event->payOrder;
         $belongUser = $event->belongUser;
-        console($payOrder->toArray());
+        $order = OrderQuery::find()->andWhere(['=', 'od_number', $trans->t_app_no])->one();
+        $order->scenario = "update";
+        $orderModel = new static();
+        $order->od_succ_pay_type = $trans->t_succ_pay_type;
+        // 更新订单为已经支付
+        if(!$orderModel->updateOrder($order, [
+            'od_pay_status' => Order::PAY_STATUS_PAYED,
+            'od_payed_at' => time(),
+            'od_status' => Order::STATUS_C_PAYED
+        ])){
+            list($code, $error) = $orderModel->getOneError();
+            throw new \Exception(sprintf("%s:%s", $code, $error));
+        }
+        $event = new AfterPayedEvent();
+        $event->trans = $trans;
+        $event->payOrder = $payOrder;
+        $event->belongUser = $belongUser;
+        static::triggerOrderPayed($order, $event);
+        console($order->toArray());
     }
     /**
      *
@@ -652,7 +678,15 @@ class OrderModel extends Model
 
     // 更新订单
     public function updateOrder(Order $order, $data = []){
-
+        if(!$order->load($data, '') || !$order->validate()){
+            $this->addError('', $this->getOneErrMsg($order));
+            return false;
+        }
+        if(false === $order->update(false)){
+            $this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', '更新订单失败'));
+            return false;
+        }
+        return $order;
     }
 
     public static function handleTransPayed($event){

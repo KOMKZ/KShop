@@ -15,6 +15,8 @@ use common\models\order\ar\OrderDiscount;
  */
 class Order extends ActiveRecord
 {
+    const EVENT_AFTER_PAYED = 'event_order_payed';
+
     const OD_TYPE_GOODS = 'goods';
 
     const PAY_STATUS_NOPAY = 'nopay';
@@ -24,8 +26,10 @@ class Order extends ActiveRecord
     const COMMENT_STATUS_COMMENTED = 'commented';
 
     const RF_STATUS_NORF = 'norf';
+    const RF_STATUS_CUSTOMER_SUBMIT = 'c_submit';
 
     const STATUS_SUBMIT = 'submit';
+    CONST STATUS_C_PAYED = 'c_payed';
 
     const LG_STATUS_INIT = 'init';
 
@@ -151,7 +155,16 @@ class Order extends ActiveRecord
     //         $this->addError('', Yii::t('app', "goods_sku_data中每个元素都必须是GoodsSku"));
     //     }
     // }
-
+    public function scenarios(){
+        return [
+            'default' => [
+                'od_type', 'od_title', 'od_pay_status', 'od_comment_status', 'od_refund_status', 'od_status', 'od_belong_storage', 'od_logistics_status', 'od_pay_mode', 'od_belong_uid', 'od_operator_uid', 'od_pid', 'od_payed_at', 'od_invalid_at', 'od_number',
+            ],
+            'update' => [
+                'od_type', 'od_title', 'od_pay_status', 'od_comment_status', 'od_refund_status', 'od_status', 'od_belong_storage', 'od_logistics_status', 'od_pay_mode', 'od_belong_uid', 'od_operator_uid', 'od_pid', 'od_payed_at', 'od_invalid_at', 'od_number',
+            ]
+        ];
+    }
     public function rules(){
         return [
             ['od_type', 'default', 'value' => self::OD_TYPE_GOODS]
