@@ -17,120 +17,122 @@ use yii\behaviors\TimestampBehavior;
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_ACTIVE = 'active';
+	const STATUS_ACTIVE = 'active';
 
-    const STATUS_NO_AUTH = 'not_auth';
+	const STATUS_NO_AUTH = 'not_auth';
 
-    const NOT_AUTH = 'not_auth';
+	const NOT_AUTH = 'not_auth';
 
-    const HAD_AUTH = 'had_auth';
+	const HAD_AUTH = 'had_auth';
 
-    public $password;
+	public $password;
 
-    public $password_confirm;
+	public $password_confirm;
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::className(),
-                'createdAtAttribute' => 'u_created_at',
-                'updatedAtAttribute' => 'u_updated_at'
-            ]
-        ];
-    }
+	public $rememberMe = false;
 
-    public function fields(){
-        $fields = parent::fields();
-        ArrayHelper::removeValue($fields, 'u_password_hash');
-        ArrayHelper::removeValue($fields, 'u_auth_key');
-        ArrayHelper::removeValue($fields, 'u_password_reset_token');
-        ArrayHelper::removeValue($fields, 'u_access_token');
-        return $fields;
-    }
+	public function behaviors()
+	{
+		return [
+			[
+				'class' => TimestampBehavior::className(),
+				'createdAtAttribute' => 'u_created_at',
+				'updatedAtAttribute' => 'u_updated_at'
+			]
+		];
+	}
 
-    public function rules(){
-        return [
-            ['u_username', 'required'],
-            ['u_username', 'match', 'pattern' => '/[a-zA-Z0-9_\-]/'],
-            ['u_username', 'string', 'min' => 5, 'max' => 30],
-            ['u_username', 'unique', 'targetClass' => self::className()],
+	public function fields(){
+		$fields = parent::fields();
+		ArrayHelper::removeValue($fields, 'u_password_hash');
+		ArrayHelper::removeValue($fields, 'u_auth_key');
+		ArrayHelper::removeValue($fields, 'u_password_reset_token');
+		ArrayHelper::removeValue($fields, 'u_access_token');
+		return $fields;
+	}
 
-            ['u_email', 'required'],
-            ['u_email', 'email'],
-            ['u_email', 'unique', 'targetClass' => self::className()],
+	public function rules(){
+		return [
+			['u_username', 'required'],
+			['u_username', 'match', 'pattern' => '/[a-zA-Z0-9_\-]/'],
+			['u_username', 'string', 'min' => 5, 'max' => 30],
+			['u_username', 'unique', 'targetClass' => self::className()],
 
-            ['u_status', 'required'],
-            ['u_status', 'in', 'range' => ConstMap::getConst('u_status', true)],
+			['u_email', 'required'],
+			['u_email', 'email'],
+			['u_email', 'unique', 'targetClass' => self::className()],
 
-            ['u_auth_status', 'default', 'value' => User::STATUS_NO_AUTH],
-            ['u_auth_status', 'in', 'range' => ConstMap::getConst('u_auth_status', true)],
+			['u_status', 'required'],
+			['u_status', 'in', 'range' => ConstMap::getConst('u_status', true)],
 
-            ['password', 'required', 'on' => 'create'],
-            ['password', 'required', 'on' => 'update', 'skipOnEmpty' => true],
+			['u_auth_status', 'default', 'value' => User::STATUS_NO_AUTH],
+			['u_auth_status', 'in', 'range' => ConstMap::getConst('u_auth_status', true)],
 
-            ['u_access_token', 'default', 'value' => ''],
+			['password', 'required', 'on' => 'create'],
+			['password', 'required', 'on' => 'update', 'skipOnEmpty' => true],
 
-            ['password', 'string', 'min' => 6, 'max' =>  50],
+			['u_access_token', 'default', 'value' => ''],
 
-            ['password_confirm', 'required', 'on' => 'create'],
-            ['password_confirm', 'required', 'on' => 'update', 'skipOnEmpty' => true],
-            ['password_confirm', 'compare', 'compareAttribute' => 'password'],
+			['password', 'string', 'min' => 6, 'max' =>  50],
 
-        ];
-    }
+			['password_confirm', 'required', 'on' => 'create'],
+			['password_confirm', 'required', 'on' => 'update', 'skipOnEmpty' => true],
+			['password_confirm', 'compare', 'compareAttribute' => 'password'],
 
-    public static function tableName(){
-        return "{{%user}}";
-    }
+		];
+	}
 
-    public static function findIdentity($id)
-    {
-        return UserQuery::findActive()->andWhere(['=', 'u_id', $id]);
-    }
+	public static function tableName(){
+		return "{{%user}}";
+	}
 
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-        try {
-            $payload = UserModel::parseAccessToken($token, $type);
-            $user = UserQuery::findActive()->andWhere(['=', 'u_email', $payload->data->user_info->u_email])->one();
-            if($user->u_access_token != $payload->jti){
-                return null;
-            }
-            return $user;
-        } catch (\Exception $e) {
-            return null;
-        }
-    }
+	public static function findIdentity($id)
+	{
+		return UserQuery::findActive()->andWhere(['=', 'u_id', $id]);
+	}
 
-    public static function findByUsername($username)
-    {
-        return static::findOne(['u_username' => $username, 'u_status' => self::STATUS_ACTIVE]);
-    }
+	public static function findIdentityByAccessToken($token, $type = null)
+	{
+		try {
+			$payload = UserModel::parseAccessToken($token, $type);
+			$user = UserQuery::findActive()->andWhere(['=', 'u_email', $payload->data->user_info->u_email])->one();
+			if($user->u_access_token != $payload->jti){
+				return null;
+			}
+			return $user;
+		} catch (\Exception $e) {
+			return null;
+		}
+	}
 
-    public static function findByPasswordResetToken($token)
-    {
-        if (!static::isPasswordResetTokenValid($token)) {
-            return null;
-        }
-        return static::findOne([
-            'u_password_reset_token' => $token,
-            'u_status' => self::STATUS_ACTIVE,
-        ]);
-    }
-    public function getId()
-    {
-        return $this->getPrimaryKey();
-    }
+	public static function findByUsername($username)
+	{
+		return static::findOne(['u_username' => $username, 'u_status' => self::STATUS_ACTIVE]);
+	}
 
-    public function getAuthKey()
-    {
-        return $this->u_auth_key;
-    }
+	public static function findByPasswordResetToken($token)
+	{
+		if (!static::isPasswordResetTokenValid($token)) {
+			return null;
+		}
+		return static::findOne([
+			'u_password_reset_token' => $token,
+			'u_status' => self::STATUS_ACTIVE,
+		]);
+	}
+	public function getId()
+	{
+		return $this->getPrimaryKey();
+	}
 
-    public function validateAuthKey($authKey)
-    {
-        return $this->getAuthKey() === $authKey;
-    }
+	public function getAuthKey()
+	{
+		return $this->u_auth_key;
+	}
+
+	public function validateAuthKey($authKey)
+	{
+		return $this->getAuthKey() === $authKey;
+	}
 
 }
