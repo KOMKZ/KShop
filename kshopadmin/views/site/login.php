@@ -3,7 +3,6 @@ use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\widgets\Pjax;
 use yii\widgets\PjaxAsset;
-PjaxAsset::register($this);
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -18,14 +17,7 @@ $fieldOptions2 = [
 	'options' => ['class' => 'form-group has-feedback'],
 	'inputTemplate' => "{input}<span class='glyphicon glyphicon-lock form-control-feedback'></span>"
 ];
-$js = <<<JS
-$("document").ready(function(){
-	
-});
-JS;
-$this->registerJs($js);
 ?>
-
 <div class="login-box">
 	<div class="login-logo">
 		<a href="#"><b>Lartik</b>Shop</a>
@@ -33,10 +25,6 @@ $this->registerJs($js);
 	<!-- /.login-logo -->
 	<div class="login-box-body">
 		<p class="login-box-msg">Sign in to start your session</p>
-		<?php Pjax::begin([
-			'formSelector' => '#login-form',
-			'enablePushState' => false
-		]);?>
 		<?php
 			$form = ActiveForm::begin([
 				'id' => 'login-form',
@@ -45,9 +33,9 @@ $this->registerJs($js);
 			]);
 		?>
 		<?= $form
-			->field($model, 'u_username', $fieldOptions1)
+			->field($model, 'u_email', $fieldOptions1)
 			->label(false)
-			->textInput(['placeholder' => $model->getAttributeLabel('u_username')])
+			->textInput(['placeholder' => $model->getAttributeLabel('u_email')])
 		?>
 		<?= $form
 			->field($model, 'password', $fieldOptions2)
@@ -65,7 +53,6 @@ $this->registerJs($js);
 			<!-- /.col -->
 		</div>
 		<?php ActiveForm::end(); ?>
-		<?php Pjax::end();?>
 		<!-- /.social-auth-links -->
 		<a href="#">忘记密码</a><br>
 	</div>

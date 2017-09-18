@@ -50,9 +50,24 @@ class User extends ActiveRecord implements IdentityInterface
 		ArrayHelper::removeValue($fields, 'u_access_token');
 		return $fields;
 	}
-
+	public function scenarios(){
+        return [
+            'default' => [
+				'u_username', 'u_email', 'u_status', 'u_auth_status', 'password', 'u_access_token', 'password', 'password_confirm'
+            ],
+			'create' => [
+				'u_username', 'u_email', 'u_status', 'u_auth_status', 'password', 'u_access_token', 'password', 'password_confirm'
+			],
+            'login' => [
+				'u_email', 'password', 'rememberMe'
+            ]
+        ];
+    }
 	public function rules(){
 		return [
+			['rememberMe', 'in', 'range' => [1, 0]],
+			['rememberMe', 'default', 'value' => 1],
+
 			['u_username', 'required'],
 			['u_username', 'match', 'pattern' => '/[a-zA-Z0-9_\-]/'],
 			['u_username', 'string', 'min' => 5, 'max' => 30],
@@ -60,7 +75,7 @@ class User extends ActiveRecord implements IdentityInterface
 
 			['u_email', 'required'],
 			['u_email', 'email'],
-			['u_email', 'unique', 'targetClass' => self::className()],
+			['u_email', 'unique', 'targetClass' => self::className(), 'on' => ['create', 'update']],
 
 			['u_status', 'required'],
 			['u_status', 'in', 'range' => ConstMap::getConst('u_status', true)],
@@ -68,12 +83,12 @@ class User extends ActiveRecord implements IdentityInterface
 			['u_auth_status', 'default', 'value' => User::STATUS_NO_AUTH],
 			['u_auth_status', 'in', 'range' => ConstMap::getConst('u_auth_status', true)],
 
-			['password', 'required', 'on' => 'create'],
+			['password', 'required', 'on' => ['create', 'login']],
 			['password', 'required', 'on' => 'update', 'skipOnEmpty' => true],
+			['password', 'string', 'min' => 6, 'max' =>  50],
 
 			['u_access_token', 'default', 'value' => ''],
 
-			['password', 'string', 'min' => 6, 'max' =>  50],
 
 			['password_confirm', 'required', 'on' => 'create'],
 			['password_confirm', 'required', 'on' => 'update', 'skipOnEmpty' => true],
@@ -88,7 +103,7 @@ class User extends ActiveRecord implements IdentityInterface
 
 	public static function findIdentity($id)
 	{
-		return UserQuery::findActive()->andWhere(['=', 'u_id', $id]);
+		return UserQuery::findActive()->andWhere(['=', 'u_id', $id])->one();
 	}
 
 	public static function findIdentityByAccessToken($token, $type = null)

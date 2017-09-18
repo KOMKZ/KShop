@@ -8,6 +8,7 @@ return [
     'defaultRoute' => 'site/index',
     'basePath' => dirname(dirname(__DIR__)),
     'bootstrap' => ['log'],
+    'language' => 'zh-CN',
     'controllerNamespace' => 'kshopadmin\controllers',
     'params' => $params,
     'components' => []

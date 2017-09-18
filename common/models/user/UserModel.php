@@ -152,6 +152,7 @@ class UserModel extends Model
     public static function handleAfterLogout($event){
         static::updateUserAccessToken($event->identity, '');
     }
+
     public function loginInSession($user, $remember = false){
         Yii::$app->user->login($user, $remember ? 3600 * 24 * 30 : 0);
         return true;

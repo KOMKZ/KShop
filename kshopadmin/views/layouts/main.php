@@ -38,6 +38,7 @@ if (Yii::$app->controller->action->id === 'login') {
 	</head>
 	<body class="hold-transition skin-blue sidebar-mini">
 	<?php $this->beginBody() ?>
+	<textarea style="display:none;" id="pjax-res"></textarea>
 	<div class="wrapper">
 
 		<?= $this->render(

@@ -2,6 +2,7 @@
 namespace kshopadmin\controllers;
 
 use common\controllers\AdminController;
+use common\models\goods\ar\Goods;
 
 /**
  *
@@ -9,6 +10,9 @@ use common\controllers\AdminController;
 class GoodsController extends AdminController
 {
 	public function actionCreate(){
-		return $this->render('create');
+		$goods = new Goods();
+		return $this->render('create', [
+			'model' => $goods
+		]);
 	}
 }
