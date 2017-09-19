@@ -4,12 +4,19 @@ namespace kshopadmin\controllers;
 use Yii;
 use common\controllers\AdminController;
 use common\models\classification\ar\GoodsClassification;
+use common\models\goods\query\GoodsClassificationQuery;
 use common\models\goods\ClassificationModel;
 /**
  *
  */
 class ClassificationController extends AdminController
 {
+	public function actionIndex(){
+		$query = GoodsClassificationQuery::find()
+										  ->andWhere(['=', 'g_cls_pid', 0]);
+		
+		return $this->render('index');
+	}
 	public function actionCreate(){
 		$newCls = new GoodsClassification();
 		$clsModel = new ClassificationModel();
