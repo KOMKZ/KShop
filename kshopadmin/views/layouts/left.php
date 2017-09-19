@@ -39,6 +39,14 @@
 						],
 					],
 					[
+						'label' => "分类管理",
+						'icon' => 'share',
+						'url' => '#',
+						'items' => [
+							['label' => '创建分类', 'icon' => 'file-code-o', 'url' => ['/classification/create'],],
+						],
+					],
+					[
 						'label' => 'Same tools',
 						'icon' => 'share',
 						'url' => '#',

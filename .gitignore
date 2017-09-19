@@ -19,7 +19,7 @@ nbproject
 Thumbs.db
 
 # composer vendor dir
-/vendor
+
 
 # composer itself is not needed
 composer.phar
@@ -34,5 +34,5 @@ phpunit.phar
 
 # vagrant runtime
 /.vagrant
-
+/vendor
 common/tests/_output/
