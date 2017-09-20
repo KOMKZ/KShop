@@ -43,7 +43,10 @@
 						'icon' => 'share',
 						'url' => '#',
 						'items' => [
+							['label' => '分类列表', 'icon' => 'file-code-o', 'url' => ['/classification/index'],],
 							['label' => '创建分类', 'icon' => 'file-code-o', 'url' => ['/classification/create'],],
+							['label' => '修改分类', 'icon' => 'file-code-o', 'url' => ['/classification/update'], 'visible' => Yii::$app->requestedRoute == 'classification/update'],
+
 						],
 					],
 					[

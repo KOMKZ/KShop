@@ -3,7 +3,7 @@ namespace common\models\goods;
 
 use Yii;
 use common\models\Model;
-use common\models\classification\ar\GoodsClassification;
+use common\models\goods\ar\GoodsClassification;
 use common\models\goods\query\GoodsClassificationQuery;
 
 /**
@@ -12,6 +12,22 @@ use common\models\goods\query\GoodsClassificationQuery;
 class ClassificationModel extends Model
 {
 	public $maxLevel = 3;
+	public function validateClsUpdate($data, GoodsClassification $goodsCls){
+		$goodsCls->scenario = 'update';
+		if(!$goodsCls->load($data) || !$goodsCls->validate()){
+			return false;
+		}
+		return true;
+	}
+
+	public function updateGoodsClassification(GoodsClassification $goodsCls){
+		if(false === $goodsCls->update(false)){
+			$this->addError('', Yii::t('app', '更新失败'));
+			return false;
+		}
+		return $goodsCls;
+	}
+
 	public function validateClsCreate($data, GoodsClassification $goodsCls){
 		if(!$goodsCls->load($data) || !$goodsCls->validate()){
 			return false;
@@ -20,8 +36,6 @@ class ClassificationModel extends Model
 	}
 
 	public function createGoodsClassification(GoodsClassification $goodsCls){
-		$this->addError('', 'adf');
-		return false;
 		if(!empty($goodsCls->g_cls_pid)){
 			$parents = GoodsClassificationQuery::findParentsById($goodsCls->g_cls_pid);
 			if(count($parents) >= $this->maxLevel){

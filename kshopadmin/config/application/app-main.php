@@ -9,6 +9,7 @@ return [
     'basePath' => dirname(dirname(__DIR__)),
     'bootstrap' => ['log'],
     'language' => 'zh-CN',
+    'timeZone' => 'Asia/Shanghai',
     'controllerNamespace' => 'kshopadmin\controllers',
     'params' => $params,
     'components' => []
