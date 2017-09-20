@@ -35,6 +35,26 @@ class ClassificationModel extends Model
 		return true;
 	}
 
+	public function removeClassification(GoodsClassification $goodsCls){
+		$hasChild = GoodsClassificationQuery::find()
+											->andWhere(['=', 'g_cls_pid', $goodsCls->g_cls_id])
+											->asArray()
+											->all();
+		if($hasChild){
+			$this->addError('', Yii::t('app', '指定的分类存在子分类，禁止删除'));
+			return false;
+		}
+		// todo more check
+		$goodsCls->delete();
+		// todo more delete
+		return true;
+	}
+
+	public function removeClsSafe($ids){
+		// todo more delete
+		return GoodsClassification::deleteAll(['g_cls_id' => $ids]);
+	}
+
 	public function createGoodsClassification(GoodsClassification $goodsCls){
 		if(!empty($goodsCls->g_cls_pid)){
 			$parents = GoodsClassificationQuery::findParentsById($goodsCls->g_cls_pid);
