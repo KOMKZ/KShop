@@ -18,8 +18,11 @@ class ClassificationController extends AdminController
 {
 	public function actionDemo(){
 		$result = GoodsClassificationQuery::findClsAsTree();
-		console($result);
-		return $this->render('demo');
+		return $this->render('demo', [
+			'routes' => [
+				'classification_result_action' => $this->getApiRoute(['classification/index'])
+			]
+		]);
 	}
 	public function actionBulk(){
 		$postData = Yii::$app->request->getBodyParams();

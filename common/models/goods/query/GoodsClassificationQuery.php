@@ -40,10 +40,21 @@ class GoodsClassificationQuery extends Object{
 				unset($allCls[$index]);
 			}
 		}
-		console($allCls);
+        $allCls = static::covertToArray($allCls);
+        return $allCls;
 	}
 
-	
+    protected static function covertToArray($allCls){
+        $result = [];
+        foreach($allCls as $index => $cls){
+            if(!empty($cls['nodes'])){
+                $cls['nodes'] = static::covertToArray($cls['nodes']);
+            }
+            $result[] = $cls;
+        }
+        return $result;
+    }
+
 	protected static function setAsLeave(&$allCls, $pidPath, $cls){
 		$pidPathData = explode(',', $pidPath);
 		$id = array_shift($pidPathData);

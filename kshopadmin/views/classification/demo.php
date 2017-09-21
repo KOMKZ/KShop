@@ -1,44 +1,17 @@
 <?php
 use common\assets\BootstrapTreeAsset;
 BootstrapTreeAsset::register($this);
+$url = $routes['classification_result_action'];
 $js = <<<JS
-function getTree() {
-	var data = [
-  {
-	text: "Parent 1",
-	nodes: [
-	  {
-		text: "Child 1",
-		nodes: [
-		  {
-			text: "Grandchild 1"
-		  },
-		  {
-			text: "Grandchild 2"
-		  }
-		]
-	  },
-	  {
-		text: "Child 2"
-	  }
-	]
-  },
-  {
-	text: "Parent 2"
-  },
-  {
-	text: "Parent 3"
-  },
-  {
-	text: "Parent 4"
-  },
-  {
-	text: "Parent 5"
-  }
-];
-	return data;
-}
-$('#tree').treeview({data: getTree()});
+$.get("{$url}", function(res){
+	// console.log(res);
+	var nodes = eval(res);
+	if(nodes['code'] > 0){
+		alert(nodes['message']);
+	}else{
+		$('#tree').treeview({data: nodes['data']});
+	}
+})
 JS;
 $this->registerJs($js);
 ?>
