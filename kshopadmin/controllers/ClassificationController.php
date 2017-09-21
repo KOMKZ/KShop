@@ -16,6 +16,11 @@ use yii\helpers\Html;
  */
 class ClassificationController extends AdminController
 {
+	public function actionDemo(){
+		$result = GoodsClassificationQuery::findClsAsTree();
+		console($result);
+		return $this->render('demo');
+	}
 	public function actionBulk(){
 		$postData = Yii::$app->request->getBodyParams();
 		$type = ArrayHelper::getValue($postData, 'action', null);

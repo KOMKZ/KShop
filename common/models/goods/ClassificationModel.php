@@ -11,7 +11,7 @@ use common\models\goods\query\GoodsClassificationQuery;
  */
 class ClassificationModel extends Model
 {
-	public $maxLevel = 3;
+	public $maxLevel = 4;
 	public function validateClsUpdate($data, GoodsClassification $goodsCls){
 		$goodsCls->scenario = 'update';
 		if(!$goodsCls->load($data) || !$goodsCls->validate()){
