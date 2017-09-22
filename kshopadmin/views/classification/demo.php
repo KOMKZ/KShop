@@ -4,7 +4,6 @@ BootstrapTreeAsset::register($this);
 $url = $routes['classification_result_action'];
 $js = <<<JS
 $.get("{$url}", function(res){
-	// console.log(res);
 	var nodes = eval(res);
 	if(nodes['code'] > 0){
 		alert(nodes['message']);
@@ -12,6 +11,35 @@ $.get("{$url}", function(res){
 		$('#tree').treeview({data: nodes['data']});
 	}
 })
+var search = function(e) {
+  var pattern = $('#input-search').val();
+  var options = {
+	ignoreCase: $('#chk-ignore-case').is(':checked'),
+	exactMatch: $('#chk-exact-match').is(':checked'),
+	revealResults: $('#chk-reveal-results').is(':checked')
+  };
+  var results = $('#tree').treeview('search', [ pattern, options ]);
+  $('#tree').treeview('expandNode', [ results ,{}]);
+
+  var output = '<p>' + results.length + ' matches found</p>';
+  $.each(results, function (index, result) {
+	output += '<p>- ' + result.text + '</p>';
+  });
+  $('#search-output').html(output);
+}
+$('#btn-search').on('click', search);
+$('#input-search').on('keyup', search);
+
+$('#btn-clear-search').on('click', function (e) {
+  $('#search-output').treeview('clearSearch');
+  $('#input-search').val('');
+  $('#search-output').html('');
+});
+
+
+
+
+
 JS;
 $this->registerJs($js);
 ?>
@@ -82,7 +110,7 @@ $this->registerJs($js);
 				</div>
 			</div>
 			<div class="box-body">
-				<div class="search-output">
+				<div id="search-output">
 
 				</div>
 			</div>
