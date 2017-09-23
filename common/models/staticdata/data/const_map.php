@@ -35,9 +35,9 @@ return [
         \common\models\goods\ar\Goods::STATUS_DELETE => \Yii::t('app', "删除"),
     ],
     'g_atr_type' => [
-        \common\models\goods\ar\GoodsAttr::ATR_TYPE_META => \Yii::t('app', '信息属性'),
-        \common\models\goods\ar\GoodsAttr::ATR_TYPE_SKU => \Yii::t('app', 'sku属性'),
-        \common\models\goods\ar\GoodsAttr::ATR_TYPE_OPTION => \Yii::t('app', 'sku属性')
+        // \common\models\goods\ar\GoodsAttr::ATR_TYPE_META => \Yii::t('app', '信息属性'),
+        \common\models\goods\ar\GoodsAttr::ATR_TYPE_SKU => \Yii::t('app', 'sku型属性'),
+        \common\models\goods\ar\GoodsAttr::ATR_TYPE_OPTION => \Yii::t('app', '选项型属性')
     ],
     'g_atr_cls_type' => [
         \common\models\goods\ar\GoodsAttr::ATR_CLS_TYPE_CLS => Yii::t('app', "属性直属于分类"),
@@ -149,6 +149,10 @@ return [
     ]
     ,'od_express_target_type' => [
         \common\models\order\ar\OrderExpress::TTYPE_ORDER => Yii::t('app', '消费类型订单物流')
+    ]
+    ,'g_atr_opt_img' => [
+        0 => Yii::t('app', '不能携带图片')
+        ,1 => Yii::t('app', '能携带图片')
     ]
 
 

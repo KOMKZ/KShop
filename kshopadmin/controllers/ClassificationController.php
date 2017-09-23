@@ -4,8 +4,11 @@ namespace kshopadmin\controllers;
 use Yii;
 use common\controllers\AdminController;
 use common\models\goods\ar\GoodsClassification;
+use common\models\goods\ar\GoodsAttr;
 use common\models\goods\query\GoodsClassificationQuery;
+use common\models\goods\query\GoodsAttrQuery;
 use common\models\goods\ClassificationModel;
+use common\models\goods\GoodsAttrModel;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use yii\helpers\Url;
@@ -101,6 +104,7 @@ class ClassificationController extends AdminController
 		// 初始化子分类
 		$newCls = new GoodsClassification();
 		$newCls->g_cls_pid = $parentCls->g_cls_id;
+		$newAttr = new GoodsAttr();
 
 
 		if('create_sub_action' == $type &&
@@ -138,6 +142,22 @@ class ClassificationController extends AdminController
 				list($code, $error) = $clsModel->getOneError();
 				Yii::$app->session->setFlash('error', Yii::t('app', "{$code}:{$error}"));
 			}
+		}elseif(
+			'create_cls_attr_action' == $type &&
+			Yii::$app->request->isPost &&
+			$postData = Yii::$app->request->getBodyParams()
+		){
+			$gAttrModel = new GoodsAttrModel();
+			$newAttr->g_atr_cls_id = $parentCls->g_cls_id;
+			$result = $gAttrModel->createAttr($postData, $newAttr);
+			if($result){
+				$this->setCreateSuccess();
+				return $this->refresh();
+			}
+			if($gAttrModel->hasErrors()){
+				list($code, $error) = $gAttrModel->getOneError();
+				$this->setError("{$code}:{$error}");
+			}
 		}
 
 
@@ -153,11 +173,19 @@ class ClassificationController extends AdminController
 		$childClsProvider = new ActiveDataProvider([
 			'query' => $childClsQuery
 		]);
+		// 查找当前分类的属性
+		$clsAttrsQuery = GoodsAttrQuery::findAttrsByClsid($parentCls->g_cls_id);
+		$clsAttrsProvider = new ActiveDataProvider([
+			'query' => $clsAttrsQuery
+		]);
+
 		$this->setReturnUrl();
 		return $this->render('update', [
 			'model' => $parentCls,
 			'newCls' => $newCls,
+			'newAttr' => $newAttr,
 			'childClsProvider' => $childClsProvider,
+			'clsAttrsProvider' => $clsAttrsProvider,
 			'parents' => $parents,
 			'routes' => [
 				'bulk_action' => Url::to(['classification/bulk']),
@@ -165,6 +193,11 @@ class ClassificationController extends AdminController
 					'classification/update',
 					'type' => 'create_sub_action',
 					'id' => $parentCls->g_cls_id,
+				]),
+				'create_cls_attr_action' => Url::to([
+					'classification/update',
+					'type' => 'create_cls_attr_action',
+					'id' => $parentCls->g_cls_id
 				]),
 				'delete_parent_action' => Url::to([
 					'classification/delete',

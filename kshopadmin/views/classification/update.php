@@ -1,4 +1,5 @@
 <?php
+use common\models\staticdata\ConstMap;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -87,7 +88,90 @@ $clsPathHtml = Breadcrumbs::widget(['links' => $clsPath, 'homeLink' => false]);
 	</div>
 	<?php ActiveForm::end();?>
 </div>
+<div class="row">
+	<div class="col-md-12">
+		<?php
+		$from = ActiveForm::begin([
+			'action' => $routes['create_cls_attr_action']
+		]);
+		?>
+		<div class="box box-default">
+			<div class="box-header with-border">
+				<div class="box-title">
+					<?= Yii::t('app', '添加分类属性')?>
+				</div>
+			</div>
+			<div class="box-body">
+				<div class="row">
+					<div class="col-md-4">
+						<?php
+						echo $form->field($newAttr, 'g_atr_code')->textInput();
+						echo $form->field($newAttr, 'g_atr_name')->textInput();
+						echo $form->field($newAttr, 'g_atr_show_name')->textInput();
+						?>
+					</div>
+					<div class="col-md-4">
+						<?php
+						echo $form->field($newAttr, 'g_atr_opt_img')->dropDownList(ConstMap::getConst('g_atr_opt_img'));
+						echo $form->field($newAttr, 'g_atr_type')->dropDownList(ConstMap::getConst('g_atr_type'));
+						echo $form->field($newAttr, 'g_atr_cls_type')->dropDownList(ConstMap::getConst('g_atr_cls_type'));
+						?>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="form-group">
+							<?= Html::submitButton(Yii::t('app', '添加'), ['class' => 'btn btn-primary']) ?>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<?php
+						$map = [
+							'g_atr_type' => ConstMap::getConst('g_atr_type')
+							,'g_atr_cls_type' => ConstMap::getConst('g_atr_cls_type')
+							,'g_atr_opt_img' => ConstMap::getConst('g_atr_opt_img')
+						];
+						echo GridView::widget([
+							'caption' => sprintf('分类：%s 子分类属性', $model->g_cls_name),
+							'dataProvider' => $clsAttrsProvider,
+							'columns' => [
+								['class' => CheckboxColumn::className()]
+								,['attribute' => 'g_atr_id']
+								,['attribute' => 'g_atr_name']
+								,['attribute' => 'g_atr_show_name']
+								,[
+									'attribute' => 'g_atr_opt_img'
+									,'value' => function($model, $key, $index, $column) use($map){
+										return $map['g_atr_opt_img'][$model['g_atr_opt_img']];
+									}
+								]
+								,[
+									'attribute' => 'g_atr_type'
+									,'value' => function($model, $key, $index, $column) use($map){
+										return $map['g_atr_type'][$model['g_atr_type']];
+									}
+								]
+								,[
+									'attribute' => 'g_atr_cls_type'
+									,'value' => function($model, $key, $index, $column) use($map){
+										return $map['g_atr_cls_type'][$model['g_atr_cls_type']];
+									}
+								]
 
+							]
+						]);
+						?>
+					</div>
+				</div>
+			</div>
+		</div>
+		<?php
+		ActiveForm::end();
+		?>
+	</div>
+</div>
 <!-- 子类列表 -->
 <?php
 echo Html::beginForm($routes['bulk_action'], 'post');

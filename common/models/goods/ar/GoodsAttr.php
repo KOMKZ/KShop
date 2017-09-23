@@ -29,7 +29,8 @@ class GoodsAttr extends ActiveRecord
     public function rules(){
         return [
             ['g_atr_code', 'string'],
-            ['g_atr_code', 'required'],
+            ['g_atr_code', 'default', 'value' => ''],
+            // ['g_atr_code', 'required'],
 
             ['g_atr_name', 'string'],
             ['g_atr_name', 'required'],

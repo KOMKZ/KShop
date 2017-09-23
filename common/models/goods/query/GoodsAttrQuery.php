@@ -19,14 +19,14 @@ class GoodsAttrQuery extends Object{
      * @param  boolean $returnQuery [description]
      * @return [type]               [description]
      */
-    public static function findAttrsByClsid($clsId, $returnQuery = false){
+    public static function findAttrsByClsid($clsId){
         $clsObjects = GoodsClassificationQuery::findParentsById($clsId);
         $clsIds = array_keys(ArrayHelper::index($clsObjects, 'g_cls_id'));
         $query = GoodsAttr::find()
                         ->where([
                             'g_atr_cls_id' => $clsIds
                         ]);
-        return $returnQuery ? $query : $query->all();
+        return $query;
     }
 
 }

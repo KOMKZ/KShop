@@ -395,10 +395,8 @@ class GoodsAttrModel extends Model
      * - g_atr_cls_id: integer, required 属性所属分类id
      * @return object 返回属性数据对象
      */
-    public function createAttr($attrData){
-        $goodsAttr = new GoodsAttr();
-        if(!$goodsAttr->load($attrData, '') || !$goodsAttr->validate()){
-            $this->addError('', $this->getOneErrMsg($goodsAttr));
+    public function createAttr($attrData, GoodsAttr $goodsAttr){
+        if(!$goodsAttr->load($attrData) || !$goodsAttr->validate()){
             return false;
         }
         $goodsAttr->g_atr_created_at = time();
