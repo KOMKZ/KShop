@@ -16,14 +16,6 @@ use yii\helpers\Html;
  */
 class ClassificationController extends AdminController
 {
-	public function actionDemo(){
-		$result = GoodsClassificationQuery::findClsAsTree();
-		return $this->render('demo', [
-			'routes' => [
-				'classification_result_action' => $this->getApiRoute(['classification/index'])
-			]
-		]);
-	}
 	public function actionBulk(){
 		$postData = Yii::$app->request->getBodyParams();
 		$type = ArrayHelper::getValue($postData, 'action', null);
@@ -72,7 +64,8 @@ class ClassificationController extends AdminController
 			'routes' => [
 				'bulk_action' => Url::to(['classification/bulk']),
 				'update_route' => ['classification/update'],
-				'delete_route' => ['classification/delete']
+				'delete_route' => ['classification/delete'],
+				'classification_result_action' => $this->getApiRoute(['classification/index'])
 			]
 		]);
 	}
@@ -105,23 +98,16 @@ class ClassificationController extends AdminController
 		if(!$parentCls){
 			throw new NotFoundHttpException(Yii::t('app', "指定的数据不存在"));
 		}
-		// 查找该分类的所有父类
-		if($parentCls->g_cls_id > 0){
-			$parents = GoodsClassificationQuery::findParentsById($parentCls->g_cls_id);
-		}else{
-			$parents = [];
-		}
-
-
 		// 初始化子分类
 		$newCls = new GoodsClassification();
 		$newCls->g_cls_pid = $parentCls->g_cls_id;
 
-		// 处理创建子分类请求
+
 		if('create_sub_action' == $type &&
 			Yii::$app->request->isPost &&
 			$postData = Yii::$app->request->getBodyParams()
 		){
+			// 处理创建子分类请求
 			$createResult = [];
 			if($clsModel->validateClsCreate($postData, $newCls)){
 				$createResult = $clsModel->createGoodsClassification($newCls);
@@ -135,13 +121,11 @@ class ClassificationController extends AdminController
 				list($code, $error) = $clsModel->getOneError();
 				Yii::$app->session->setFlash('error', Yii::t('app', "{$code}:{$error}"));
 			}
-		  }
-
-		// 更新父级分类信息
-		if('update_parent_action' == $type &&
+		}elseif('update_parent_action' == $type &&
 			 Yii::$app->request->isPost &&
 			$postData = Yii::$app->request->getBodyParams()
 		){
+			// 更新父级分类信息
 			$updateResult = [];
 			if($clsModel->validateClsUpdate($postData, $parentCls)){
 				$updateResult = $clsModel->updateGoodsClassification($parentCls);
@@ -156,6 +140,14 @@ class ClassificationController extends AdminController
 			}
 		}
 
+
+
+		// 查找该分类的所有父类
+		if($parentCls->g_cls_id > 0){
+			$parents = GoodsClassificationQuery::findParentsById($parentCls->g_cls_id);
+		}else{
+			$parents = [];
+		}
 		// 查找父级分类儿子
 		$childClsQuery = GoodsClassificationQuery::findChildrenByCls($parentCls);
 		$childClsProvider = new ActiveDataProvider([
