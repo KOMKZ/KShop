@@ -213,6 +213,7 @@ class ClassificationController extends AdminController
 			]
 		]);
 	}
+	
 	public function actionCreate(){
 		$newCls = new GoodsClassification();
 		$clsModel = new ClassificationModel();

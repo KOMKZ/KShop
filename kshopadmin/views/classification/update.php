@@ -88,8 +88,10 @@ $clsPathHtml = Breadcrumbs::widget(['links' => $clsPath, 'homeLink' => false]);
 	</div>
 	<?php ActiveForm::end();?>
 </div>
+
 <div class="row">
 	<div class="col-md-12">
+		<!-- 添加子分类属性表单 -->
 		<?php
 		$from = ActiveForm::begin([
 			'action' => $routes['create_cls_attr_action']
