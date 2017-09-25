@@ -30,6 +30,7 @@ class Goods extends ActiveRecord
 	public $g_start_at_string;
 	public $g_end_at_string;
 
+	
 	public static function tableName(){
 		return "{{%goods}}";
 	}

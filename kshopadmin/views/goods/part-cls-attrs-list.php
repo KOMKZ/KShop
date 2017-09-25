@@ -2,6 +2,7 @@
 use yii\grid\GridView;
 use common\models\staticdata\ConstMap;
 use yii\grid\CheckboxColumn;
+use yii\helpers\Html;
 ?>
 <div class="box box-default">
 	<div class="box-header with-border">
@@ -43,7 +44,22 @@ use yii\grid\CheckboxColumn;
 							return $map['g_atr_cls_type'][$model['g_atr_cls_type']];
 						}
 					]
-
+					,[
+						'class' => 'yii\grid\ActionColumn',
+						'header' => '操作',
+						// 'buttonOptions' => ['target' => '_blank'],
+						'template' => '{add-to-as-goods-meta}',
+						'urlCreator' => function ($action, $model, $key, $index){
+							return '#';
+						},
+						'buttons' => [
+							'add-to-as-goods-meta' => function($url, $model, $key){
+								return Html::a(Yii::t('app', '添加为商品元属性'), $url, [
+									'class' => 'btn btn-primary btn-xs add-to-as-goods-meta-btn'
+								]);
+							},
+						],
+					]
 				]
 			]);
 
@@ -73,6 +89,22 @@ use yii\grid\CheckboxColumn;
 						,'value' => function($model, $key, $index, $column) use($map){
 							return $map['g_atr_cls_type'][$model['g_atr_cls_type']];
 						}
+					]
+					,[
+						'class' => 'yii\grid\ActionColumn',
+						'header' => '操作',
+						// 'buttonOptions' => ['target' => '_blank'],
+						'template' => '{add-to-as-goods-attr}',
+						'urlCreator' => function ($action, $model, $key, $index){
+							return '#';
+						},
+						'buttons' => [
+							'add-to-as-goods-attr' => function($url, $model, $key){
+								return Html::a(Yii::t('app', '添加为商品属性'), $url, [
+									'class' => 'btn btn-primary btn-xs add-to-as-goods-attr-btn'
+								]);
+							},
+						],
 					]
 
 				]

@@ -3,26 +3,30 @@ use yii\bootstrap\ActiveForm;
 use common\models\staticdata\ConstMap;
 use common\assets\BootstrapTreeAsset;
 use common\assets\DateTimePickerAsset;
+use common\assets\JsonEditorAsset;
 BootstrapTreeAsset::register($this);
 DateTimePickerAsset::register($this);
+JsonEditorAsset::register($this);
 $url = $routes['classification_result_action'];
 $clsMetaUrl = $routes['cls_meta_list_action'];
 $js = <<<JS
 
+// 选择分类 设置嗯分类相关信息，属性列表，表单分类字段名称
 function set_cls_info_from_select(node){
 	$('#goods-g_cls_id').val(node.g_cls_id);
 	$('#goods-g_cls_id_label').val(node.g_cls_name);
-	set_cls_meta_html(node.g_cls_id);
+	set_cls_attr_grid_html(node.g_cls_id);
 }
 
-function set_cls_meta_html(id){
+// 设置属性网格列表html
+function set_cls_attr_grid_html(id){
 	$.get("{$clsMetaUrl}?id=" + id, function(res){
 		$('#cls-metas-container').html(res);
 	})
 }
 
 // 初始化分类元属性列表
-set_cls_meta_html(0);
+set_cls_attr_grid_html(0);
 
 // 初始化分类树
 $.get("{$url}", function(res){
@@ -41,6 +45,7 @@ $.get("{$url}", function(res){
 	}
 });
 
+// 定义搜索分类逻辑
 var search = function(e) {
   var pattern = $('#input-search').val();
   var options = {
@@ -67,10 +72,45 @@ $('#btn-clear-search').on('click', function (e) {
 });
 
 
-
+// 设置日期时间字段控件
 $('.datepicker').datetimepicker({
   language: 'zh-CN',
   format: 'yyyy-mm-dd hh:ii:ss'
+});
+
+// g_meta 结构 Json editor 初始化
+JSONEditor.defaults.options.theme = 'bootstrap3';
+
+var editor = new JSONEditor(document.getElementById('g-meta-json-widget'),{
+  // The schema for the editor
+  schema: {
+	type: "array",
+	format: "tabs",
+	items: {
+	  title: "元属性",
+	  headerTemplate: "{{self.g_atr_id}} - {{self.g_atr_name}}",
+	  "type": "object",
+	  "properties": {
+		"g_atr_id": {
+		  "type": "integer"
+		},
+		"gm_value": {
+			"type": "string"
+		},
+		"g_atr_name": {
+			"type": "string"
+		}
+	  }
+	}
+  },
+
+
+
+  // Disable additional properties
+  no_additional_properties: true,
+
+  // Require all properties by default
+  required_by_default: true
 });
 
 
@@ -163,7 +203,44 @@ $form = ActiveForm::begin();
 	<div class="col-md-8">
 		<div class="row">
 			<div class="col-md-12" id="cls-metas-container">
-				
+
+			</div>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<?php
+		$form = ActiveForm::begin([
+
+		]);
+		?>
+		<div class="box box-default">
+			<div class="box-header with-border">
+				<div class="box-title">
+					<?= Yii::t('app', '编辑商品元属性')?>
+				</div>
+			</div>
+			<div class="box-body">
+				<div id="g-meta-json-widget">
+
+				</div>
+			</div>
+		</div>
+		<?php
+		ActiveForm::end();
+		?>
+	</div>
+
+	<div class="col-md-6">
+		<div class="box box-default">
+			<div class="box-header with-border">
+				<div class="box-title">
+					<?= Yii::t('app', '编辑商品sku/option属性')?>
+				</div>
+			</div>
+			<div class="box-body">
+
 			</div>
 		</div>
 	</div>
