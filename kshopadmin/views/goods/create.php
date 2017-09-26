@@ -26,7 +26,7 @@ function set_cls_attr_grid_html(id){
 }
 
 // 初始化分类元属性列表
-set_cls_attr_grid_html(0);
+set_cls_attr_grid_html($('#goods-g_cls_id').val());
 
 // 初始化分类树
 $.get("{$url}", function(res){
@@ -104,13 +104,14 @@ var editor = new JSONEditor(document.getElementById('g-meta-json-widget'),{
 	}
   },
 
-
-
-  // Disable additional properties
   no_additional_properties: true,
-
-  // Require all properties by default
+  disable_edit_json: false,
   required_by_default: true
+});
+
+// 添加属性到编辑元属性菜单当中
+$('.add-to-as-goods-meta-btn').click(function(){
+	alert();
 });
 
 
@@ -135,7 +136,7 @@ $form = ActiveForm::begin();
 				echo $form->field($model, 'g_primary_name')->textInput();
 				echo $form->field($model, 'g_secondary_name')->textInput();
 				echo $form->field($model, 'g_status')->dropDownList(ConstMap::getConst('g_status'));
-				echo $form->field($model, 'g_cls_id')->textInput(['disabled' => true]);
+				echo $form->field($model, 'g_cls_id')->textInput(['disabled' => true, 'value' => 33]);
 				echo $form->field($model, 'g_cls_id_label')->textInput(['disabled' => true]);
 				echo $form->field($model, 'g_start_at_string')->textInput(['class' => 'datepicker form-control']);
 				echo $form->field($model, 'g_end_at_string')->textInput(['class' => 'datepicker form-control']);
