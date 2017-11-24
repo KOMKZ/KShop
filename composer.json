@@ -26,7 +26,8 @@
         "league/csv": "^8.0",
         "omnilight/yii2-shopping-cart": "^1.2",
         "toplan/phpsms": "~1.8",
-        "dmstr/yii2-adminlte-asset": "^2.4"
+        "dmstr/yii2-adminlte-asset": "^2.4",
+        "php-ffmpeg/php-ffmpeg": "^0.11.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

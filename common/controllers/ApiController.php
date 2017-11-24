@@ -3,6 +3,7 @@ namespace common\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\filters\auth\HttpBearerAuth;
 
 /**
  *
@@ -26,10 +27,14 @@ class ApiController extends Controller
 					'Origin' => ['*'],
 					'Access-Control-Request-Method' => ['GET', 'POST'],
 					'Access-Control-Request-Headers' => ['*'],
-					'Access-Control-Allow-Credentials' => null,
+					'Access-Control-Allow-Credentials' => true,
 					'Access-Control-Max-Age' => 86400,
 					'Access-Control-Expose-Headers' => [],
 				],
+			],
+			'bearerAuth' => [
+				'class' => HttpBearerAuth::className(),
+				'optional' => ['login']
 			]
 		];
 	}
