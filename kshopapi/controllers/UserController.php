@@ -18,7 +18,6 @@ class UserController extends ApiController{
 	public function actionCreate(){
 		$postData = Yii::$app->request->getBodyParams();
 		$uModel = new UserModel();
-		return $this->succ($postData);
 		$user = $uModel->createUser($postData);
 		if(!$user){
 			return $this->error(null, $uModel->getErrors());
