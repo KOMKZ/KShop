@@ -7,13 +7,18 @@ use common\models\user\UserModel;
 use common\models\user\query\UserQuery;
 use yii\filters\auth\HttpBearerAuth;
 use yii\base\ErrorException;
+use yii\data\ActiveDataProvider;
 
 /**
  *
  */
 class UserController extends ApiController{
 	public function actionList(){
-		$this->succ(1);
+		sleep(10);
+		$provider = new ActiveDataProvider([
+			'query' => UserQuery::findSafeField()->asArray()
+		]);
+		return $this->succItems($provider->getModels(), $provider->totalCount);
 	}
 	public function actionCreate(){
 		$postData = Yii::$app->request->getBodyParams();

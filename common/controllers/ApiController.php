@@ -42,6 +42,15 @@ class ApiController extends Controller
 	public function notfound($error){
 		return $this->error(404, $error ? $error : Yii::t('app', '数据不存在'));
 	}
+	public function succItems($items, $count = null){
+		$res = $this->getRes();
+		$res['data'] = [
+			'items' => $items,
+			'count' => null === $count ? count($items) : $count
+		];
+		$res['message'] = '';
+		return $this->asJson($res);
+	}
 	public function succ($data = null){
 		$res = $this->getRes();
 		$res['data'] = $data;
