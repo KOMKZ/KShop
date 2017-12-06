@@ -14,7 +14,6 @@ use yii\data\ActiveDataProvider;
  */
 class UserController extends ApiController{
 	public function actionList(){
-		sleep(10);
 		$provider = new ActiveDataProvider([
 			'query' => UserQuery::findSafeField()->asArray()
 		]);

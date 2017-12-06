@@ -8,10 +8,33 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\VarDumper;
 use common\helpers\ChinaAreaHelper;
 use PhpAmqpLib\Message\AMQPMessage;
+use common\models\user\UserModel;
 
 
 class ToolController extends Controller{
 	public $is_test = false;
+
+	public function actionBulk(){
+		$max = 100;
+		$default = [
+			'u_username' => 'kitralzhong%s',
+			'password' => 'philips',
+			'password_confirm' => 'philips',
+			'u_email' => 'kitralzhong%s@qq.com',
+			'u_auth_status' => 'had_auth',
+			'u_status' => 'active',
+		];
+		$i = 0;
+		$uModel = new UserModel();
+		while($i <= $max){
+			$defaultData = $default;
+			$defaultData['u_username'] = sprintf($defaultData['u_username'], $i);
+			$defaultData['u_email'] = sprintf($defaultData['u_email'], $i);
+			$uModel->createUser($defaultData);
+			$i++;
+			echo $defaultData['u_username'] . "\n";
+		}
+	}
 
 	public function actionDemo(){
 		$in = "/home/master/tmp/hse/animation01.mp4";
