@@ -51,18 +51,18 @@ class User extends ActiveRecord implements IdentityInterface
 		return $fields;
 	}
 	public function scenarios(){
-        return [
-            'default' => [
+		return [
+			'default' => [
 				'u_username', 'u_email', 'u_status', 'u_auth_status', 'password', 'u_access_token', 'password', 'password_confirm'
-            ],
+			],
 			'create' => [
 				'u_username', 'u_email', 'u_status', 'u_auth_status', 'password', 'u_access_token', 'password', 'password_confirm'
 			],
-            'login' => [
+			'login' => [
 				'u_email', 'password', 'rememberMe'
-            ]
-        ];
-    }
+			]
+		];
+	}
 	public function rules(){
 		return [
 			['rememberMe', 'in', 'range' => [1, 0]],
@@ -75,6 +75,7 @@ class User extends ActiveRecord implements IdentityInterface
 
 			['u_email', 'required'],
 			['u_email', 'email'],
+			['u_email', 'string', 'min' => 5, 'max' => 30],
 			['u_email', 'unique', 'targetClass' => self::className(), 'on' => ['create', 'update']],
 
 			['u_status', 'required'],
