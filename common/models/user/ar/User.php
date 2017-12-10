@@ -21,6 +21,8 @@ class User extends ActiveRecord implements IdentityInterface
 
 	const STATUS_NO_AUTH = 'not_auth';
 
+	const STATUS_LOCKED = 'locked';
+
 	const NOT_AUTH = 'not_auth';
 
 	const HAD_AUTH = 'had_auth';
@@ -57,8 +59,11 @@ class User extends ActiveRecord implements IdentityInterface
 			],
 			'create' => [
 				'u_username', 'u_email', 'u_status', 'u_auth_status', 'password', 'u_access_token', 'password', 'password_confirm'
-			],
-			'login' => [
+			]
+			,'update' => [
+				'u_status', 'u_auth_status', 'password', 'password_confirm'
+			]
+			,'login' => [
 				'u_email', 'password', 'rememberMe'
 			]
 		];

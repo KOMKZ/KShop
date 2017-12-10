@@ -3,7 +3,8 @@
 return [
 	'u_status' => [
 		\common\models\user\ar\User::STATUS_ACTIVE => Yii::t('app', '可用'),
-		\common\models\user\ar\User::STATUS_NO_AUTH => Yii::t('app', "没有验证")
+		\common\models\user\ar\User::STATUS_NO_AUTH => Yii::t('app', "没有验证"),
+		\common\models\user\ar\User::STATUS_LOCKED => Yii::t('app', '锁定状态')
 	],
 	'u_auth_status' => [
 		\common\models\user\ar\User::NOT_AUTH => Yii::t('app', '未验证'),

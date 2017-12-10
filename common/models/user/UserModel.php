@@ -106,6 +106,21 @@ class UserModel extends Model
 		}
 		return $user;
 	}
+
+	public function updateUser(User $user, $data){
+		$user->scenario = 'update';
+		if(!$user->load($data, '') || !$user->validate()){
+			$this->addErrors($user->getErrors());
+			return false;
+		}
+		if(false === $user->update(false)){
+			$this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', "数据库更新失败"));
+			return false;
+		}
+		return $user;
+	}
+
+
 	public function validatePassword($user, $password){
 		return Yii::$app->security->validatePassword($password, $user->u_password_hash);
 	}
