@@ -3,12 +3,14 @@ namespace common\models\user\query;
 
 use common\models\user\ar\User;
 use yii\base\Object;
-
+use common\base\Filter;
 /**
  *
  */
 class UserQuery extends Object
 {
+    use Filter;
+
     public static function find(){
         return User::find();
     }

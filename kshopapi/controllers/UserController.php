@@ -14,6 +14,13 @@ use yii\helpers\ArrayHelper;
  *
  */
 class UserController extends ApiController{
+	public function behaviors(){
+		return [];
+	}
+	public function actionFilter(){
+		$getData = Yii::$app->request->get();
+		
+	}
 	public function actionUpdate(){
 		$postData = Yii::$app->request->getBodyParams();
 		if(empty($postData['u_id'])){

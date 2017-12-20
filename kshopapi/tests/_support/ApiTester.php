@@ -1,5 +1,5 @@
 <?php
-namespace kshopapi\tests;
+
 
 /**
  * Inherited Methods

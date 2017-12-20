@@ -1,8 +1,0 @@
-class_name: UnitTester
-modules:
-    enabled:
-        - Asserts
-        - PhpBrowser
-    config:
-        PhpBrowser:
-            url: http://localhost:8011
