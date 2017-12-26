@@ -13,7 +13,6 @@ use yii\filters\auth\HttpBearerAuth;
  */
 class AuthController extends ApiController
 {
-
 	public function actionLogin(){
 		$post = Yii::$app->request->getBodyParams();
 		if(empty($post['u_email']) || empty($post['password']) || empty($post['type'])){
@@ -46,6 +45,14 @@ class AuthController extends ApiController
 			return $this->error('401', Yii::t('app', "系统生成access-token失败"));
 		}
 		return $this->succ(['jwt' => $token]);
+	}
+	
+	public function actionGetInfo(){
+		$user = Yii::$app->user->identity;
+		$userInfo = $user->toArray();
+		$userInfo['u_role'] = "admin";
+		$userInfo['u_avatar'] = "https://avatars2.githubusercontent.com/u/813734?s=88&v=4";
+		return $this->succ($userInfo);
 	}
 
 	public function actionLogout(){

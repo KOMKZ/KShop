@@ -13,7 +13,6 @@ use common\models\user\UserModel;
 
 class ToolController extends Controller{
 	public $is_test = false;
-
 	public function actionBulk(){
 		$max = 100;
 		$default = [

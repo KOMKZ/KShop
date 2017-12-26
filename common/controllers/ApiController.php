@@ -4,7 +4,7 @@ namespace common\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\filters\auth\HttpBearerAuth;
-
+use yii\filters\RateLimiter;
 /**
  *
  */
@@ -31,6 +31,9 @@ class ApiController extends Controller
 					'Access-Control-Max-Age' => 86400,
 					'Access-Control-Expose-Headers' => [],
 				],
+			],
+			'rateLimiter' => [
+				'class' => RateLimiter::className(),
 			],
 			'bearerAuth' => [
 				'class' => HttpBearerAuth::className(),

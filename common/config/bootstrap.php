@@ -28,3 +28,6 @@ Event::on(PayTrace::className(), PayTrace::EVENT_AFTER_PAYED, [TransModel::class
 Event::on(Transaction::className(), Transaction::EVENT_AFTER_PAYED, [UserModel::className(), 'handleReceivePayedEvent']);
 Event::on(Transaction::className(), Transaction::EVENT_AFTER_PAYED, [OrderModel::className(), 'handleReceivePayedEvent']);
 Event::on(Goods::className(), Goods::EVENT_AFTER_UPDATE, [ActionModel::className(), "handle"]);
+
+// fix bug https://github.com/auth0/auth0-PHP/issues/56
+\Firebase\JWT\JWT::$leeway = 5;

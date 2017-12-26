@@ -11,11 +11,14 @@ use common\models\set\SetModel;
 use common\models\user\UserModel;
 use Firebase\JWT\JWT;
 use yii\behaviors\TimestampBehavior;
+use yii\filters\RateLimitInterface;
+use common\models\user\ar\UserData;
+use yii\web\ForbiddenHttpException;
 
 /**
  *
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 {
 	const STATUS_ACTIVE = 'active';
 
@@ -99,8 +102,69 @@ class User extends ActiveRecord implements IdentityInterface
 			['password_confirm', 'required', 'on' => 'create'],
 			['password_confirm', 'required', 'on' => 'update', 'skipOnEmpty' => true],
 			['password_confirm', 'compare', 'compareAttribute' => 'password'],
-
 		];
+	}
+
+	/**
+	 * Returns the maximum number of allowed requests and the window size.
+	 * @param \yii\web\Request $request the current request
+	 * @param \yii\base\Action $action the action to be executed
+	 * @return array an array of two elements. The first element is the maximum number of allowed requests,
+	 * and the second element is the size of the window in seconds.
+	 */
+	public function getRateLimit($request, $action){
+		// todo
+		return static::getDefaultRateLimit();
+	}
+
+	public static function getDefaultRateLimit(){
+		return [60, 60];
+	}
+
+	/**
+	 * Loads the number of allowed requests and the corresponding timestamp from a persistent storage.
+	 * @param \yii\web\Request $request the current request
+	 * @param \yii\base\Action $action the action to be executed
+	 * @return array an array of two elements. The first element is the number of allowed requests,
+	 * and the second element is the corresponding UNIX timestamp.
+	 */
+	public function loadAllowance($request, $action){
+		list($max, $peroid) = static::getDefaultRateLimit();
+		$user = Yii::$app->user->identity;
+		$userData = $user->user_data;
+		if(!$userData){
+			$userData = (new UserModel())->createUserDataFormUser($user, [
+				'u_remain_time' => $max,
+				'u_last_timestamp' => $timestamp
+			]);
+			if(!$userData){
+				return [0, time()];
+			}
+		}
+		if($userData->u_remain_time == 0){
+			list($max, $period) = [$max, $peroid];
+			if((time() - $userData->u_last_timestamp) >= $period){
+				return [$max, time()];
+			}
+		}
+		return [$userData->u_remain_time, time()];
+	}
+
+	/**
+	 * Saves the number of allowed requests and the corresponding timestamp to a persistent storage.
+	 * @param \yii\web\Request $request the current request
+	 * @param \yii\base\Action $action the action to be executed
+	 * @param int $allowance the number of allowed requests remaining.
+	 * @param int $timestamp the current timestamp.
+	 */
+	public function saveAllowance($request, $action, $allowance, $timestamp){
+		// todo
+		$user = Yii::$app->user->identity;
+		if($userData = $user->user_data){
+			$userData->u_remain_time = $allowance - 1;
+			$userData->u_last_timestamp = $timestamp;
+			$userData->update(false);
+		}
 	}
 
 	public static function tableName(){
@@ -111,19 +175,24 @@ class User extends ActiveRecord implements IdentityInterface
 	{
 		return UserQuery::findActive()->andWhere(['=', 'u_id', $id])->one();
 	}
-
+	
+	
 	public static function findIdentityByAccessToken($token, $type = null)
 	{
 		try {
 			$payload = UserModel::parseAccessToken($token, $type);
 			$user = UserQuery::findActive()->andWhere(['=', 'u_email', $payload->data->user_info->u_email])->one();
-			if($user->u_access_token != $payload->jti){
-				return null;
+			if($user->u_access_token == $payload->jti){
+				return $user;
 			}
-			return $user;
+			return $null;
 		} catch (\Exception $e) {
 			return null;
 		}
+	}
+
+	public function getUser_data(){
+		return $this->hasOne(UserData::className(), ['u_id' => 'u_id']);
 	}
 
 	public static function findByUsername($username)

@@ -4,6 +4,7 @@ namespace common\models\user;
 use Yii;
 use common\models\Model;
 use common\models\user\ar\User;
+use common\models\user\ar\UserData;
 use common\models\staticdata\Errno;
 use yii\filters\auth\HttpBearerAuth;
 use yii\web\ForbiddenHttpException;
@@ -73,6 +74,20 @@ class UserModel extends Model
 		return Yii::$app->db->createCommand()
 							->insert(UserBillRecord::tableName(), $billData)
 							->execute();
+	}
+
+	public function createUserDataFormUser(User $user, $data){
+		$userData = new UserData();
+		if(!$userData->load($data, '') || !$userData->validate()){
+			$this->addErrors($userData->getErrors());
+			return false;
+		}
+		$userData->u_id = $user->u_id;
+		if(!$userData->insert(false)){
+			$this->addError('', Errno::DB_INSERT_FAIL);
+			return false;
+		}
+		return $userData;
 	}
 
 	/**

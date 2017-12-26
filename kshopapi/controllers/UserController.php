@@ -14,13 +14,12 @@ use yii\helpers\ArrayHelper;
  *
  */
 class UserController extends ApiController{
-	public function behaviors(){
-		return [];
-	}
+
 	public function actionFilter(){
-		$getData = Yii::$app->request->get();
-		
+		$postData = Yii::$app->request->getBodyParams();
+		echo 1;
 	}
+	
 	public function actionUpdate(){
 		$postData = Yii::$app->request->getBodyParams();
 		if(empty($postData['u_id'])){
@@ -37,6 +36,7 @@ class UserController extends ApiController{
 		}
 		return $this->succ($user->toArray());
 	}
+	
 	public function actionView($u_id){
 		$user = UserQuery::findSafeField()->andWhere(['u_id' => $u_id])->one();
 		if(!$user){
@@ -44,6 +44,7 @@ class UserController extends ApiController{
 		}
 		return $this->succ($user);
 	}
+	
 	public function actionList(){
 		$getData = Yii::$app->request->get();
 		$defaultOrder = [];
