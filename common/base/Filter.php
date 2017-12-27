@@ -20,7 +20,7 @@ class Filter extends Object
 			throw new InvalidConfigException(Yii::t('app', 'Attribute query cant not be empty.'));
 		}
 		$this->formatAttributes();
-		
+
 	}
 	public function parse(){
 		$params = $this->parseParams();
@@ -33,10 +33,13 @@ class Filter extends Object
 			if(is_array($this->attributes[$field]) && (3 === count($this->attributes[$field]))){
 				$conditionDef = $this->attributes[$field];
 				if(is_string($conditionVal)){
-					$conditionDef[2] = strtr($conditionDef[2], ['%s%' => $conditionVal]);
+					$conditionDef[2] = is_callable($conditionDef[2]) ?
+									   $conditionDef[2]($conditionVal)
+									   :
+									   strtr($conditionDef[2], ['%s%' => $conditionVal]);
 				}else{
 					$conditionDef[2] = $conditionVal;
-				}				
+				}
 			}elseif(is_string($this->attributes[$field])){
 				$conditionDef = ['=', $this->attributes[$field], $conditionVal];
 			}else{

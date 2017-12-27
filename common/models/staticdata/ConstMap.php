@@ -5,6 +5,7 @@ use Yii;
 use yii\base\Object;
 use yii\base\InvalidParamException;
 
+
 /**
  *
  */
@@ -22,5 +23,14 @@ class ConstMap extends Object
 			throw new InvalidParamException("{$name} 不存在");
 		}
 		return $onlyValue ? array_keys(self::$map[$name]) : self::$map[$name];
+	}
+	public static function getSchemas(){
+		$schemas = [
+			\common\models\user\ar\User::className() => [
+				'safe' => ['u_password_hash', 'u_password_reset_token', 'u_access_token', 'u_auth_key']
+			]
+		];
+		$class = \common\models\user\ar\User::className();
+		console($class::getTableSchema());
 	}
 }

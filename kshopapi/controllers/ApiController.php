@@ -16,11 +16,16 @@ class ApiController extends Controller
 		$behaviors['bearerAuth']['optional'][] = 'api/index';
 		$behaviors['bearerAuth']['optional'][] = 'api/error';
 		$behaviors['bearerAuth']['optional'][] = 'api/enums-map';
+		$behaviors['bearerAuth']['optional'][] = 'api/schemas';
 		return $behaviors;
 	}
 
 	public function actionEnumsMap(){
 		return $this->succ(ConstMap::getConst());
+	}
+
+	public function actionSchemas(){
+		return $this->succ(ConstMap::getSchemas());
 	}
 
 	public function actionIndex(){

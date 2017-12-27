@@ -15,10 +15,10 @@ use common\base\Filter;
  *
  */
 class UserController extends ApiController{
-	
-	
 
-	
+
+
+
 	public function actionUpdate(){
 		$postData = Yii::$app->request->getBodyParams();
 		if(empty($postData['u_id'])){
@@ -35,7 +35,7 @@ class UserController extends ApiController{
 		}
 		return $this->succ($user->toArray());
 	}
-	
+
 	public function actionView($u_id){
 		$user = UserQuery::findSafeField()->andWhere(['u_id' => $u_id])->one();
 		if(!$user){
@@ -43,7 +43,7 @@ class UserController extends ApiController{
 		}
 		return $this->succ($user);
 	}
-	
+
 	public function actionList(){
 		$getData = Yii::$app->request->get();
 		$defaultOrder = [
@@ -57,13 +57,25 @@ class UserController extends ApiController{
 				'attributes' => [
 					'u_status',
 					'u_auth_status',
-					'u_email' => ['like', 'u_email', '%s%'] 
+					'u_email' => ['like', 'u_email', '%s%'],
+					'u_created_at_begin' => ['>=', 'u_created_at', function($dateStr){
+						return strtotime($dateStr);
+					}],
+					'u_created_at_end' => ['<=', 'u_created_at', function($dateStr){
+						return strtotime($dateStr);
+					}],
+					'u_updated_at_begin' => ['>=', 'u_updated_at', function($dateStr){
+						return strtotime($dateStr);
+					}],
+					'u_updated_at_end' => ['<=', 'u_updated_at', function($dateStr){
+						return strtotime($dateStr);
+					}],
 				],
 				'query' => $query,
 				'params' => $filterParams
 			]))->parse();
 		}
-		
+
 		$provider = new ActiveDataProvider([
 			'query' => $query->asArray(),
 			'sort' => [
