@@ -6,7 +6,7 @@ use common\controllers\ApiController;
 use common\models\user\UserModel;
 use common\models\user\query\UserQuery;
 use yii\base\ErrorException;
-use yii\filters\auth\HttpBearerAuth;
+use common\filters\auth\HttpBearerAuth;
 
 /**
  *

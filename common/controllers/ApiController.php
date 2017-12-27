@@ -3,7 +3,7 @@ namespace common\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\filters\auth\HttpBearerAuth;
+use common\filters\auth\HttpBearerAuth;
 use yii\filters\RateLimiter;
 /**
  *
@@ -37,7 +37,8 @@ class ApiController extends Controller
 			],
 			'bearerAuth' => [
 				'class' => HttpBearerAuth::className(),
-				'optional' => ['login']
+				'except' => ["user/list"],
+				'optional' => ['auth/login']
 			]
 		];
 	}

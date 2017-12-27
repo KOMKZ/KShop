@@ -6,7 +6,7 @@ use common\models\Model;
 use common\models\user\ar\User;
 use common\models\user\ar\UserData;
 use common\models\staticdata\Errno;
-use yii\filters\auth\HttpBearerAuth;
+use common\filters\auth\HttpBearerAuth;
 use yii\web\ForbiddenHttpException;
 use common\models\set\SetModel;
 use Firebase\JWT\JWT;

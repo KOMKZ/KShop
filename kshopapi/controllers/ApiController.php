@@ -13,9 +13,9 @@ class ApiController extends Controller
 {
 	public function behaviors(){
 		$behaviors = parent::behaviors();
-		$behaviors['bearerAuth']['optional'][] = 'index';
-		$behaviors['bearerAuth']['optional'][] = 'error';
-		$behaviors['bearerAuth']['optional'][] = 'enums-map';
+		$behaviors['bearerAuth']['optional'][] = 'api/index';
+		$behaviors['bearerAuth']['optional'][] = 'api/error';
+		$behaviors['bearerAuth']['optional'][] = 'api/enums-map';
 		return $behaviors;
 	}
 

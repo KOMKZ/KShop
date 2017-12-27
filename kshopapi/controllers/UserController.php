@@ -9,16 +9,15 @@ use yii\filters\auth\HttpBearerAuth;
 use yii\base\ErrorException;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
+use common\base\Filter;
 
 /**
  *
  */
 class UserController extends ApiController{
+	
+	
 
-	public function actionFilter(){
-		$postData = Yii::$app->request->getBodyParams();
-		echo 1;
-	}
 	
 	public function actionUpdate(){
 		$postData = Yii::$app->request->getBodyParams();
@@ -47,14 +46,32 @@ class UserController extends ApiController{
 	
 	public function actionList(){
 		$getData = Yii::$app->request->get();
-		$defaultOrder = [];
-		if(!empty($getData['orderBy'])){
-			$defaultOrder[$getData['orderBy']] = 1 == ArrayHelper::getValue($getData, 'ascending', 1) ? SORT_DESC : SORT_ASC;
+		$defaultOrder = [
+			'u_created_at' => SORT_DESC,
+			'u_updated_at' => SORT_DESC
+		];
+		$query = UserQuery::findSafeField();
+		$filterParams = json_decode(ArrayHelper::getValue($getData, 'filters', ''), true);
+		if(!empty($filterParams)){
+			$query = (new Filter([
+				'attributes' => [
+					'u_status',
+					'u_auth_status',
+					'u_email' => ['like', 'u_email', '%s%'] 
+				],
+				'query' => $query,
+				'params' => $filterParams
+			]))->parse();
 		}
+		
 		$provider = new ActiveDataProvider([
-			'query' => UserQuery::findSafeField()->asArray(),
+			'query' => $query->asArray(),
 			'sort' => [
-				'defaultOrder' => $defaultOrder
+				'defaultOrder' => $defaultOrder,
+				'attributes' => [
+					'u_created_at',
+					'u_updated_at'
+				]
 			]
 		]);
 		return $this->succItems($provider->getModels(), $provider->totalCount);
