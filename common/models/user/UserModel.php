@@ -113,8 +113,6 @@ class UserModel extends Model
 							User::STATUS_NO_AUTH : $user->u_status;
 		$user->u_password_hash = static::buildPasswordHash($user->password);
 		$user->u_password_reset_token = '';
-		$user->u_created_at = time();
-		$user->u_updated_at = time();
 		if(!$user->insert(false)){
 			$this->addError('', Errno::DB_INSERT_FAIL);
 			return false;
@@ -127,6 +125,9 @@ class UserModel extends Model
 		if(!$user->load($data, '') || !$user->validate()){
 			$this->addErrors($user->getErrors());
 			return false;
+		}
+		if($user->password){
+			$user->u_password_hash = static::buildPasswordHash($user->password);
 		}
 		if(false === $user->update(false)){
 			$this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', "数据库更新失败"));

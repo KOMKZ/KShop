@@ -2,7 +2,7 @@
 namespace kshopapi\controllers;
 
 use Yii;
-use common\controllers\ApiController as Controller;
+use kshopapi\controllers\ApiController as Controller;
 use common\models\file\FileModel;
 use common\models\file\query\FileQuery;
 use common\models\file\ar\FileTask;
@@ -13,16 +13,32 @@ use common\models\file\drivers\Oss;
 use yii\web\NotFoundHttpException;
 use yii\base\InvalidParamException;
 use yii\web\ForbiddenHttpException;
+use yii\data\ActiveDataProvider;
 /**
  *
  */
 class FileController extends Controller
 {
     public function actionIndex(){
-
+        
     }
 
-
+    public function actionList(){
+        $query = FileQuery::find();
+		$defaultOrder = [
+			'file_created_time' => SORT_DESC,
+		];
+		$provider = new ActiveDataProvider([
+			'query' => $query,
+			'sort' => [
+				'defaultOrder' => $defaultOrder,
+				'attributes' => [
+					'file_created_time'
+				]
+			]
+		]);
+		return $this->succItems($provider->getModels(), $provider->totalCount);
+    }
 
     public function actionChunkTaskCreate(){
         $fileModel = new FileModel();

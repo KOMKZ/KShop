@@ -32,9 +32,9 @@ class ApiController extends Controller
 					'Access-Control-Expose-Headers' => [],
 				],
 			],
-			'rateLimiter' => [
-				'class' => RateLimiter::className(),
-			],
+			// 'rateLimiter' => [
+			// 	'class' => RateLimiter::className(),
+			// ],
 			'bearerAuth' => [
 				'class' => HttpBearerAuth::className(),
 				'except' => ["user/list"],

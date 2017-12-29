@@ -17,6 +17,7 @@ class ApiController extends Controller
 		$behaviors['bearerAuth']['optional'][] = 'api/error';
 		$behaviors['bearerAuth']['optional'][] = 'api/enums-map';
 		$behaviors['bearerAuth']['optional'][] = 'api/schemas';
+		$behaviors['bearerAuth']['optional'][] = 'file/output';
 		return $behaviors;
 	}
 

@@ -15,10 +15,6 @@ use common\base\Filter;
  *
  */
 class UserController extends ApiController{
-
-
-
-
 	public function actionUpdate(){
 		$postData = Yii::$app->request->getBodyParams();
 		if(empty($postData['u_id'])){

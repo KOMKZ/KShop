@@ -53,7 +53,7 @@ class File extends ActiveRecord
             'file_query_id',
             'file_url'
         ]);
-        $extra = ['file_source_path'];
+        $extra = ['file_source_path', 'file_medium_info'];
         foreach($extra as $attr){
             ArrayHelper::removeValue($attrs, $attr);
         }

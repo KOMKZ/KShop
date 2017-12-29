@@ -14,6 +14,7 @@ use common\models\user\UserModel;
 class ToolController extends Controller{
 	public $is_test = false;
 	public function actionBulk(){
+		// Yii::$app->db->beginTransaction();
 		$max = 100;
 		$default = [
 			'u_username' => 'kitralzhong%s',
@@ -22,6 +23,7 @@ class ToolController extends Controller{
 			'u_email' => 'kitralzhong%s@qq.com',
 			'u_auth_status' => 'had_auth',
 			'u_status' => 'active',
+			
 		];
 		$i = 0;
 		$uModel = new UserModel();
