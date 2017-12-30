@@ -101,6 +101,7 @@ class File extends ActiveRecord
             }],
 
             ['file_category', 'string'],
+            ['file_category', 'default', 'value' => 'default'],
             ['file_category', 'filter', 'filter' => function($value){
                 return trim($value, '/');
             }]

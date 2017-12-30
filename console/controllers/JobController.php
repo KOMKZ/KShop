@@ -6,6 +6,7 @@ use yii\console\Controller;
 use common\base\Worker;
 use common\models\set\SetModel;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use Workerman\Lib\Timer;
 
 
 /**
@@ -59,6 +60,7 @@ class JobController extends Controller{
 
     public function actionStart(){
         $this->runEmail();
+        $this->runClearTmp();
         Worker::$action = 'start';
         if(true === (boolean)$this->d){
             Worker::$daemonize = true;
@@ -66,6 +68,25 @@ class JobController extends Controller{
         Worker::runAll();
     }
 
+    private function runClearTmp(){
+        $worker = new Worker("tcp://127.0.0.1:2346");
+        $worker->name = 'clear-tmp-worker';
+        $worker::$logFile = Yii::getAlias($this->logFile);
+        $worker::$pidFile = Yii::getAlias($this->pidFile);
+        $worker->count = 1;
+        $worker->onWorkerStart = function($worker)
+        {
+            $timeInterval = 1;
+            Timer::add($timeInterval, function()
+            {
+                echo 1 . "\n";
+            });    
+            Timer::add($timeInterval, function()
+            {
+                echo 2 . "\n";
+            });   
+        };
+    }
 
     private function runEmail(){
         $worker = new Worker("tcp://127.0.0.1:2345");

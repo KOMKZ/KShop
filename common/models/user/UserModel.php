@@ -16,6 +16,8 @@ use common\models\trans\ar\Transaction;
 use common\models\user\ar\UserBillRecord;
 use common\models\user\ar\UserReceiverAddr;
 use common\models\user\query\UserReceAddrQuery;
+use common\models\file\FileModel;
+use common\models\file\query\FileQuery;
 /**
  *
  */
@@ -153,6 +155,32 @@ class UserModel extends Model
 			$user->u_password_hash = static::buildPasswordHash($user->password);
 		}
 		if(false === $user->update(false)){
+			$this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', "数据库更新失败"));
+			return false;
+		}
+		$userExtend = $user->user_extend;
+		// todo 修改为永久文件的逻辑可以考虑使用异步
+		$oldAvatar1 = $userExtend->u_avatar_id1;
+		if(!$userExtend->load($data, '') || !$userExtend->validate()){
+			$this->addErrors($user->getErrors());
+			return false;
+		}
+		if($oldAvatar1 != $userExtend->u_avatar_id1){
+			$newfileInfo = FileModel::parseQueryId($userExtend->u_avatar_id1);
+			$oldFileInfo = FileModel::parseQueryId($oldAvatar1);
+			$newFile = FileQuery::find()->andWhere($newfileInfo)->one();
+			if($newFile){
+				$newFile->file_is_tmp = 0;
+				$newFile->update(false);
+			}
+			$oldFile = FileQuery::find()->andWhere($oldFileInfo)->one();
+			if($oldFile){
+				$oldFile->file_is_tmp = 1;
+				$oldFile->update(false);
+			}
+		}
+		
+		if(false === $userExtend->update(false)){
 			$this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', "数据库更新失败"));
 			return false;
 		}

@@ -23,7 +23,22 @@ class FileController extends Controller
     public function actionIndex(){
 
     }
-
+    public function actionDelete(){
+        $postData = Yii::$app->request->getBodyParams();
+        if(empty($postData['file_ids']) || !is_array($postData['file_ids'])){
+            return $this->succ(0);
+        }
+        $fileModel = new FileModel();
+        $files = FileQuery::find()->andWhere(['in', 'file_id', $postData['file_ids']])->all();
+        $succ = 0;
+        foreach($files as $file){
+            $result = $fileModel->deleteFile($file);
+            if($result){
+                $succ++;
+            }
+        }
+        return $this->succ($succ);
+    }
     public function actionList(){
         $getData = Yii::$app->request->get();
         $query = FileQuery::find();

@@ -28,7 +28,8 @@ class UserQuery extends Object
             "{$uTab}.u_username",
             // extend
             "{$uExtTab}.u_ext_id",
-            "{$uExtTab}.u_avatar_id"
+            "{$uExtTab}.u_avatar_id1",
+            "{$uExtTab}.u_avatar_id2"
         ]);
         $query->joinWith('user_extend');
         return $query;

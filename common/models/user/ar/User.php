@@ -2,7 +2,7 @@
 namespace common\models\user\ar;
 
 use Yii;
-use yii\db\ActiveRecord;
+use common\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use common\models\staticdata\ConstMap;
 use yii\helpers\ArrayHelper;
@@ -14,6 +14,7 @@ use yii\behaviors\TimestampBehavior;
 use yii\filters\RateLimitInterface;
 use common\models\user\ar\UserData;
 use yii\web\ForbiddenHttpException;
+use common\models\file\FileModel;
 
 /**
  *
@@ -47,6 +48,8 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 		];
 	}
 
+
+
 	public function fields(){
 		$fields = parent::fields();
 		ArrayHelper::removeValue($fields, 'u_password_hash');
@@ -54,8 +57,18 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 		ArrayHelper::removeValue($fields, 'u_password_reset_token');
 		ArrayHelper::removeValue($fields, 'u_access_token');
 		$fields['user_extend'] = 'user_extend';
+		$fields['u_avatar_url1'] = 'u_avatar_url1';
+		$fields['u_avatar_url2'] = 'u_avatar_url2';
+
 		return $fields;
 	}
+	
+	public function releaseFields(){
+		return [
+			"user_extend"
+		];
+	}
+	
 	public function scenarios(){
 		return [
 			'default' => [
@@ -73,8 +86,31 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 		];
 	}
 	public function getUser_extend(){
-		return $this->hasOne(UserExtend::className(), ['u_id' => 'u_id']);
+		return $this->hasOne(UserExtend::className(), ['u_id' => 'u_id'])
+				    ->select([
+						'u_ext_id',
+						'u_id',
+						'u_avatar_id1',
+						'u_avatar_id2'
+					]);
 	}
+	
+	public function getU_avatar_url1(){
+		if(!$this->user_extend->u_avatar_id1){
+			return '';
+		}
+		$fileInfo = FileModel::parseQueryId($this->user_extend->u_avatar_id1);
+		return FileModel::buildFileUrlStatic($fileInfo);
+	}
+	
+	public function getU_avatar_url2(){
+		if(!$this->user_extend->u_avatar_id2){
+			return '';
+		}
+		$fileInfo = FileModel::parseQueryId($this->user_extend->u_avatar_id2);
+		return FileModel::buildFileUrlStatic($fileInfo);
+	}
+	
 	public function rules(){
 		return [
 			['rememberMe', 'in', 'range' => [1, 0]],

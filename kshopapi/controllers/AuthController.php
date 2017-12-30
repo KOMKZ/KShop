@@ -51,7 +51,6 @@ class AuthController extends ApiController
 		$user = Yii::$app->user->identity;
 		$userInfo = $user->toArray();
 		$userInfo['u_role'] = "admin";
-		$userInfo['u_avatar'] = "https://avatars2.githubusercontent.com/u/813734?s=88&v=4";
 		return $this->succ($userInfo);
 	}
 

@@ -13,7 +13,7 @@ return [
 		]
 	],
 	'worker' => [
-		'email_worker_count' => 1,
+		'email_worker_count' => 2
 	],
 	'amqp' => [
 		'host' => '',

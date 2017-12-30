@@ -25,8 +25,11 @@ class UserExtend extends ActiveRecord
 	}
 	public function rules(){
 		return [
-			['u_avatar_id', 'string']
-			,['u_avatar_id', 'default', 'value' => '']
+			['u_avatar_id1', 'string']
+			,['u_avatar_id1', 'default', 'value' => '']
+			
+			,['u_avatar_id2', 'string']
+			,['u_avatar_id2', 'default', 'value' => '']
 		];
 	}
 }

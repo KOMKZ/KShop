@@ -21,7 +21,8 @@ class UserController extends ApiController{
 		if(empty($postData['u_id'])){
 			return $this->error(400, Yii::t('app',"参数不完整，没有指定用户u_id"));
 		}
-		$user = UserQuery::findSafeField()->andWhere(['u_id' => $postData['u_id']])->one();
+		$uTab = User::tableName();
+		$user = UserQuery::findSafeField()->andWhere(["{$uTab}.u_id" => $postData['u_id']])->one();
 		if(!$user){
 			return $this->error(404, Yii::t('app', "指定的用户不存在"));
 		}
@@ -76,9 +77,9 @@ class UserController extends ApiController{
 				'params' => $filterParams
 			]))->parse();
 		}
-
+		
 		$provider = new ActiveDataProvider([
-			'query' => $query->asArray(),
+			'query' => $query,
 			'sort' => [
 				'defaultOrder' => $defaultOrder,
 				'attributes' => [

@@ -75,7 +75,7 @@ class Oss extends Model implements SaveMediumInterface{
 
     /**
      * oss内网客户端实例
-     * @var \OSS\OssClient
+     * @vardeleteFile \OSS\OssClient
      */
     protected static $innerOss;
 
@@ -123,6 +123,11 @@ class Oss extends Model implements SaveMediumInterface{
             $originMedium = json_decode($file->file_medium_info);
             return $this->createClient()->signUrl($originMedium->bucket, $objectName, $this->timeout , OssClient::OSS_HTTP_GET, []);
         }
+    }
+    
+    public function deleteFile(File $file){
+        $originMedium = json_decode($file->file_medium_info);
+        $this->createClient(true)->deleteObject($originMedium->bucket, $this->buildFileObjectName($file));
     }
 
     /**

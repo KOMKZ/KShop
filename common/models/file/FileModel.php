@@ -19,6 +19,21 @@ use common\models\file\query\FileTaskQuery;
  */
 class FileModel extends Model
 {
+    
+    public function deleteFile(File $file){
+        // 先删数据
+        // 再删文件
+        try {
+            $file->delete();
+            $saveDriver = static::getSaveMedium($file->file_save_type);
+            $saveDriver->deleteFile($file);
+            return true;
+        } catch (\Exception $e) {
+            Yii::error($e);
+            return false;
+        }
+    }
+    
     /**
      * 从一个文件路径来上传文件到文件存储中
      * 内部流程如下：
