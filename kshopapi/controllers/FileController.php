@@ -14,20 +14,42 @@ use yii\web\NotFoundHttpException;
 use yii\base\InvalidParamException;
 use yii\web\ForbiddenHttpException;
 use yii\data\ActiveDataProvider;
+use common\base\Filter;
 /**
  *
  */
 class FileController extends Controller
 {
     public function actionIndex(){
-        
+
     }
 
     public function actionList(){
+        $getData = Yii::$app->request->get();
         $query = FileQuery::find();
 		$defaultOrder = [
 			'file_created_time' => SORT_DESC,
 		];
+        $filterParams = json_decode(ArrayHelper::getValue($getData, 'filters', ''), true);
+		if(!empty($filterParams)){
+			$query = (new Filter([
+				'attributes' => [
+                    'file_is_tmp',
+                    'file_is_private',
+                    'file_save_type',
+                    'file_ext' => ['like', 'file_ext', '%s%'],
+                    'file_save_name' => ['like', 'file_save_name', '%s%'],
+                    'file_created_time_begin' => ['>=', 'file_created_time', function($dateStr){
+						return strtotime($dateStr);
+					}],
+					'file_created_time_end' => ['<=', 'file_created_time', function($dateStr){
+						return strtotime($dateStr);
+					}],
+				],
+				'query' => $query,
+				'params' => $filterParams
+			]))->parse();
+		}
 		$provider = new ActiveDataProvider([
 			'query' => $query,
 			'sort' => [

@@ -51,7 +51,7 @@ class HttpBearerAuth extends AuthMethod
 
 		return null;
 	}
-	
+
     protected function getActionId($action)
     {
         if ($this->owner instanceof Module) {

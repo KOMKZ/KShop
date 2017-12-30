@@ -23,7 +23,7 @@ class ToolController extends Controller{
 			'u_email' => 'kitralzhong%s@qq.com',
 			'u_auth_status' => 'had_auth',
 			'u_status' => 'active',
-			
+
 		];
 		$i = 0;
 		$uModel = new UserModel();

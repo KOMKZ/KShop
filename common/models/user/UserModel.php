@@ -4,6 +4,7 @@ namespace common\models\user;
 use Yii;
 use common\models\Model;
 use common\models\user\ar\User;
+use common\models\user\ar\UserExtend;
 use common\models\user\ar\UserData;
 use common\models\staticdata\Errno;
 use common\filters\auth\HttpBearerAuth;
@@ -102,23 +103,45 @@ class UserModel extends Model
 	 * @return [type]       [description]
 	 */
 	public function createUser($data){
-		$user = new User();
-		if(!$user->load($data, '') || !$user->validate()){
-			$this->addErrors($user->getErrors());
+		$t = Yii::$app->db->beginTransaction();
+		try {
+			// 基础数据
+			$user = new User();
+			if(!$user->load($data, '') || !$user->validate()){
+				$this->addErrors($user->getErrors());
+				return false;
+			}
+			$user->u_auth_key = User::NOT_AUTH == $user->u_auth_status ?
+								static::buildAuthKey() : '';
+			$user->u_status = User::NOT_AUTH == $user->u_auth_status ?
+								User::STATUS_NO_AUTH : $user->u_status;
+			$user->u_password_hash = static::buildPasswordHash($user->password);
+			$user->u_password_reset_token = '';
+			if(!$user->insert(false)){
+				$this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', '数据库插入用户数据失败1'));
+				return false;
+			}
+			// 扩展数据
+			$userExtend = new UserExtend();
+			if(!$userExtend->load($data, '') || !$userExtend->validate()){
+				$this->addErrors($userExtend->getErrors());
+				return false;
+			}
+			$userExtend->u_id = $user->u_id;
+			if(!$userExtend->insert(false)){
+				$this->addError(Errno::DB_INSERT_FAIL, Yii::t('app', '数据库插入用户数据失败2'));
+				return false;
+			}
+			$t->commit();
+			return $user;
+		} catch (\Exception $e) {
+			Yii::error($e);
+			$this->addError(Errno::EXCEPTION);
 			return false;
 		}
-		$user->u_auth_key = User::NOT_AUTH == $user->u_auth_status ?
-							static::buildAuthKey() : '';
-		$user->u_status = User::NOT_AUTH == $user->u_auth_status ?
-							User::STATUS_NO_AUTH : $user->u_status;
-		$user->u_password_hash = static::buildPasswordHash($user->password);
-		$user->u_password_reset_token = '';
-		if(!$user->insert(false)){
-			$this->addError('', Errno::DB_INSERT_FAIL);
-			return false;
-		}
-		return $user;
 	}
+
+	
 
 	public function updateUser(User $user, $data){
 		$user->scenario = 'update';

@@ -53,6 +53,7 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 		ArrayHelper::removeValue($fields, 'u_auth_key');
 		ArrayHelper::removeValue($fields, 'u_password_reset_token');
 		ArrayHelper::removeValue($fields, 'u_access_token');
+		$fields['user_extend'] = 'user_extend';
 		return $fields;
 	}
 	public function scenarios(){
@@ -70,6 +71,9 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 				'u_email', 'password', 'rememberMe'
 			]
 		];
+	}
+	public function getUser_extend(){
+		return $this->hasOne(UserExtend::className(), ['u_id' => 'u_id']);
 	}
 	public function rules(){
 		return [
@@ -175,8 +179,8 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 	{
 		return UserQuery::findActive()->andWhere(['=', 'u_id', $id])->one();
 	}
-	
-	
+
+
 	public static function findIdentityByAccessToken($token, $type = null)
 	{
 		try {

@@ -2,7 +2,7 @@
 namespace kshopapi\controllers;
 
 use Yii;
-use common\controllers\ApiController;
+use kshopapi\controllers\ApiController;
 use common\models\user\UserModel;
 use common\models\user\query\UserQuery;
 use yii\filters\auth\HttpBearerAuth;
@@ -10,6 +10,7 @@ use yii\base\ErrorException;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use common\base\Filter;
+use common\models\user\ar\User;
 
 /**
  *
@@ -33,11 +34,15 @@ class UserController extends ApiController{
 	}
 
 	public function actionView($u_id){
-		$user = UserQuery::findSafeField()->andWhere(['u_id' => $u_id])->one();
+		$uTab = User::tableName();
+		$user = UserQuery::findSafeField()
+						 ->andWhere(["{$uTab}.u_id" => $u_id])
+						 ->one();
+
 		if(!$user){
 			return $this->error(404, Yii::t("app", "指定的用户不存在"));
 		}
-		return $this->succ($user);
+		return $this->succ($user->toArray());
 	}
 
 	public function actionList(){

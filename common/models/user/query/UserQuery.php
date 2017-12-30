@@ -2,6 +2,7 @@
 namespace common\models\user\query;
 
 use common\models\user\ar\User;
+use common\models\user\ar\UserExtend;
 use yii\base\Object;
 /**
  *
@@ -14,15 +15,23 @@ class UserQuery extends Object
     }
 
     public static function findSafeField(){
-        return static::find()->select([
-            'u_auth_status',
-            'u_created_at',
-            'u_email',
-            'u_id',
-            'u_status',
-            'u_updated_at',
-            'u_username'
+        $uTab = User::tableName();
+        $uExtTab = UserExtend::tableName();
+        $query = static::find()->select([
+            // base
+            "{$uTab}.u_auth_status",
+            "{$uTab}.u_created_at",
+            "{$uTab}.u_email",
+            "{$uTab}.u_id",
+            "{$uTab}.u_status",
+            "{$uTab}.u_updated_at",
+            "{$uTab}.u_username",
+            // extend
+            "{$uExtTab}.u_ext_id",
+            "{$uExtTab}.u_avatar_id"
         ]);
+        $query->joinWith('user_extend');
+        return $query;
     }
 
     public static function findActive(){
