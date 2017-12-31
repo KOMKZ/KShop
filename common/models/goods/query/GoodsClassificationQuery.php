@@ -15,7 +15,7 @@ class GoodsClassificationQuery extends Object{
 
 	public static function findClsAsTree(){
 		$allCls = [];
-		foreach(self::find()->select(['g_cls_id', 'g_cls_name', 'g_cls_pid'])->asArray()->all() as $cls){
+		foreach(self::find()->select(['g_cls_id', 'g_cls_name', 'g_cls_show_name', 'g_cls_pid'])->asArray()->all() as $cls){
 			$cls['nodes'] = [];
 			$cls['text'] = $cls['g_cls_name'];
 			$cls['href'] = Url::to(['classification/update', 'id' => $cls['g_cls_id']]);

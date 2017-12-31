@@ -12,15 +12,14 @@ use common\models\goods\query\GoodsClassificationQuery;
 class ClassificationModel extends Model
 {
 	public $maxLevel = 4;
-	public function validateClsUpdate($data, GoodsClassification $goodsCls){
+
+
+	public function updateGoodsClassification(GoodsClassification $goodsCls, $data){
 		$goodsCls->scenario = 'update';
-		if(!$goodsCls->load($data) || !$goodsCls->validate()){
+		if(!$goodsCls->load($data, '') || !$goodsCls->validate()){
+			$this->addErrors($goodsCls->getErrors());
 			return false;
 		}
-		return true;
-	}
-
-	public function updateGoodsClassification(GoodsClassification $goodsCls){
 		if(false === $goodsCls->update(false)){
 			$this->addError('', Yii::t('app', '更新失败'));
 			return false;
@@ -55,7 +54,11 @@ class ClassificationModel extends Model
 		return GoodsClassification::deleteAll(['g_cls_id' => $ids]);
 	}
 
-	public function createGoodsClassification(GoodsClassification $goodsCls){
+	public function createGoodsClassification(GoodsClassification $goodsCls, $data){
+		if(!$goodsCls->load($data, '') || !$goodsCls->validate()){
+			$this->addErrors($goodsCls->getErrors());
+			return false;
+		}
 		if(!empty($goodsCls->g_cls_pid)){
 			$parents = GoodsClassificationQuery::findParentsById($goodsCls->g_cls_pid);
 			if(count($parents) >= $this->maxLevel){
