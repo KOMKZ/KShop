@@ -16,9 +16,10 @@ class ApiController extends Controller
 		$behaviors['bearerAuth']['optional'][] = 'api/index';
 		$behaviors['bearerAuth']['optional'][] = 'api/error';
 		$behaviors['bearerAuth']['optional'][] = 'api/enums-map';
-		$behaviors['bearerAuth']['optional'][] = 'api/schemas';
+		$behaviors['bearerAuth']['optional'][] = 'api/labels';
 		$behaviors['bearerAuth']['optional'][] = 'file/output';
 		$behaviors['bearerAuth']['optional'][] = 'user/view';
+		$behaviors['bearerAuth']['optional'][] = 'classification/*';
 		return $behaviors;
 	}
 
@@ -26,8 +27,8 @@ class ApiController extends Controller
 		return $this->succ(ConstMap::getConst());
 	}
 
-	public function actionSchemas(){
-		return $this->succ(ConstMap::getSchemas());
+	public function actionLabels(){
+		return $this->succ(ConstMap::getLabels());
 	}
 
 	public function actionIndex(){

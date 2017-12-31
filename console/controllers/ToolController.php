@@ -13,6 +13,24 @@ use common\models\user\UserModel;
 
 class ToolController extends Controller{
 	public $is_test = false;
+	public function actionGeneLabels(){
+		$sql = "show tables";
+		$result = Yii::$app->db->createCommand($sql)->queryAll();
+		$labels = [];
+		foreach($result as $item){
+			$schema = Yii::$app->db->getTableSchema(array_pop($item));
+			foreach($schema->columns as $column){
+				if($column->comment){
+					$labels[$column->name] = $column->comment;
+				}else{
+					$labels[$column->name] = $column->name;
+				}
+			}
+		}
+		$file = Yii::getAlias('@common/models/staticdata/data/const_labels.php');
+		$content = sprintf("<?php\nreturn %s;", VarDumper::export($labels));
+		file_put_contents($file, $content);
+	}
 	public function actionBulk(){
 		// Yii::$app->db->beginTransaction();
 		$max = 100;

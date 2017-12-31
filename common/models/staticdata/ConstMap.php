@@ -24,13 +24,8 @@ class ConstMap extends Object
 		}
 		return $onlyValue ? array_keys(self::$map[$name]) : self::$map[$name];
 	}
-	public static function getSchemas(){
-		$schemas = [
-			\common\models\user\ar\User::className() => [
-				'safe' => ['u_password_hash', 'u_password_reset_token', 'u_access_token', 'u_auth_key']
-			]
-		];
-		$class = \common\models\user\ar\User::className();
-		console($class::getTableSchema());
+	public static function getLabels(){
+		$data = require(Yii::getAlias('@common/models/staticdata/data/const_labels.php'));
+		return $data;
 	}
 }

@@ -1,7 +1,7 @@
 <?php
 namespace kshopapi\controllers;
 
-use common\controllers\ApiController;
+use kshopapi\controllers\ApiController;
 use common\models\goods\query\GoodsClassificationQuery;
 /**
  *
