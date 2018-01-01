@@ -43,7 +43,7 @@ class ClassificationModel extends Model
 			$this->addError('', Yii::t('app', '指定的分类存在子分类，禁止删除'));
 			return false;
 		}
-		// todo more check
+		// todo more check 必须检查是否有商品
 		$goodsCls->delete();
 		// todo more delete
 		return true;

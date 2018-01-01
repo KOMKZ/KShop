@@ -22,14 +22,27 @@ class ClassificationController extends ApiController
 		}
         $cls = GoodsClassificationQuery::find()->andWhere(['=', 'g_cls_id', $postData['g_cls_id']])->one();
         if(!$cls){
-			return $this->error(404, Yii::t('app', "指定的用户不存在"));
+			return $this->error(404, Yii::t('app', "指定的分类不存在"));
         }
         $clsModel = new ClassificationModel();
         $result = $clsModel->updateGoodsClassification($cls, $postData);
 		if(!$result){
-			return $this->error(null, $uModel->getErrors());
+			return $this->error(null, $clsModel->getErrors());
 		}
 		return $this->succ($result->toArray());
+    }
+    public function actionDelete(){
+        $postData = Yii::$app->request->getBodyParams();
+        $cls = GoodsClassificationQuery::find()->andWhere(['=', 'g_cls_id', $postData['g_cls_id']])->one();
+        if(!$cls){
+            return $this->succ([]);
+        }
+        $clsModel = new ClassificationModel();
+        $result = $clsModel->removeClassification($cls);
+        if(!$result){
+			return $this->error(null, $clsModel->getErrors());
+		}
+        return $this->succ([]);
     }
     public function actionCreate(){
         $postData = Yii::$app->request->getBodyParams();
@@ -40,6 +53,6 @@ class ClassificationController extends ApiController
             return $this->error(null, $clsModel->getErrors());
         }
         return $this->succ($result);
-        
+
     }
 }
