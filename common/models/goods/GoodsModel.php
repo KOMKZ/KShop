@@ -430,7 +430,7 @@ class GoodsModel extends Model
 	public function validateGoodsBaseData($data){
 		$goods = new Goods();
 		if(!$goods->load($data, '') || !$goods->validate()){
-			$this->addError('', $this->getOneErrMsg($goods));
+			$this->addErrors($goods->getErrors());
 			return false;
 		}
 		$goods->g_created_at = time();
