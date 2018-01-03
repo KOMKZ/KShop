@@ -185,10 +185,17 @@ class Goods extends ActiveRecord
 			['g_create_uid', 'required'],
 
 			['g_updated_at', 'default', 'value' => time()],
-
+			
+			['g_start_at', 'filter', 'filter' => function($value){
+				
+				return $value ? strtotime($value) : $value;
+			}],
 			['g_start_at', 'integer'],
 
 			// todo g_start_at < g_end_at 或者一个时期
+			['g_end_at', 'filter', 'filter' => function($value){
+				return $value ? strtotime($value) : $value;
+			}],
 			['g_end_at', 'integer']
 
 		];

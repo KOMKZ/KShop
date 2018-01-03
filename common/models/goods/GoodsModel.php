@@ -415,7 +415,7 @@ class GoodsModel extends Model
 	public function validateGoodsDetailData($data){
 		$goodsDetail = new GoodsDetail();
 		if(!$goodsDetail->load($data, '') || !$goodsDetail->validate()){
-			$this->addError('', $this->getOneErrMsg($goodsDetail));
+			$this->addError($goodsDetail->getErrors());
 			return false;
 		}
 		return $goodsDetail;
