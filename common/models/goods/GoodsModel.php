@@ -265,7 +265,7 @@ class GoodsModel extends Model
 			$gAttrModel = new GoodsAttrModel();
 			// create goods meta info
 			$gMetas = $gAttrModel->createGoodsMetas([
-				'metas' => $data['g_metas']
+				'metas' => ArrayHelper::getValue($data, 'g_metas', [])
 			], $goods);
 			if(!$gMetas){
 				list($code, $error) = $gAttrModel->getOneError();
@@ -415,7 +415,7 @@ class GoodsModel extends Model
 	public function validateGoodsDetailData($data){
 		$goodsDetail = new GoodsDetail();
 		if(!$goodsDetail->load($data, '') || !$goodsDetail->validate()){
-			$this->addError($goodsDetail->getErrors());
+			$this->addErrors($goodsDetail->getErrors());
 			return false;
 		}
 		return $goodsDetail;
