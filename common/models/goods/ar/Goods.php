@@ -30,7 +30,7 @@ class Goods extends ActiveRecord
 	public $g_start_at_string;
 	public $g_end_at_string;
 
-	
+
 	public static function tableName(){
 		return "{{%goods}}";
 	}
@@ -185,9 +185,9 @@ class Goods extends ActiveRecord
 			['g_create_uid', 'required'],
 
 			['g_updated_at', 'default', 'value' => time()],
-			
+
 			['g_start_at', 'filter', 'filter' => function($value){
-				
+
 				return $value ? strtotime($value) : $value;
 			}],
 			['g_start_at', 'integer'],

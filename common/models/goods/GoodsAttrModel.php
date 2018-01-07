@@ -178,7 +178,8 @@ class GoodsAttrModel extends Model
         foreach($newMetas as $meta){
             $meta['g_atr_cls_type'] = GoodsAttr::ATR_CLS_TYPE_GOODS;
             $meta['g_atr_cls_id'] = $goods->g_id;
-            $metaObject = $this->createAttr($meta);
+            $attrObj = new GoodsAttr();
+            $metaObject = $this->createAttr($meta, $attrObj);
             if(!$metaObject){
                 return false;
             }
@@ -244,7 +245,8 @@ class GoodsAttrModel extends Model
         foreach($newAttrs as $attr){
             $attr['g_atr_cls_type'] = GoodsAttr::ATR_CLS_TYPE_GOODS;
             $attr['g_atr_cls_id'] = $goods->g_id;
-            $attrObject = $this->createAttr($attr);
+            $attrObj = new GoodsAttr();
+            $attrObject = $this->createAttr($attr, $attrObj);
             if(!$attrObject){
                 return false;
             }
@@ -396,7 +398,7 @@ class GoodsAttrModel extends Model
      * @return object 返回属性数据对象
      */
     public function createAttr($attrData, GoodsAttr $goodsAttr){
-        if(!$goodsAttr->load($attrData) || !$goodsAttr->validate()){
+        if(!$goodsAttr->load($attrData, '') || !$goodsAttr->validate()){
             return false;
         }
         $goodsAttr->g_atr_created_at = time();

@@ -5,6 +5,7 @@ use Yii;
 use common\models\staticdata\ConstMap;
 use yii\db\ActiveRecord;
 use common\models\goods\query\GoodsAttrQuery;
+use common\models\file\FileModel;
 /**
  *
  */
@@ -14,6 +15,19 @@ class GoodsRealOption extends ActiveRecord
         return "{{%goods_real_option}}";
     }
 
+    public function fields(){
+		$fields = parent::fields();
+		return array_merge($fields, [
+			'g_opt_img_url'
+		]);
+	}
+
+    public function getG_opt_img_url(){
+        if($this->g_opt_img){
+            return FileModel::buildFileUrlStatic(FileModel::parseQueryId($this->g_opt_img));
+        }
+        return '';
+    }
 
     public function scenarios(){
         return [
