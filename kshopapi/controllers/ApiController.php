@@ -20,6 +20,8 @@ class ApiController extends Controller
 		$behaviors['bearerAuth']['optional'][] = 'file/output';
 		$behaviors['bearerAuth']['optional'][] = 'user/view';
 		$behaviors['bearerAuth']['optional'][] = 'classification/*';
+		$behaviors['bearerAuth']['optional'][] = 'goods/*';
+
 		return $behaviors;
 	}
 
