@@ -186,7 +186,6 @@ class GoodsAttrModel extends Model
             $meta['g_atr_id'] = $metaObject->g_atr_id;
             $metas[] = $meta;
         }
-
         $metaDefs = [];
         $metas = array_merge($metas, $oldMetas);
         foreach($metas as $meta){

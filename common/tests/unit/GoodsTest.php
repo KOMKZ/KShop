@@ -110,7 +110,6 @@ class ClassificationTest extends \Codeception\Test\Unit
 					'g_atr_name' => "logo",
 					'g_atr_opt_img' => 1,
 					'g_atr_code' => 'has_logo',
-					'g_atr_type' => 'has_logo',
 					'g_atr_type' => 'option',
 					'g_atr_opts' => [
 						[

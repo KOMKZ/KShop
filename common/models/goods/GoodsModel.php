@@ -274,7 +274,7 @@ class GoodsModel extends Model
 			}
 			// create goods attrs info,including option info
 			$gAttrs = $gAttrModel->createGoodsAttrs([
-				'attrs' => ArrayHelper::getValue($data, 'g_attrs', [])
+				'attrs' => ArrayHelper::getValue($data, 'g_sku_attrs', [])
 			], $goods);
 			if(!$gAttrs){
 				list($code, $error) = $gAttrModel->getOneError();
@@ -463,82 +463,92 @@ class GoodsModel extends Model
 	 * @return [type]        [description]
 	 */
 	public function updateGoods($data, Goods $goods){
-		Yii::$app->db->beginTransaction();
-		if(empty($goods->g_id)){
-			$this->addError('', Yii::t('app', "商品g_id不存在"));
-			return false;
-		}
-		// update base data of goods
-		if(!$goods = $this->updateGoodsBase($data, $goods)){
-			return false;
-		}
-		// update or create detail data of goods
-		$detailObject = $goods->g_detail;
-		if($detailObject && (!$goodsDetail = $this->updateGoodsDetail($data, $goods))){
-			return false;
-		}
-		if(!$detailObject && (!$goodsDetail = $this->createGoodsDetail($data, $goods))){
-			return false;
-		}
-		// update, create, delete meta of goods
-		$delRows = GoodsAttrModel::deleteGoodsMetas(['in', 'gm_id', ArrayHelper::getValue($data, 'g_del_meta_ids', [])]);
-		if(false === $delRows){
-			$this->addError(Errno::DB_FAIL_MDELETE, Yii::t('app', '删除多条商品元属性出错'));
-			return false;
-		}
-		$oldMetaData = $newMetaData = [];
-		foreach($data['g_metas'] as $metaData){
-			if(!array_key_exists('gm_id', $metaData)){
-				$newMetaData[] = $metaData;
-			}elseif(array_key_exists('gm_id', $metaData) && !in_array($metaData['gm_id'], ArrayHelper::getValue($data, 'g_del_meta_ids', []))){ //
-				$oldMetaData[] = $metaData;
-			}
-		}
-		$gAttrModel = new GoodsAttrModel();
-		if($oldMetaData && !$gAttrModel->updateGoodsMetas($oldMetaData, $goods)){
-			$this->addErrors($gAttrModel->getErrors());
-			return false;
-		}
-		if($newMetaData && !$gAttrModel->createGoodsMetas(['metas' => $newMetaData], $goods)){
-			list($code, $error) = $gAttrModel->getOneError();
-			$this->addError($code, "创建商品元属性失败:" . $error);
-			return false;
-		}
-		unset($newMetaData, $oldMetaData);
-
-
-		// 更新商品sku属性和选项属性
-		// 首先进行进行删除操作
-		if(!empty(ArrayHelper::getValue($data, 'g_del_atr_ids', []))){
-			$delRows = GoodsAttrModel::deleteGoodsAttrs(['in', 'gr_id', ArrayHelper::getValue($data, 'g_del_atr_ids', [])]);
-			if(false === $delRows){
-				$this->addError(Errno::DB_FAIL_MDELETE, Yii::t('app', '删除多条商品属性出错'));
+		$t = Yii::$app->db->beginTransaction();
+		try {
+			if(empty($goods->g_id)){
+				$this->addError('', Yii::t('app', "商品g_id不存在"));
 				return false;
 			}
-		}
-		// 分别新的属性和旧的属性设置
-		$oldAttrData = $newAttrData = [];
-		foreach($data['g_sku_attrs'] as $attrData){
-			if(!array_key_exists('gr_id', $attrData)){
-				$newAttrData[] = $attrData;
-			}elseif(array_key_exists('gr_id', $attrData) && !in_array($attrData['gr_id'], ArrayHelper::getValue($data, 'g_del_atr_ids', []))){ //
-				$oldAttrData[] = $attrData;
+			// update base data of goods
+			if(!$goods = $this->updateGoodsBase($data, $goods)){
+				return false;
 			}
-		}
-		if($newAttrData && !$gAttrModel->createGoodsAttrs(['attrs' => $newAttrData], $goods)){
-			list($code, $error) = $gAttrModel->getOneError();
-			$this->addError($code, "创建商品属性失败:" . $error);
-			return false;
-		}
-		if($oldAttrData && !$gAttrModel->updateGoodsAttrs($oldAttrData, $goods)){
-			list($code, $error) = $gAttrModel->getOneError();
-			$this->addError($code, "创建商品属性失败:" . $error);
+			// update or create detail data of goods
+			$detailObject = $goods->g_detail;
+			if($detailObject && (!$goodsDetail = $this->updateGoodsDetail($data, $goods))){
+				return false;
+			}
+			if(!$detailObject && (!$goodsDetail = $this->createGoodsDetail($data, $goods))){
+				return false;
+			}
+			// update, create, delete meta of goods
+			$delRows = GoodsAttrModel::deleteGoodsMetas(['in', 'gm_id', ArrayHelper::getValue($data, 'g_del_meta_ids', [])]);
+			if(false === $delRows){
+				$this->addError(Errno::DB_FAIL_MDELETE, Yii::t('app', '删除多条商品元属性出错'));
+				return false;
+			}
+			$oldMetaData = $newMetaData = [];
+			foreach($data['g_metas'] as $metaData){
+				if(!array_key_exists('gm_id', $metaData)){
+					$newMetaData[] = $metaData;
+				}elseif(array_key_exists('gm_id', $metaData) && !in_array($metaData['gm_id'], ArrayHelper::getValue($data, 'g_del_meta_ids', []))){ //
+					$oldMetaData[] = $metaData;
+				}
+			}
+
+			$gAttrModel = new GoodsAttrModel();
+			if($oldMetaData && !$gAttrModel->updateGoodsMetas($oldMetaData, $goods)){
+				$this->addErrors($gAttrModel->getErrors());
+				return false;
+			}
+			if($newMetaData && !$gAttrModel->createGoodsMetas(['metas' => $newMetaData], $goods)){
+				list($code, $error) = $gAttrModel->getOneError();
+				$this->addError($code, "创建商品元属性失败:" . $error);
+				return false;
+			}
+			unset($newMetaData, $oldMetaData);
+
+
+			// 更新商品sku属性和选项属性
+			// 首先进行进行删除操作
+			if(!empty(ArrayHelper::getValue($data, 'g_del_atr_ids', []))){
+				$delRows = GoodsAttrModel::deleteGoodsAttrs(['in', 'gr_id', ArrayHelper::getValue($data, 'g_del_atr_ids', [])]);
+				if(false === $delRows){
+					$this->addError(Errno::DB_FAIL_MDELETE, Yii::t('app', '删除多条商品属性出错'));
+					return false;
+				}
+			}
+			// 分别新的属性和旧的属性设置
+			$oldAttrData = $newAttrData = [];
+			foreach($data['g_sku_attrs'] as $attrData){
+				if(!array_key_exists('gr_id', $attrData)){
+					$newAttrData[] = $attrData;
+				}elseif(array_key_exists('gr_id', $attrData) && !in_array($attrData['gr_id'], ArrayHelper::getValue($data, 'g_del_atr_ids', []))){ //
+					$oldAttrData[] = $attrData;
+				}
+			}
+			if($newAttrData && !$gAttrModel->createGoodsAttrs(['attrs' => $newAttrData], $goods)){
+				list($code, $error) = $gAttrModel->getOneError();
+				$this->addError($code, "创建商品属性失败:" . $error);
+				return false;
+			}
+			if($oldAttrData && !$gAttrModel->updateGoodsAttrs($oldAttrData, $goods)){
+				list($code, $error) = $gAttrModel->getOneError();
+				$this->addError($code, "创建商品属性失败:" . $error);
+				return false;
+			}
+
+			// 确保sku实例此时是正确的
+			self::ensureSkuValid($goods);
+			// $t->commit();
+			$goods->refresh();
+			return $goods;
+		} catch (\Exception $e) {
+			Yii::error($e);
+			$t->rollBack();
 			return false;
 		}
 
-		// 确保sku实例此时是正确的
-		self::ensureSkuValid($goods);
-		console(1);
 	}
 
 	/**
