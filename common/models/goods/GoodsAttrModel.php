@@ -33,7 +33,7 @@ class GoodsAttrModel extends Model
     }
 
     /**
-     * 根据筛选条件删除商品属性
+     * 根据筛选条件删除商品属性68
      * 注意该删除是伪删除
      * @param  array $condition 筛选数据的条件
      * @param  array  $params    [description]

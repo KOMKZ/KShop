@@ -19,7 +19,7 @@ use common\models\file\query\FileTaskQuery;
  */
 class FileModel extends Model
 {
-    
+
     public function deleteFile(File $file){
         // 先删数据
         // 再删文件
@@ -33,7 +33,7 @@ class FileModel extends Model
             return false;
         }
     }
-    
+
     /**
      * 从一个文件路径来上传文件到文件存储中
      * 内部流程如下：
@@ -479,8 +479,12 @@ class FileModel extends Model
             'class' => File::className(),
             'file_is_private' => 0,
         ], $fileInfo));
-        $file->file_medium_info = json_encode(self::getSaveMedium($file->file_save_type)->buildMediumInfo());
-        return static::buildFileUrl($file);
+        if($file->file_save_type){
+            $file->file_medium_info = json_encode(self::getSaveMedium($file->file_save_type)->buildMediumInfo());
+            return static::buildFileUrl($file);
+        }else{
+            return '';
+        }
     }
 
     /**

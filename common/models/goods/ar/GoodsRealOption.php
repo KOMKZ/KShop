@@ -24,7 +24,12 @@ class GoodsRealOption extends ActiveRecord
 
     public function getG_opt_img_url(){
         if($this->g_opt_img){
-            return FileModel::buildFileUrlStatic(FileModel::parseQueryId($this->g_opt_img));
+            $queryId = FileModel::parseQueryId($this->g_opt_img);
+            if($queryId){
+                return FileModel::buildFileUrlStatic($queryId);
+            }else{
+                return $this->g_opt_img;
+            }
         }
         return '';
     }

@@ -16,6 +16,7 @@ class GoodsSku extends ActiveRecord
     const STATUS_ON_SALE = 'sale';
     const STATUS_ON_NOT_SALE = 'on_not_sale';
     CONST STATUS_INVALID = 'invalid';
+    const STATUS_DRAFT = 'draft';
 
     protected static $currentSkuValues = [];
     public static function tableName(){

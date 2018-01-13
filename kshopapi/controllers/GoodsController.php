@@ -7,6 +7,7 @@ use kshopapi\controllers\ApiController;
 use common\models\goods\query\GoodsAttrQuery;
 use common\models\goods\ar\GoodsAttr;
 use common\models\goods\query\GoodsQuery;
+use common\models\goods\query\GoodsSkuQuery;
 use common\models\goods\GoodsAttrModel;
 use yii\data\ActiveDataProvider;
 /**
@@ -32,6 +33,39 @@ class GoodsController extends ApiController{
 		]);
 		return $this->succItems($provider->getModels(), $provider->totalCount);
     }
+    public function actionViewSku($g_id, $g_sku_value){
+        $getData = Yii::$app->request->get();
+        $goodsSku = GoodsSkuQuery::find()
+                                 ->andWhere(['=', 'g_id', $g_id])
+                                 ->andWhere(['=', 'g_sku_value', $g_sku_value])
+                                 ->one();
+        if(!$goodsSku){
+            return $this->error(404, Yii::t('app', '指定的数据不存在'));
+        }
+        return $this->succ($goodsSku->toArray());
+    }
+
+    public function actionCreateSku(){
+        $postData = Yii::$app->request->getBodyParams();
+        if(empty($postData['g_id'])){
+            return $this->error(500, Yii::t('app', '参数不完整'));
+        }
+        $goods = GoodsQuery::find()->andWhere(['=', 'g_id', $postData['g_id']])->one();
+        if(!$goods){
+            return $this->error(404, Yii::t('app', '指定的商品不存在'));
+        }
+        $loginUser = Yii::$app->user->identity;
+        $postData['g_sku_create_uid'] = $loginUser->u_id;
+        $skuData = [$postData];
+        $gModel = new GoodsModel();
+		$skus = $gModel->createMultiGoodsSku($skuData, $goods);
+		if(!$skus){
+            return $this->error(1, $gModel->getErrors());
+		}
+        $sku = array_pop($skus);
+        return $this->succ($sku->toArray());
+    }
+
     public function actionUpdate(){
         $postData = Yii::$app->request->getBodyParams();
         if(empty($postData['g_id'])){

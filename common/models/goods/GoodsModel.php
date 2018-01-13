@@ -83,12 +83,12 @@ class GoodsModel extends Model
 	 * 单个元素的数据结构:
 	 * @see \common\models\goods\GoodsModel::createGoodsSku
 	 */
-	public function createMultiGoodsSku($skuData, Goods $goods, $asArray = true){
+	public function createMultiGoodsSku($skuData, Goods $goods, $asArray = false){
 		$t = Yii::$app->db->beginTransaction();
 		try {
 			$skuData = ArrayHelper::index($skuData, 'g_sku_value');
 			$skuIds = array_keys($skuData);
-			$validSkuIds = array_keys($goods->g_vaild_sku_ids);
+			$validSkuIds = array_keys(ArrayHelper::index($goods->g_vaild_sku_ids, 'value'));
 			$notExistIds = array_diff($skuIds, $validSkuIds);
 			if(!empty($notExistIds)){
 				$this->addError('', Yii::t('app', "sku值不存在:" . implode(',', $notExistIds)));
@@ -202,12 +202,13 @@ class GoodsModel extends Model
 			$this->addError('', $this->getOneErrMsg($sku));
 			return false;
 		}
-		if(!array_key_exists($skuData['g_sku_value'], $goods->g_vaild_sku_ids)){
+		$skuItems = ArrayHelper::index($goods->g_vaild_sku_ids, 'value');
+		if(!array_key_exists($skuData['g_sku_value'], $skuItems)){
 			$this->addError('', Yii::t('app', '无效的g_sku_value值:' . $skuData['g_sku_value']));
 			return false;
 		}
 		// $sku->g_sku_id = static::buildGSkuId($goods->g_id, $sku->g_sku_value);
-		$sku->g_sku_value_name = $goods->g_vaild_sku_ids[$sku->g_sku_value]['name'];
+		$sku->g_sku_value_name = $skuItems[$sku->g_sku_value]['name'];
 		$sku->g_sku_name = $sku->g_sku_name ? $sku->g_sku_name : $goods->g_primary_name;
 		$sku->g_sku_created_at = time();
 		if(!$sku->insert(false)){
@@ -325,13 +326,14 @@ class GoodsModel extends Model
 			foreach($attr['g_atr_opts'] as $opt){
 				$skuValues[$attr['g_atr_id']][] = [
 					'value' => sprintf("%s:%s", $attr['g_atr_id'], $opt['g_opt_value']),
-					'name'  => sprintf("%s-%s", $attr['g_atr_show_name'], $opt['g_opt_name'])
+					'name'  => sprintf("%s-%s", $attr['g_atr_show_name'], $opt['g_opt_name']),
+					'g_id' => $goods->g_id
 				];
 			}
 		}
 		ksort($skuValues);
 		$skuIds = static::buildSkuIds($skuValues);
-		return ArrayHelper::index($skuIds, 'value');
+		return $skuIds;
 	}
 
 	/**
@@ -356,6 +358,7 @@ class GoodsModel extends Model
 					$skuIds[] = [
 						'value' => implode(';', [$item['value'], $otherItem['value']]),
 						'name' => implode(';', [$item['name'], $otherItem['name']]),
+						'g_id' => $item['g_id']
 					];
 				}
 				break;
@@ -562,7 +565,7 @@ class GoodsModel extends Model
 		return GoodsSku::updateAll(['g_sku_status' => GoodsSku::STATUS_INVALID], [
 			'and',
 			['=', 'g_id', $goods->g_id],
-			['not in', 'g_sku_value', array_keys($validSkuMap)]
+			['not in', 'g_sku_value', array_keys(ArrayHelper::index($validSkuMap, 'value'))]
 		]);
 	}
 
