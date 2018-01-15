@@ -13,6 +13,8 @@ Yii::setAlias('@kshopapi', dirname(dirname(__DIR__)) . '/kshopapi');
 Yii::setAlias('@kshopadmin', dirname(dirname(__DIR__)) . '/kshopadmin');
 Yii::setAlias('@console', dirname(dirname(__DIR__)) . '/console');
 Yii::setAlias('@OSS', '@common/lib/alisdk/OSS');
+Yii::setAlias('@OSS', '@common/lib/alisdk/OSS');
+Yii::setAlias('@Aliyun', '@common/lib/alisdk/dysms');
 
 require(dirname(__DIR__) . '/lib/wxsdk/wxpay/lib/WxPay.Config.php');
 require(dirname(__DIR__) . '/lib/wxsdk/wxpay/lib/WxPay.Exception.php');
