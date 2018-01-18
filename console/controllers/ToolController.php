@@ -24,16 +24,7 @@ use common\models\sms\SmsModel;
 class ToolController extends Controller{
 	public $is_test = false;
 
-	public function actionCreate(){
-		$smsModel = new SmsModel();
-		$data = [
 
-		];
-		$res = $smsModel->saveWaitSend($data);
-		if(!$res){
-			console($smsModel->getErrors());
-		}
-	}
 
 
 	public function actionSend(){
@@ -44,9 +35,9 @@ class ToolController extends Controller{
         $domain = "dysmsapi.aliyuncs.com";
 
         // TODO 此处需要替换成开发者自己的AK (https://ak-console.aliyun.com/)
-        $accessKeyId = "24659917"; // AccessKeyId
+        $accessKeyId = ""; // AccessKeyId
 
-        $accessKeySecret = "193e53b3eb11970b9c6f07d68043564b"; // AccessKeySecret
+        $accessKeySecret = ""; // AccessKeySecret
 
         // 暂时不支持多Region
         $region = "cn-hangzhou";
