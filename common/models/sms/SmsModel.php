@@ -1,6 +1,7 @@
 <?php
 namespace common\models\sms;
 
+use Yii;
 use common\models\Model;
 use Aliyun\Core\Config;
 use Aliyun\Core\Profile\DefaultProfile;
@@ -53,7 +54,21 @@ class SmsModel extends Model
         if(!$sms){
             return false;
         }
+        // todo
+        // 1. redis list push
+        if(!$this->saveSmsInQueue($sms)){
+            return false;
+        }
+        return $sms;
+    }
 
+    public function sendSms($sms){
+        return true;
+    }
+
+    public function saveSmsInQueue($sms){
+
+        return true;
     }
 
     public static function getInnerCodeMap($name = null){
@@ -70,12 +85,8 @@ class SmsModel extends Model
             $this->addErrors($sms->getErrors());
             return false;
         }
-        // 检查参数是否匹配
-        $paramsNum = preg_match_all('/\{([a-zA-Z0-9\-\_]+)\}/', $sms->sms_real_outer_code['message'], $requiredParams);
-        if($paramsNum > 0  && count(array_keys($sms->sms_params_object)) != $paramsNum){
-            return false;
-        }
-
+        $sms->sms_outer_code = $sms->sms_real_outer_code['code'];
+        $sms->sms_params = json_encode($sms->sms_params_object);
         if(!$sms->insert(false)){
             $this->addError('', Yii::t('app', "数据库插入失败"));
             return false;
