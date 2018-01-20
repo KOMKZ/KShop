@@ -1,12 +1,15 @@
 <?php
 namespace common\models\sms;
 
+use Yii;
 use common\models\Model;
 use Aliyun\Core\Config;
 use Aliyun\Core\Profile\DefaultProfile;
 use Aliyun\Core\DefaultAcsClient;
 use yii\base\InvalidConfigException;
 use common\models\sms\ar\Sms;
+use common\models\set\SetModel;
+use yii\helpers\ArrayHelper;
 /**
  *
  */
@@ -37,12 +40,43 @@ class SmsModel extends Model
         }
     }
 
+    /**
+     * 创建短信，保存进数据库，推入推列，等待发送
+     * @param  [type] $data [description]
+     * - sms_provider: optional,default(Sms::PROVIDER_ALIDY)短信服务商,类型
+     * - sms_type: required,短信的类型@see Sms::rules()
+     * - sms_inner_code: required,短信的模板@see Sms::sms_inner_code
+     * - sms_params_object: optional, 模板需要的变量
+     * @return [type]       [description]
+     */
     public function saveWaitSend($data){
         $sms = $this->createSms($data);
         if(!$sms){
             return false;
         }
-        console($sms);
+        // todo
+        // 1. redis list push
+        if(!$this->saveSmsInQueue($sms)){
+            return false;
+        }
+        return $sms;
+    }
+
+    public function sendSms($sms){
+        return true;
+    }
+
+    public function saveSmsInQueue($sms){
+
+        return true;
+    }
+
+    public static function getInnerCodeMap($name = null){
+        $innerCodes = ArrayHelper::index(SetModel::get('sms_inner_codes'), 'name');
+        if(null === $name){
+            return array_keys($innerCodes);
+        }
+        return $innerCodes[$name] ? $innerCodes[$name] : [];
     }
 
     public function createSms($data){
@@ -51,6 +85,8 @@ class SmsModel extends Model
             $this->addErrors($sms->getErrors());
             return false;
         }
+        $sms->sms_outer_code = $sms->sms_real_outer_code['code'];
+        $sms->sms_params = json_encode($sms->sms_params_object);
         if(!$sms->insert(false)){
             $this->addError('', Yii::t('app', "数据库插入失败"));
             return false;

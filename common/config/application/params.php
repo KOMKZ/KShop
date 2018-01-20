@@ -1,5 +1,9 @@
 <?php
-return [
+$smsCodes = array_merge(
+    require(__DIR__ . '/sms-code.php'),
+    require(__DIR__ . '/sms-code-local.php')
+);
+$params = [
 	'email' => [
 		'default_sender' => [
 			'sender' => '',
@@ -15,6 +19,7 @@ return [
 	'worker' => [
 		'email_worker_count' => 2
 	],
+	'sms_inner_codes' => $smsCodes,
 	'amqp' => [
 		'host' => '',
 		'port' => '',
@@ -45,3 +50,4 @@ return [
 		'transaction_timeout' => 1800
 	]
 ];
+return $params;

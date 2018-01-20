@@ -160,6 +160,13 @@ return [
 		0 => Yii::t('app', '不能携带图片')
 		,1 => Yii::t('app', '能携带图片')
 	]
+	,'sms_type' => [
+		\common\models\sms\ar\Sms::TYPE_PRIVATE => Yii::t('app', '私发短信'),
+		\common\models\sms\ar\Sms::TYPE_BOARD => Yii::t('app', '系统短信'),
+	]
+	,'sms_provider' => [
+		\common\models\sms\ar\Sms::PROVIDER_ALIDY => Yii::t('app', '阿里大于')
+	]
 
 
 ];
