@@ -401,6 +401,7 @@ class GoodsModel extends Model
 		}
 		$goodsSource = new GoodsSource();
 		if(!$goodsSource->load($data, '') || !$goodsSource->validate()){
+			$this->addErrors($goodsSource->getErrors());
 			return false;
 		}
 		$goodsSource->gs_cls_type = $clsType;

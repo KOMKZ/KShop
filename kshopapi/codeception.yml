@@ -8,6 +8,8 @@ suites:
                 - REST:
                     url: http://localhost:8011/index.php
                     depends: PhpBrowser
+                    part: JSON
+
 
 paths:
     tests: tests
@@ -18,4 +20,4 @@ paths:
 settings:
     shuffle: false
     lint: true
-
+    bootstrap: _bootstrap.php

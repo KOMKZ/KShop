@@ -10,6 +10,11 @@ use common\models\goods\query\GoodsQuery;
 use common\models\goods\query\GoodsSkuQuery;
 use common\models\goods\GoodsAttrModel;
 use yii\data\ActiveDataProvider;
+use yii\validators\FileValidator;
+use yii\web\UploadedFile;
+use common\models\file\FileModel;
+use common\models\goods\query\GoodsOptionQuery;
+use common\models\goods\ar\GoodsSource;
 /**
  *
  */
@@ -33,6 +38,59 @@ class GoodsController extends ApiController{
 		]);
 		return $this->succItems($provider->getModels(), $provider->totalCount);
     }
+
+    public function actionCreateSource(){
+        $postData = Yii::$app->request->getBodyParams();
+        $file = UploadedFile::getInstanceByName('file');
+        if($file){
+            $fileValidator = new FileValidator([
+                'extensions' => ['jpg', 'gif', 'png'],
+                'maxSize' => 1 * 1024 * 1024, // 1m
+            ]);
+            $isValidFile = $fileValidator->validate($file, $error);
+            if(!$isValidFile){
+                return $this->error(500, $error);
+            }
+            // 上传到文件模块中
+            $fileModel = new FileModel();
+            $sourceData = [
+                'file_source_path' => $file->tempName,
+                'file_save_name' => $file->name,
+                'file_is_tmp' => 0
+            ];
+            $file = $fileModel->createFileBySource($sourceData);
+            if(!$file){
+                return $this->error(1, $fileModel->getErrors());
+            }
+            $postData['gs_sid'] = $file['file_query_id'];
+        }
+        // 查找资源所属
+        if(empty($postData['gs_cls_type'])){
+            return $this->error(1, Yii::t('app', '缺失参数gs_cls_type'));
+        }
+        if(GoodsSource::CLS_TYPE_SKU == $postData['gs_cls_type']){
+            // sku本身
+            $clsObject = GoodsSkuQuery::find()->where(['g_sku_id' => $postData['gs_cls_id']])->one();
+        }elseif(GoodsSource::CLS_TYPE_GOODS == $postData['gs_cls_type']){
+            // 商品本身
+            $clsObject = GoodsQuery::find()->where(['g_id' => $postData['gs_cls_id']])->one();
+        }elseif($GoodsSource::CLS_TYPE_OPTION == $postData['gs_cls_type']){
+            // 选项
+            $clsObject = GoodsOptionQuery::find()->where(['g_opt_id' => $postData['gs_cls_id']])->one();
+        }else{
+            return $this->error(1, Yii::t('app', '无效参数值gs_cls_type'));
+        }
+        if(!$clsObject){
+            return $this->error(1, Yii::t('app', '资源所属分类不存在'));
+        }
+        $gModel = new GoodsModel();
+        $gSource = $gModel->createSource($postData, $clsObject);
+        if(!$gSource){
+            return $this->error(1, $gModel->getErrors());
+        }
+        return $this->succ($gSource->toArray());
+    }
+
     public function actionViewSku($g_id, $g_sku_value){
         $getData = Yii::$app->request->get();
         $goodsSku = GoodsSkuQuery::find()
