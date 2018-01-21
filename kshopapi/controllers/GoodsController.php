@@ -15,10 +15,9 @@ use yii\web\UploadedFile;
 use common\models\file\FileModel;
 use common\models\goods\query\GoodsOptionQuery;
 use common\models\goods\ar\GoodsSource;
-/**
- *
- */
+
 class GoodsController extends ApiController{
+
     public function actionList(){
         $getData = Yii::$app->request->get();
         $query = GoodsQuery::find();

@@ -17,15 +17,125 @@ use Aliyun\Api\Sms\Request\V20170525\SendSmsRequest;
 use Aliyun\Api\Sms\Request\V20170525\QuerySendDetailsRequest;
 use common\models\sms\ar\Sms;
 use common\models\sms\SmsModel;
-
+use common\base\Worker;
 // 加载区域结点配置
 
 
 class ToolController extends Controller{
 	public $is_test = false;
+	public $debug = false;
 
 
+	public $_client = null;
+	public $pidFile = '@app/runtime/logs/grab-pid.txt';
+    public $logFile = '@app/runtime/logs/grab-log.txt';
+	public $dataFile = '@app/runtime/logs/grab-data.txt';
+	public function client(){
+		if(!$this->_client){
+			$this->_client = new \GuzzleHttp\Client();
+		}
+		return $this->_client;
+	}
+	public function options($actionID)
+    {
+        return array_merge(
+            parent::options($actionID),
+            ['debug', 'is_test']
+        );
+    }
+	public function debug($content){
+		if($this->debug){
+			echo $content . "\n";
+		}
+	}
+	public function actionGrabPage($totalPage, $max){
+		@file_put_contents(Yii::getAlias($this->dataFile));
+		$worker = new Worker("tcp://127.0.0.1:2345");
+        $worker->name = 'grab-worker';
+        $worker::$logFile = Yii::getAlias($this->logFile);
+        $worker::$pidFile = Yii::getAlias($this->pidFile);
+        $worker->count = $max;
+        $worker->onWorkerStart = function($worker) use($totalPage, $max)
+        {
+			$perTotal = ceil($totalPage/$max);
+			$begin = $worker->id * $perTotal + 1;
+			$end = ($worker->id + 1) * $perTotal;
+			$end = $end > $totalPage ? $totalPage : $end;
+			while($begin <= $end){
+				$content = $this->grab($begin);
+				$this->handle($content);
+				$begin++;
+			}
+			echo "ok...\n";
+        };
+		Worker::$action = 'start';
+		Worker::runAll();
+	}
+	public function handle($content){
+		file_put_contents(Yii::getAlias($this->dataFile), $content . "\n", FILE_APPEND);
+	}
+	public function parseOne($one, $str){
+		if(preg_match("/{$str}/", $one)){
+			echo trim($one, "\n") . "\n";
+		}
+	}
+	public function actionParse($str){
+		$file = Yii::getAlias($this->dataFile);
+		$handle = @fopen($file, "r");
+		if ($handle) {
+		    while (($buffer = fgets($handle, 4096)) !== false) {
+		        $this->parseOne($buffer, $str);
+		    }
+		    if (!feof($handle)) {
+		        echo "Error: unexpected fgets() fail\n";
+		    }
+		    fclose($handle);
+		}
+	}
+	public function grab($page){
+		$url = 'http://www.yiichina.com/topic?page=' . $page;
+		$this->debug(sprintf("正在获取 %s", $url));
+		$res = $this->client()->get('http://www.yiichina.com/topic?page=' . $page);
+		$content = $res->getBody();
+		$code = $res->getStatusCode();
+		$result = preg_match_all(
+			"/<h2 class=\"media\-heading\">.*?<a href=\"(.*?)\">(.*?)<\/a>.*?<\/h2>/",
+			$content,
+			$matches
+		);
+		if(!$result)return '';
+		$list = [];
+		foreach ($matches[1] as $index => $id) {
+			$list[] = sprintf("%s %s", $id, $matches[2][$index]);
+		}
+		return implode("\n", $list);
+	}
 
+	public function actionTestGrab(){
+		@file_put_contents(Yii::getAlias($this->dataFile), '');
+		$url = "http://forum.laravelacademy.org/api/discussions?include=startUser%2ClastUser%2CstartPost%2Ctags&filter%5Bq%5D=%20tag%3Aquestion&";
+		$ok = true;
+		while($ok){
+			$this->debug(sprintf("正在获取 %s", $url));
+			$res = $this->client()->get($url);
+			$content = $res->getBody();
+			$code = $res->getStatusCode();
+			$ok = $code == '200';
+			if($ok){
+				$data = json_decode($content, true);
+				$list = [];
+				foreach($data['data'] as $item){
+					$list[] = sprintf("%s %s", $item['id'], $item['attributes']['title']);
+				}
+				$url = $data['links']['next'];
+				$content = implode("\n", $list);
+				file_put_contents(Yii::getAlias($this->dataFile), $content . "\n", FILE_APPEND);
+			}else{
+				echo "error\n";
+			}
+
+		}
+	}
 
 	public function actionSend(){
 		Config::load();
@@ -142,13 +252,7 @@ class ToolController extends Controller{
 		$video->save($format, $out);
 	}
 
-	public function options($actionID)
-	{
-		return array_merge(
-			parent::options($actionID),
-			['is_test']
-		);
-	}
+
 	public function actionOneConfig($app){
 		$config = ArrayHelper::merge(
 			require(Yii::getAlias('@common/config/merge_config.php')),
