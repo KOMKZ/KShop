@@ -3,6 +3,7 @@ namespace console\controllers;
 
 use Yii;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 
 /**
  * @def #global_res
@@ -20,6 +21,19 @@ use yii\console\Controller;
  */
 class DocController extends Controller
 {
+    public $save_dir = "/tmp";
+
+    public function options($actionID)
+    {
+        return array_merge(
+            parent::options($actionID),
+            ['save_dir']
+        );
+    }
+    /**
+     * [init description]
+     * @return [type] [description]
+     */
     public function init(){
         parent::init();
         foreach($this->getAlias() as $alias => $path){
@@ -34,8 +48,8 @@ class DocController extends Controller
      * @return #global_res,返回商品列表
      * - data array#goods_item,商品列表
      */
-    public function actionGene(){
-        $files = func_get_args();
+    public function actionGeneApi($module){
+        $files = $this->getFilesFromModule($module);
         $files = $this->prepareFiles($files);
         $phpDoces = [];
         foreach($files as $file){
@@ -43,6 +57,21 @@ class DocController extends Controller
         }
         console($phpDoces);
     }
+
+    protected function geneSwgRefFileFromDef(){
+
+    }
+
+    protected function geneSwgApiFileFromDef(){
+
+    }
+
+    protected function geneSwgRootFileFromDef(){
+
+    }
+
+    
+
     protected function parseDocesFormPhpFile($file){
         $content = file_get_contents($file);
         $result = preg_match_all("/\/\*[\s\S]*?\*\//", $content, $matches);
@@ -55,7 +84,9 @@ class DocController extends Controller
             $type = $this->getDocContentType($docBlock);
             switch ($type) {
                 case 'def':
-                    $defs = $this->parseDefFromDocBlock($docBlock);
+                    foreach($this->parseDefFromDocBlock($docBlock) as $def){
+                        $defs[$def['name']] = $def;
+                    }
                     break;
                 case 'api':
                     $apis[] = $this->parseApiFormDocBlock($docBlock);
@@ -65,7 +96,7 @@ class DocController extends Controller
             }
         }
         console($defs, $apis);
-        console(1);
+
     }
     protected function parseApiFormDocBlock($block){
         $method = "";
@@ -211,7 +242,7 @@ class DocController extends Controller
     }
     protected function prepareFiles($files = []){
         if(!$files){
-            return false;
+            return [];
         }
         foreach($files as $index => $file){
             $path = Yii::getAlias($file);
@@ -231,5 +262,8 @@ class DocController extends Controller
             '@homekscmd' => '/home/kitralzhong/pro/php/kshop/console',
             '@cpykscmd' => '/home/master/pro/php/kshop/console',
         ];
+    }
+    protected function getFilesFromModule($module){
+        return ArrayHelper::getValue(Yii::$app->params['apifiles'], $module, []);
     }
 }
