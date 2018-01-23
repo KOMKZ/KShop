@@ -26,11 +26,13 @@ class DocController extends Controller
     public $tmp_dir = "@console/runtime";
     public $out_dir = "/var/www/html";
 
+    public $update = false;
+
     public function options($actionID)
     {
         return array_merge(
             parent::options($actionID),
-            ['tmp_dir', 'out_dir']
+            ['tmp_dir', 'out_dir', 'update']
         );
     }
     /**
@@ -88,9 +90,24 @@ class DocController extends Controller
         $this->geneSwgJson($module);
         echo sprintf("php_swagger:%s\n", $this->getPhpFilePath($module));
         echo sprintf("json_swagger:%s\n", $this->getJsonFilePath($module));
-
+        if($this->update){
+            $this->commitSwgToSvn($module);
+        }
 
     }
+
+    protected function commitSwgToSvn($module){
+        $json = $this->getJsonFilePath($module);
+        $targetJson = Yii::$app->params['svn_swg_json'][$module];
+        $msg = sprintf('swagger: 更新%s swagger.json', $module);
+        copy($json, $targetJson);
+        system(sprintf("cd /home/master/company/trainor/hsehome_develop_document;svn commit -m \"%s\" %s;svn update;",
+            $msg,
+            $targetJson
+        ));
+    }
+
+
     protected function geneSwgJson($module){
         system(sprintf("swg %s --output %s", $this->getPhpFilePath($module), $this->getJsonFilePath($module)));
     }
@@ -121,8 +138,15 @@ class DocController extends Controller
  */
 tpl;
         $propsContents = [];
+        $required = [];
         foreach($ref['props'] as $prop){
             $propsContents[] =  $this->geneSwgPropContentFromDef($prop);
+            if('required' == $prop['required']){
+                $required[] = "\"" . $prop['name'] . "\"";
+            }
+        }
+        if($required){
+            $propsContents[] = sprintf("*           required={%s}", implode(',', $required));
         }
         $propsContents = implode(",\n", $propsContents);
         return sprintf($tpl, $ref['name'], $propsContents);
@@ -217,8 +241,14 @@ tpl;
             $propsContent = [];
             foreach($ref['props'] as $prop){
                 if(array_key_exists($prop['name'], $return['props'])){
-                    $prop['type'] = 'object';
-                    $prop['ref'] = $return['props'][$prop['name']]['ref'];
+                    $target = $return['props'][$prop['name']];
+                    if(in_array($target['type'], ['object', 'array'])){
+                        $prop['type'] = $target['type'];
+                        $prop['ref'] = $target['ref'];
+                    }else{
+                        $prop['type'] = $target['type'];
+                    }
+                    $prop['des'] = $target['des'];
                 }
                 $propsContent[] = $this->geneSwgPropContentFromDef($prop);
             }
@@ -409,7 +439,6 @@ tpl;
 tpl;
         $varMap['{{property}}'] = sprintf(" *      property=\"%s\"", $prop['name']);
         $varMap['{{description}}'] = sprintf(" *      description=\"%s\"", $this->formatDes($prop['des']));
-
         // 构造type
         if(in_array($prop['type'], ['string', 'boolean'])){
             $content = <<<tpl
@@ -479,7 +508,7 @@ tpl;
         $content = file_get_contents($file);
         $result = preg_match_all("/\/\*[\s\S]*?\*\//", $content, $matches);
         if(!$result){
-            return [];
+            return [[], [], []];
         }
         $defs = [];
         $apis = [];
@@ -572,12 +601,12 @@ tpl;
     protected function parsePropsFromDocBlock($propsDefs){
         $props = explode("\n", $propsDefs);
         foreach($props as $index => $propDef){
-            $propDef = trim($propDef, "\n*-\s\t ");
+            $propDef = trim($propDef, "\n*-\t ");
             if(!$propDef){
                 unset($props[$index]);
                 continue;
             }
-            $result = preg_match("/(?P<name>[a-z0-9A-Z\_\-]+)\s+(?P<prop_def>[^\n]+)/", $propDef, $vars);
+            $result = preg_match("/(?P<name>[a-z0-9A-Z\_\-\[\]]+)\s+(?P<prop_def>[^\n]+)/", $propDef, $vars);
             if(!$result){
                 throw new \Exception("def的语法书写错误 " . $propDef);
             }
