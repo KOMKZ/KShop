@@ -52,6 +52,7 @@ class ApiController extends Controller
 			'items' => $items,
 			'count' => null === $count ? count($items) : $count
 		];
+		$res['code'] = 0;
 		$res['message'] = '';
 		return $this->asJson($res);
 	}

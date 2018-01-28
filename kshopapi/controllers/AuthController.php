@@ -2,7 +2,7 @@
 namespace kshopapi\controllers;
 
 use Yii;
-use common\controllers\ApiController;
+use common\controllers\ApiController as Controller;
 use common\models\user\UserModel;
 use common\models\user\query\UserQuery;
 use yii\base\ErrorException;
@@ -11,7 +11,7 @@ use common\filters\auth\HttpBearerAuth;
 /**
  *
  */
-class AuthController extends ApiController
+class AuthController extends Controller
 {
 	public function actionLogin(){
 		$post = Yii::$app->request->getBodyParams();
@@ -46,7 +46,7 @@ class AuthController extends ApiController
 		}
 		return $this->succ(['jwt' => $token]);
 	}
-	
+
 	public function actionGetInfo(){
 		$user = Yii::$app->user->identity;
 		$userInfo = $user->toArray();

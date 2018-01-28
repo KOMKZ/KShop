@@ -1,0 +1,50 @@
+roles:
+  - root@超级用户
+  - root_admin@超级管理员
+  - goods_admin@商品管理员
+  - normal_user@普通用户
+  - vistor@游客
+permissions:
+  - auth/login@
+  - auth/get-info@
+  - auth/logout@
+  - classification/index@
+  - classification/update@
+  - classification/delete@
+  - classification/create@
+  - demo/index@
+  - demo/wx@
+  - file/index@
+  - file/delete@
+  - file/list@
+  - file/chunk-task-create@
+  - file/create@
+  - file/output@
+  - goods/list@获取商品列表
+  - goods/create-source@
+  - goods/view-sku@
+  - goods/create-sku@
+  - goods/update@
+  - goods/create@
+  - goods/view@
+  - goods/create-cls-attr@
+  - goods/delete-cls-attr@
+  - goods/cls-attrs@
+  - rbac/create-role@
+  - rbac/permissions@
+  - rbac/assign@
+  - site/enums-map@
+  - site/labels@
+  - site/index@
+  - site/error@
+  - trans/notify@
+  - user/update@
+  - user/view@
+  - user/list@
+  - user/create@
+  - >
+    goods/can-update-goods-price@是否能够修改商品价格
+  - >
+    can-delete-goods-sku@是否能够删除商品sku
+assign:
+  - root@goods/can-update-goods-price

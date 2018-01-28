@@ -18,6 +18,11 @@ use common\models\goods\ar\GoodsSource;
 
 class GoodsController extends ApiController{
 
+    /**
+     * @api get,/goods/list,Goods,获取商品列表
+     * @return #global_res
+     * - data object#goods_list_res,商品列表信息
+     */
     public function actionList(){
         $getData = Yii::$app->request->get();
         $query = GoodsQuery::find();
@@ -37,6 +42,7 @@ class GoodsController extends ApiController{
 		]);
 		return $this->succItems($provider->getModels(), $provider->totalCount);
     }
+
 
     public function actionCreateSource(){
         $postData = Yii::$app->request->getBodyParams();
@@ -194,3 +200,23 @@ class GoodsController extends ApiController{
         return $this->succ($query->asArray()->all());
     }
 }
+
+/**
+ * @def #goods_list_res
+ * - total_count integer,总数量
+ * - items array#goods_item,商品列表信息
+ *
+ * @def #goods_item
+ * - g_id integer,商品id
+ * - g_primary_name string,商品主要名称
+ * - g_secondary_name string,商品第二名称
+ * - g_sku_attrs array#g_sku_attr,商品sku属性列表
+ * - g_metas array#g_meta,商片元属性列表
+ *
+ * @def #g_sku_attr
+ * - g_atr_id integer,属性id
+ *
+ * @def #g_meta
+ * - g_atr_id integer,属性id
+ *
+ */
