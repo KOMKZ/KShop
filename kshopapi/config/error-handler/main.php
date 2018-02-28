@@ -1,6 +1,6 @@
 <?php
 return [
     'errorHandler' => [
-        'errorAction' => 'api/error'
+        'errorAction' => 'site/error'
     ]
 ];

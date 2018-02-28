@@ -6,6 +6,7 @@
  */
 
 namespace common\filters\auth;
+use Yii;
 use yii\filters\auth\AuthMethod;
 
 /**
@@ -40,6 +41,7 @@ class HttpBearerAuth extends AuthMethod
 	 */
 	public function authenticate($user, $request, $response)
 	{
+
 		$authHeader = $request->getHeaders()->get('Authorization');
 		if ($authHeader !== null && preg_match('/^Bearer\s+(.*?)$/', $authHeader, $matches)) {
 			$identity = $user->loginByAccessToken($matches[1], get_class($this));
@@ -48,7 +50,6 @@ class HttpBearerAuth extends AuthMethod
 			}
 			return $identity;
 		}
-
 		return null;
 	}
 

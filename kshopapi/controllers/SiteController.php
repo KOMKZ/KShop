@@ -2,7 +2,7 @@
 namespace kshopapi\controllers;
 
 use Yii;
-use common\controllers\ApiController as Controller;
+use kshopapi\controllers\ApiController as Controller;
 
 /**
  *

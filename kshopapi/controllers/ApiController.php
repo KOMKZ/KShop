@@ -13,15 +13,10 @@ class ApiController extends Controller
 {
 	public function behaviors(){
 		$behaviors = parent::behaviors();
-		$behaviors['bearerAuth']['optional'][] = 'site/index';
-		$behaviors['bearerAuth']['optional'][] = 'site/error';
-		$behaviors['bearerAuth']['optional'][] = 'site/enums-map';
-		$behaviors['bearerAuth']['optional'][] = 'site/labels';
-		$behaviors['bearerAuth']['optional'][] = 'file/output';
-		$behaviors['bearerAuth']['optional'][] = 'user/view';
-		$behaviors['bearerAuth']['optional'][] = 'classification/*';
-		$behaviors['bearerAuth']['optional'][] = 'goods/*';
-
+		$ignoreRoutes = array_keys(Yii::$app->authManager->getPermissionsByRole('vistor'));
+		foreach($ignoreRoutes as $name){
+			$behaviors['bearerAuth']['optional'][] = $name;
+		}
 		return $behaviors;
 	}
 

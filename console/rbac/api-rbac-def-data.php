@@ -9,9 +9,20 @@ return [
 	],
 	'permissions' => [
 		['goods/can-update-goods-price', '是否能够修改商品价格'],
-		['can-delete-goods-sku', '是否能够删除商品sku']
+		['can-delete-goods-sku', '是否能够删除商品sku'],
+		['classification/*', '分类的全部权限'],
+		['goods/*', '商品的全部权限']
 	],
 	'assign' => [
-		['root', 'goods/can-update-goods-price']
+		['root', 'goods/*']
+		,['vistor', 'site/index']
+		,['vistor', 'site/error']
+		,['vistor', 'site/enums-map']
+		,['vistor', 'site/labels']
+		,['vistor', 'file/output']
+		,['vistor', 'user/view']
+		,['vistor', 'classification/index']
+		,['vistor', 'goods/list']
+		,['vistor', 'auth/login']
 	]
 ];
