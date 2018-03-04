@@ -100,6 +100,7 @@ class RbacController extends Controller{
 			if($withAssign){
 				// todo more 灵活
 				$this->actionAssign('root', "u_email='kitralzhong0@qq.com'");
+				$this->actionAssign('root', "u_email='kitralzhong1@qq.com'");
 			}
 			$t->commit();
 		} catch (\Exception $e) {

@@ -14,15 +14,7 @@ return [
 		['goods/*', '商品的全部权限']
 	],
 	'assign' => [
-		['root', 'goods/*']
-		,['vistor', 'site/index']
-		,['vistor', 'site/error']
-		,['vistor', 'site/enums-map']
-		,['vistor', 'site/labels']
-		,['vistor', 'file/output']
-		,['vistor', 'user/view']
-		,['vistor', 'classification/index']
-		,['vistor', 'goods/list']
-		,['vistor', 'auth/login']
+		['root', '*/*']
+		,['vistor', '*/*']
 	]
 ];

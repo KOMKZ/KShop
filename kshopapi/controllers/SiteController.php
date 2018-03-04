@@ -3,7 +3,9 @@ namespace kshopapi\controllers;
 
 use Yii;
 use kshopapi\controllers\ApiController as Controller;
-
+use yii\web\HttpException;
+use yii\web\UserException;
+use common\models\staticdata\ConstMap;
 /**
  *
  */

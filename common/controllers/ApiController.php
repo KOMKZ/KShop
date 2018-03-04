@@ -38,7 +38,6 @@ class ApiController extends Controller
 			// ],
 			'bearerAuth' => [
 				'class' => HttpBearerAuth::className(),
-				'except' => ["user/list"],
 				'optional' => ['auth/login']
 			],
 			'access' => [

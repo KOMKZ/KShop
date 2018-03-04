@@ -77,7 +77,7 @@ class UserController extends ApiController{
 				'params' => $filterParams
 			]))->parse();
 		}
-		
+
 		$provider = new ActiveDataProvider([
 			'query' => $query,
 			'sort' => [
