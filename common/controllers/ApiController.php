@@ -5,6 +5,7 @@ use Yii;
 use yii\web\Controller;
 use common\filters\auth\HttpBearerAuth;
 use yii\filters\RateLimiter;
+use yii\filters\AccessControl;
 /**
  *
  */
@@ -37,8 +38,31 @@ class ApiController extends Controller
 			// ],
 			'bearerAuth' => [
 				'class' => HttpBearerAuth::className(),
-				'except' => ["user/list"],
 				'optional' => ['auth/login']
+			],
+			'access' => [
+				'class' => AccessControl::className(),
+				'rules' => [
+					[
+						'allow' => true,
+						'matchCallback' => function($rule, $action){
+							$authMg = Yii::$app->authManager;
+							$permName = $action->controller->id . '/' . $action->id;
+							$identity = Yii::$app->user->identity;
+							if(null === $identity
+							&& in_array($permName, array_keys($authMg->getPermissionsByRole('vistor')))
+							){
+								return true;
+							}
+							if(null !== $identity
+							&& $authMg->checkAccess($identity->u_id, $permName)
+							){
+								return true;
+							}
+							return false;
+						}
+					]
+				]
 			]
 		];
 	}
@@ -52,6 +76,7 @@ class ApiController extends Controller
 			'items' => $items,
 			'count' => null === $count ? count($items) : $count
 		];
+		$res['code'] = 0;
 		$res['message'] = '';
 		return $this->asJson($res);
 	}

@@ -59,16 +59,18 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 		$fields['user_extend'] = 'user_extend';
 		$fields['u_avatar_url1'] = 'u_avatar_url1';
 		$fields['u_avatar_url2'] = 'u_avatar_url2';
+		$fields['u_role_name'] = 'u_role_name';
+
 
 		return $fields;
 	}
-	
+
 	public function releaseFields(){
 		return [
 			"user_extend"
 		];
 	}
-	
+
 	public function scenarios(){
 		return [
 			'default' => [
@@ -85,6 +87,12 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 			]
 		];
 	}
+
+	public function getU_role_name(){
+		$roles = array_keys(Yii::$app->authManager->getRolesByUser($this->u_id));
+		return $roles;
+	}
+
 	public function getUser_extend(){
 		return $this->hasOne(UserExtend::className(), ['u_id' => 'u_id'])
 				    ->select([
@@ -94,7 +102,7 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 						'u_avatar_id2'
 					]);
 	}
-	
+
 	public function getU_avatar_url1(){
 		if(!$this->user_extend->u_avatar_id1){
 			return '';
@@ -102,7 +110,7 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 		$fileInfo = FileModel::parseQueryId($this->user_extend->u_avatar_id1);
 		return FileModel::buildFileUrlStatic($fileInfo);
 	}
-	
+
 	public function getU_avatar_url2(){
 		if(!$this->user_extend->u_avatar_id2){
 			return '';
@@ -110,7 +118,7 @@ class User extends ActiveRecord implements IdentityInterface, RateLimitInterface
 		$fileInfo = FileModel::parseQueryId($this->user_extend->u_avatar_id2);
 		return FileModel::buildFileUrlStatic($fileInfo);
 	}
-	
+
 	public function rules(){
 		return [
 			['rememberMe', 'in', 'range' => [1, 0]],

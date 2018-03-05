@@ -40,11 +40,15 @@ class DocController extends Controller
      */
     public $update = false;
 
+    public $copy = true;
+
+    public $copy_json = '';
+
     public function options($actionID)
     {
         return array_merge(
             parent::options($actionID),
-            ['tmp_dir', 'out_dir', 'update', 'as_swg_json']
+            ['tmp_dir', 'out_dir', 'update', 'copy']
         );
     }
     /**
@@ -55,6 +59,10 @@ class DocController extends Controller
         parent::init();
         foreach($this->getAlias() as $alias => $path){
             Yii::setAlias($alias, $path);
+        }
+        $docDef = ArrayHelper::getValue(Yii::$app->params, 'docdef', []);
+        foreach ($docDef as $name => $value) {
+            $this->$name = $value;
         }
     }
     /**
@@ -130,8 +138,8 @@ class DocController extends Controller
 
     protected function geneSwgJson($module){
         system(sprintf("swg %s --output %s", $this->getPhpFilePath($module), $this->getJsonFilePath($module)));
-        if($this->as_swg_json){
-            copy($this->getJsonFilePath($module), '/var/www/html/swagger.json');
+        if($this->copy){
+            copy($this->getJsonFilePath($module), $this->copy_json);
         }
     }
     protected function appendDocInPhpFile($content, $module){
@@ -511,9 +519,7 @@ tpl;
  *    @SWG\Info(
  *      version="{{version}}",
  *      title="{{title}}",
- *      description="{{description}}",
- *      @SWG\Contact({{Contact}}),
- *      @SWG\License({{License}})
+ *      description="{{description}}"
  *    )
  *  )
  */

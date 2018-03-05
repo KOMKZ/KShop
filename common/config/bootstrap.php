@@ -22,6 +22,8 @@ require(dirname(__DIR__) . '/lib/wxsdk/wxpay/lib/WxPay.Data.php');
 require(dirname(__DIR__) . '/lib/wxsdk/wxpay/lib/WxPay.Notify.php');
 require(dirname(__DIR__) . '/lib/wxsdk/wxpay/lib/WxPay.Api.php');
 require(dirname(__DIR__) . '/lib/alisdk/alipay/AopSdk.php');
+require(dirname(__DIR__) . '/lib/Spyc.php');
+
 
 Event::on(User::className(), User::EVENT_AFTER_LOGOUT, [UserModel::className(), "handleAfterLogout"]);
 // 交易模块：绑定支付单支付成功处理事件
