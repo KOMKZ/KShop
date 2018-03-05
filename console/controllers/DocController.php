@@ -24,15 +24,27 @@ class DocController extends Controller
     static public $enums = [];
 
     public $tmp_dir = "@console/runtime";
+
+
     public $out_dir = "/var/www/html";
 
+    /**
+     * 是否拷贝输出的json作为web目录的swagger.json
+     * @var boolean
+     */
+    public $as_swg_json = true;
+
+    /**
+     * 是否同时更新到svn中
+     * @var boolean
+     */
     public $update = false;
 
     public function options($actionID)
     {
         return array_merge(
             parent::options($actionID),
-            ['tmp_dir', 'out_dir', 'update']
+            ['tmp_dir', 'out_dir', 'update', 'as_swg_json']
         );
     }
     /**
@@ -77,7 +89,7 @@ class DocController extends Controller
 
         $this->initPhpFile($module);
 
-        $rootContent = $this->geneSwgRootContentFromDef($root);
+        $rootContent = $this->geneSwgRootContentFromDef($root, $module);
         $this->appendDocInPhpFile($rootContent, $module);
         foreach($refs as $ref){
             $refContent = $this->geneSwgRefContentFromDef($ref);
@@ -105,11 +117,22 @@ class DocController extends Controller
             $msg,
             $targetJson
         ));
+        if(@Yii::$app->params['svn_swg_json_auto'][$module]){
+            $targetJson = Yii::$app->params['svn_swg_json_auto'][$module];
+            copy($json, $targetJson);
+            system(sprintf("cd /home/master/company/trainor/hsehome_develop_document;svn commit -m \"%s\" %s;svn update;",
+                $msg,
+                $targetJson
+            ));
+        }
     }
 
 
     protected function geneSwgJson($module){
         system(sprintf("swg %s --output %s", $this->getPhpFilePath($module), $this->getJsonFilePath($module)));
+        if($this->as_swg_json){
+            copy($this->getJsonFilePath($module), '/var/www/html/swagger.json');
+        }
     }
     protected function appendDocInPhpFile($content, $module){
         file_put_contents($this->getPhpFilePath($module), $content . "\n\n", FILE_APPEND);
@@ -293,7 +316,7 @@ tpl;
         foreach($normalParams as $param){
             $varMap = [];
             $varMap['{{name}}'] = sprintf(" *      name=\"%s\"", $param['name']);
-            $varMap['{{description}}'] = sprintf(" *      description=\"%s\"", $param['des']);
+            $varMap['{{description}}'] = sprintf(" *      description=\"%s\"", $this->formatDes($param['des']));
             $varMap['{{required}}'] = sprintf(" *      required=%s", 'required' == $param['required'] ? 'true' : 'false');
             // 构造type
             if(in_array($param['type'], ['string', 'boolean'])){
@@ -476,7 +499,7 @@ tpl;
         return sprintf($tpl, implode(",\n", $varMap));
     }
 
-    protected function geneSwgRootContentFromDef($root){
+    protected function geneSwgRootContentFromDef($root, $module){
         $rootTempalte = <<<tpl
 /**
  *  @SWG\Swagger(
@@ -497,12 +520,21 @@ tpl;
 tpl;
         $varMap = [];
         foreach($root as $name => $value){
+            if('description' == $name){
+                $value = $this->formatRootDes($value, $module);
+            }
             $varMap['{{'.$name.'}}'] = $value;
         }
         return strtr($rootTempalte, $varMap);
     }
 
-
+    protected function formatRootDes($value, $module){
+        $target = ArrayHelper::getValue(Yii::$app->params['apides'], $module, []);
+        if(!$target){
+            return $value;
+        }
+        return $target;
+    }
 
     protected function parseDocesFormPhpFile($file){
         $content = file_get_contents($file);
@@ -707,6 +739,7 @@ tpl;
     protected function getAlias(){
         return [
             '@hsefr' => '/home/master/pro/php/hsehome2.0/app/frontend',
+            '@rsfr' => '/home/master/pro/php/hsehome2.0/roadsafety/frontend',
             '@kshopapi' => '/home/kitralzhong/pro/php/kshop/kshopapi',
             '@homekscmd' => '/home/kitralzhong/pro/php/kshop/console',
             '@cpykscmd' => '/home/master/pro/php/kshop/console',
