@@ -36,3 +36,5 @@ phpunit.phar
 /.vagrant
 /vendor
 common/tests/_output/
+
+kshopapi/tests/_output/

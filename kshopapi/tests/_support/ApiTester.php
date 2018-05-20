@@ -19,8 +19,12 @@
 class ApiTester extends \Codeception\Actor
 {
     use _generated\ApiTesterActions;
-
+    public $jwt = "";
    /**
     * Define custom actions here
     */
+
+    public function setAuthHeader(){
+        $this->haveHttpHeader("Authorization", "Bearer " . $this->jwt);
+    }
 }
