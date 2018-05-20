@@ -1,0 +1,3 @@
+Exception
+Invalid Configuration – yii\base\InvalidConfigException
+The directory is not writable by the Web process: /home/lartik/pro/php/lartikShop/kshopapi/web/assets
