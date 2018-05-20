@@ -167,13 +167,13 @@ class GoodsAttrModel extends Model
      * - gm_value: string,
      * - gm_atr_code: string, 元属性代号
      * - gm_atr_name: string, 原书行名称
-     * - gm_id: 元属性id
      * @param  \common\models\goods\GoodsModel  $goods   商品基础信息对象
      * @param  boolean $asArray 返回对象元素是否时数组
      * @return [type]           [description]
      */
     public function createGoodsMetas($data, $goods, $asArray = true){
         list($newMetas, $oldMetas) = $this->parseMetaNewAndOld($data['metas']);
+
         $metas = [];
         foreach($newMetas as $meta){
             $meta['g_atr_cls_type'] = GoodsAttr::ATR_CLS_TYPE_GOODS;
@@ -194,7 +194,7 @@ class GoodsAttrModel extends Model
                 'g_id' => $goods->g_id,
             ], $meta);
             if(!$metaDef->load($metaData, '') || !$metaDef->validate()){
-                $this->addError('', $this->getOneErrMsg($metaDef));
+                $this->addErrors($metaDef->getErrors());
                 return false;
             }
             $metaDef->gm_created_at = time();
@@ -268,7 +268,7 @@ class GoodsAttrModel extends Model
                 $this->addError('', Yii::t('商品属性创建失败'));
                 return false;
             }
-            $options = $this->createAttrOptions(ArrayHelper::getValue($attr, 'g_atr_opts'), $attrDef->g_attr, $goods);
+            $options = $this->createAttrOptions(ArrayHelper::getValue($attr, 'gm_value'), $attrDef->g_attr, $goods);
             if(!$options){
                 return false;
             }
@@ -290,9 +290,17 @@ class GoodsAttrModel extends Model
      */
     public function createAttrOptions($options, GoodsAttr $attr, Goods $goods, $asArray = true, $startValue = 1){
         if(is_string($options)){
-            $options = [[
-                'g_opt_name' => $options,
-            ]];
+            $cands = preg_split("/\s*,\s*/", $options, -1, PREG_SPLIT_NO_EMPTY);
+            if(!$cands){
+                $this->addError("", "选项值设置错误");
+                return false;
+            }
+            $options = [];
+            foreach($cands as $value){
+                $options[] = [
+                    'g_opt_name' => $value,
+                ];
+            }
         }
         $optionValue = $startValue;
         foreach($options as $key => $optionData){

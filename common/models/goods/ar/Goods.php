@@ -64,8 +64,19 @@ class Goods extends ActiveRecord
 	public function getG_skus(){
 		return $this->hasMany(GoodsSku::className(), [
 			'g_id' => 'g_id'
-		])->andWhere([
-			'in', 'g_sku_status', [GoodsSku::STATUS_ON_SALE, GoodsSku::STATUS_ON_NOT_SALE]
+		])
+		->select([
+			"g_sku_id",
+			"g_sku_name",
+			"g_sku_value_name",
+			"g_sku_value",
+			"g_sku_stock_num",
+			"g_sku_price",
+			"g_sku_sale_price",
+			"g_sku_status"
+		])
+		->andWhere([
+			'in', 'g_sku_status', [GoodsSku::STATUS_ON_SALE]
 		]);
 	}
 
@@ -117,6 +128,7 @@ class Goods extends ActiveRecord
 	public function getG_sku_attrs(){
 		$gaTable = GoodsAttr::tableName();
 		$grTable = GoodsRealAttr::tableName();
+
 		return $this
 			   ->hasMany(GoodsRealAttr::className(), ['g_id' => 'g_id'])
 			   ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$grTable}.g_atr_id")
@@ -130,8 +142,14 @@ class Goods extends ActiveRecord
 		return $this
 			   ->hasMany(GoodsMeta::className(), ['g_id' => 'g_id'])
 			   ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$gmTable}.g_atr_id")
+			   ->select([
+				   "{$gmTable}.gm_value",
+				   "{$gmTable}.g_atr_id",
+				   "{$gaTable}.g_atr_name",
+			   ])
 			   ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_META])
-			   ->andWhere(['=', "{$gmTable}.gm_status", GoodsMeta::STATUS_VALID]);
+			   ->andWhere(['=', "{$gmTable}.gm_status", GoodsMeta::STATUS_VALID])
+			   ->asArray();
 	}
 
 	public function setG_metas($value){
@@ -157,10 +175,10 @@ class Goods extends ActiveRecord
 	public function scenarios(){
 		return [
 			'default' => [
-				'g_cls_id', 'g_status', 'g_primary_name', 'g_secondary_name', 'g_create_uid', 'g_updated_at', 'g_start_at', 'g_end_at',
+				'g_cls_id', 'g_code', 'g_status', 'g_primary_name', 'g_secondary_name', 'g_create_uid', 'g_updated_at', 'g_start_at', 'g_end_at',
 			],
 			'update' => [
-				'g_status', 'g_primary_name', 'g_secondary_name', 'g_start_at', 'g_end_at'
+				'g_status', 'g_code', 'g_primary_name', 'g_secondary_name', 'g_start_at', 'g_end_at'
 			]
 		];
 	}
@@ -171,6 +189,9 @@ class Goods extends ActiveRecord
 		return [
 			['g_cls_id', 'required'],
 			['g_cls_id', 'exist', 'targetAttribute' => 'g_cls_id', 'targetClass' => GoodsClassification::className()],
+
+			['g_code', 'required'],
+            ['g_code', 'string', 'max' => 10],
 
 			['g_primary_name', 'string'],
 			['g_primary_name', 'required'],

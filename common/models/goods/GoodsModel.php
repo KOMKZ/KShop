@@ -95,6 +95,7 @@ class GoodsModel extends Model
 				return false;
 			}
 			$skus = [];
+
 			foreach($skuData as $skuItem){
 				$sku = $this->createGoodsSku($skuItem, $goods);
 				if(!$sku){
@@ -273,10 +274,12 @@ class GoodsModel extends Model
 				$this->addError($code, "创建商品元属性失败:" . $error);
 				return false;
 			}
+
 			// create goods attrs info,including option info
 			$gAttrs = $gAttrModel->createGoodsAttrs([
 				'attrs' => ArrayHelper::getValue($data, 'g_sku_attrs', [])
 			], $goods);
+
 			if(!$gAttrs){
 				list($code, $error) = $gAttrModel->getOneError();
 				$this->addError($code, "创建商品属性失败:" . $error);
@@ -332,7 +335,9 @@ class GoodsModel extends Model
 			}
 		}
 		ksort($skuValues);
+
 		$skuIds = static::buildSkuIds($skuValues);
+
 		return $skuIds;
 	}
 
@@ -353,15 +358,23 @@ class GoodsModel extends Model
 		$skuIds = [];
 		$first = array_shift($skuValues);
 		foreach($first as $item){
-			foreach($skuValues as $others){
-				foreach($others as $otherItem){
-					$skuIds[] = [
-						'value' => implode(';', [$item['value'], $otherItem['value']]),
-						'name' => implode(';', [$item['name'], $otherItem['name']]),
-						'g_id' => $item['g_id']
-					];
+			if($skuValues){
+				foreach($skuValues as $others){
+					foreach($others as $otherItem){
+						$skuIds[] = [
+							'value' => implode(';', [$item['value'], $otherItem['value']]),
+							'name' => implode(';', [$item['name'], $otherItem['name']]),
+							'g_id' => $item['g_id']
+						];
+					}
+					break;
 				}
-				break;
+			}else{
+				$skuIds[] = [
+					'value' => $item['value'],
+					'name' => $item['name'],
+					'g_id' => $item['g_id']
+				];
 			}
 		}
 		array_shift($skuValues);

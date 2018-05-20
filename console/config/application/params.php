@@ -6,6 +6,9 @@ return [
     'apifiles' => [
 
     ],
+    'apialias' => [
+
+    ],
     'docdef' => [
         'out_dir' => ''
     ],

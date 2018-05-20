@@ -21,6 +21,16 @@ class GoodsRealAttr extends ActiveRecord
         $data = parent::toArray($fields, $expand, $recursive);
         $data = array_merge($data, $data['g_attr']);
         unset($data['g_attr']);
+        $keepFeilds = [
+            "g_atr_id" => null, "g_atr_opts" => null,
+            "g_atr_code" => null, "g_atr_opt_img" => null,
+            "g_atr_show_name" => null, "g_atr_name" => null
+        ];
+        foreach($data as $field => $val){
+            if(!array_key_exists($field, $keepFeilds)){
+                unset($data[$field]);
+            }
+        }
         return $data;
     }
 
@@ -49,7 +59,13 @@ class GoodsRealAttr extends ActiveRecord
     public function getG_atr_opts(){
         return $this->hasMany(GoodsRealOption::className(), [
             'g_id' => 'g_id',
-            'g_atr_id' => 'g_atr_id']);
+            'g_atr_id' => 'g_atr_id'])
+            ->select([
+                "g_opt_value",
+                "g_opt_name",
+                "g_opt_img",
+                "g_opt_id"
+            ]);
     }
     public function getG_attr(){
         return $this->hasOne(GoodsAttr::className(), [

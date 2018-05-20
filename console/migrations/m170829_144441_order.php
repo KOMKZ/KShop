@@ -41,9 +41,7 @@ class m170829_144441_order extends Migration
     }
     public function safeDown(){
         $tableName = $this->getTableName();
-        $dropTableSql = "
-        drop table if exists {$tableName}
-        ";
+        $dropTableSql = "drop table if exists `{$tableName}`";
         $this->execute($dropTableSql);
         return true;
     }

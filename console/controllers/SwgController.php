@@ -5,28 +5,29 @@ use Yii;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
 
-/**
- * @def #global_res
- * - code integer,错误编号
- * - message string,错误信息
- * - data mixed,返回信息
- *
- * @def #goods_item
- * - g_primary_name string,商品主要名称
- * - g_detail_info object#g_detail_info,商品详细信息
- *
- * @def #g_detail_info
- * - g_long_text string,商品详细介绍
- * - g_middle_text string,商品中长介绍
- */
-class DocController extends Controller
+
+class SwgController extends Controller
 {
     static public $enums = [];
 
+    /**
+     * {module_name}_swagger.php输出的目录
+     * @var string
+     */
     public $tmp_dir = "@console/runtime";
 
 
+    /**
+     * {module_name}_swagger.json输出的目录
+     * @var string
+     */
     public $out_dir = "/var/www/html";
+
+    /**
+     * swagger.json web目录
+     * @var string
+     */
+    public $web_dir = "/var/www/html";
 
     /**
      * 是否拷贝输出的json作为web目录的swagger.json
@@ -35,45 +36,31 @@ class DocController extends Controller
     public $as_swg_json = true;
 
     /**
-     * 是否同时更新到svn中
+     * 是否执行后续操作
      * @var boolean
      */
-    public $update = false;
-
-    public $copy = true;
-
-    public $copy_json = '';
+    public $after = false;
 
     public function options($actionID)
     {
         return array_merge(
             parent::options($actionID),
-            ['tmp_dir', 'out_dir', 'update', 'copy']
+            ['tmp_dir', 'out_dir', 'update', 'as_swg_json', 'web_dir']
         );
     }
     /**
-     * [init description]
+     * [init description]http://localhost/swg/swagger-ui/dist/
      * @return [type] [description]
      */
     public function init(){
         parent::init();
+        Yii::setAlias("@doc", dirname(dirname((dirname(__DIR__)))) . '/doc');
         foreach($this->getAlias() as $alias => $path){
             Yii::setAlias($alias, $path);
         }
-        $docDef = ArrayHelper::getValue(Yii::$app->params, 'docdef', []);
-        foreach ($docDef as $name => $value) {
-            $this->$name = $value;
-        }
     }
-    /**
-     * @api get,goods/list,获取商品列表
-     * - g_id optional,integer,in_query,商品id
-     * - g_create_uid optional,integer,in_query,商品创建者
-     * - g_status optional,string,in_query,is_enum(draft:草稿|online:上架),商品状态
-     * @return #global_res,返回商品列表
-     * - data array#goods_item,商品列表
-     */
-    public function actionGeneApi($module){
+
+    public function actionIndex($module){
         $files = $this->getFilesFromModule($module);
         $files = $this->prepareFiles($files);
         $refs = [];
@@ -110,37 +97,22 @@ class DocController extends Controller
         $this->geneSwgJson($module);
         echo sprintf("php_swagger:%s\n", $this->getPhpFilePath($module));
         echo sprintf("json_swagger:%s\n", $this->getJsonFilePath($module));
-        if($this->update){
-            $this->commitSwgToSvn($module);
+        if($this->as_swg_json){
+            copy($this->getJsonFilePath($module), sprintf("%s/swagger.json", $this->web_dir));
         }
-
+        if($this->after){
+            $this->afterGene($module);
+        }
     }
 
-    protected function commitSwgToSvn($module){
-        $json = $this->getJsonFilePath($module);
-        $targetJson = Yii::$app->params['svn_swg_json'][$module];
-        $msg = sprintf('swagger: 更新%s swagger.json', $module);
-        copy($json, $targetJson);
-        system(sprintf("cd /home/master/company/trainor/hsehome_develop_document;svn commit -m \"%s\" %s;svn update;",
-            $msg,
-            $targetJson
-        ));
-        if(@Yii::$app->params['svn_swg_json_auto'][$module]){
-            $targetJson = Yii::$app->params['svn_swg_json_auto'][$module];
-            copy($json, $targetJson);
-            system(sprintf("cd /home/master/company/trainor/hsehome_develop_document;svn commit -m \"%s\" %s;svn update;",
-                $msg,
-                $targetJson
-            ));
-        }
+    protected function afterGene($module){
+        $cmd = ArrayHelper::getValue(Yii::$app->params['apiafter'], $module);
     }
 
 
     protected function geneSwgJson($module){
-        system(sprintf("swg %s --output %s", $this->getPhpFilePath($module), $this->getJsonFilePath($module)));
-        if($this->copy){
-            copy($this->getJsonFilePath($module), $this->copy_json);
-        }
+        $bin = dirname(((Yii::getAlias('@app')))) . '/vendor/zircote/swagger-php/bin/swagger';
+        system(sprintf("php %s %s --output %s", $bin, $this->getPhpFilePath($module), $this->getJsonFilePath($module)));
     }
     protected function appendDocInPhpFile($content, $module){
         file_put_contents($this->getPhpFilePath($module), $content . "\n\n", FILE_APPEND);
@@ -353,11 +325,23 @@ tpl;
     }
     protected static function getEnums(){
         if(!static::$enums){
-            $enumsFile = shell_exec(Yii::$app->params['enumcmd']);
-            if(!file_exists($enumsFile)){
-                throw new \Exception("enums文件不存在");
+            $data = spyc_load_file(Yii::getAlias('@doc/enums.yaml'));
+            $result = [];
+            foreach($data as $item){
+                $enums = [];
+                foreach($item['items'] as $value){
+                    $def = explode('|', $value);
+                    $def['value'] = $def[0];
+                    $def['name'] = $def[1];
+                    $def['des'] = ArrayHelper::getValue($def, 2, '');
+                    $def['symbol'] = ArrayHelper::getValue($def, 3, '');
+                    $def['isdefault'] = ArrayHelper::getValue($def, 4, '');
+                    $value = $def;
+                    $enums[] = sprintf("%s:%s", $value['value'], $value['name']);
+                }
+                $result[$item['field']] = implode('|', $enums);
             }
-            static::$enums = require($enumsFile);
+            static::$enums = $result;
         }
         return static::$enums;
     }
@@ -415,6 +399,15 @@ tpl;
 tpl;
             $varMap['{{type}}'] = $content;
         }elseif('array' == $prop['type']){
+            if(in_array($prop['ref'], ['string', 'integer', 'boolean'])){
+            $content = <<<tpl
+ *      type="array",
+ *      @SWG\Items(
+ *      type="%s"
+ *    )
+tpl;
+$varMap['{{type}}'] = sprintf($content, $prop['ref']);
+            }else{
             $content = <<<tpl
  *      type="array",
  *      @SWG\Items(
@@ -422,8 +415,8 @@ tpl;
  *      ref="#/definitions/%s"
  *    )
 tpl;
-            // todo 未必都是object
-            $varMap['{{type}}'] = sprintf($content, $prop['ref']);
+$varMap['{{type}}'] = sprintf($content, $prop['ref']);
+            }
         }elseif('object' == $prop['type']){
             $content = <<<tpl
  *      type="object",
@@ -519,7 +512,9 @@ tpl;
  *    @SWG\Info(
  *      version="{{version}}",
  *      title="{{title}}",
- *      description="{{description}}"
+ *      description="{{description}}",
+ *      @SWG\Contact({{Contact}}),
+ *      @SWG\License({{License}})
  *    )
  *  )
  */
@@ -588,7 +583,7 @@ tpl;
         $tag = '';
         $return = ['ref' => null, 'des' => '', 'props' => []];
         $result = preg_match(sprintf("/%s%s%s%s%s/u",
-        "@api\s+(?P<method>(get|post|put|patch)),\s*",
+        "@api\s+(?P<method>(get|post|put|patch|delete)),\s*",
         "(?P<path>[\s\S]+?),\s*(?P<tag>[\s\S]+?),\s*(?P<des>[\S\s]+?)\n+",
         "(?P<props>[\s\S]*)\n*\s*\*\s*",
         "@return\s+(?P<return_def>(#[\s\S]+?))\n+",
@@ -670,7 +665,6 @@ tpl;
                 $def['type'] = $type;
                 $def['ref'] = $ref;
                 $propdefs = preg_split('/\s*,\s*/', $propdefs[1], 2, PREG_SPLIT_NO_EMPTY);
-
             }
             if($this->isPathOrQueryProp($propdefs[0])){
                 $def['query_or_path'] = $propdefs[0];
@@ -738,20 +732,18 @@ tpl;
                 return false;
             }
             $files[$index] = Yii::getAlias($file);
-
+            file_put_contents($files[$index], str_replace("\r\n", "\n", file_get_contents($files[$index])));
         }
         return $files;
     }
     protected function getAlias(){
-        return [
-            '@hsefr' => '/home/master/pro/php/hsehome2.0/app/frontend',
-            '@rsfr' => '/home/master/pro/php/hsehome2.0/roadsafety/frontend',
-            '@kshopapi' => '/home/kitralzhong/pro/php/kshop/kshopapi',
-            '@homekscmd' => '/home/kitralzhong/pro/php/kshop/console',
-            '@cpykscmd' => '/home/master/pro/php/kshop/console',
-        ];
+        return Yii::$app->params['apialias'];
     }
     protected function getFilesFromModule($module){
         return ArrayHelper::getValue(Yii::$app->params['apifiles'], $module, []);
     }
+
+
+
+
 }

@@ -10,6 +10,7 @@ use common\models\goods\query\GoodsQuery;
 use common\models\goods\query\GoodsSkuQuery;
 use common\models\goods\GoodsAttrModel;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\validators\FileValidator;
 use yii\web\UploadedFile;
 use common\models\file\FileModel;
@@ -19,7 +20,7 @@ use common\models\goods\ar\GoodsSource;
 class GoodsController extends ApiController{
 
     /**
-     * @api get,/goods/list,Goods,获取商品列表
+     * @api get,/goods,Goods,获取商品列表
      * @return #global_res
      * - data object#goods_list_res,商品列表信息
      */
@@ -108,19 +109,34 @@ class GoodsController extends ApiController{
         return $this->succ($goodsSku->toArray());
     }
 
+    /**
+    * @api post,/goods/{g_code}/sku,Goods,创建商品sku记录
+    * - g_code required,string,in_path,主商品id
+    * - g_sku_value required,string,in_body,商品sku值
+    * - g_sku_price required,integer,in_body,商品sku价格
+    * - g_sku_stock_num required,integer,in_body,商品库存量
+    *
+    *
+    * @return #global_res
+    * - data object#goods_item,商品信息
+     */
     public function actionCreateSku(){
         $postData = Yii::$app->request->getBodyParams();
-        if(empty($postData['g_id'])){
+        $queryData = Yii::$app->request->getQueryParams();
+        $postData['g_code'] = ArrayHelper::getValue($queryData, 'g_code', null);
+        if(empty($postData['g_code'])){
             return $this->error(500, Yii::t('app', '参数不完整'));
         }
-        $goods = GoodsQuery::find()->andWhere(['=', 'g_id', $postData['g_id']])->one();
+        $goods = GoodsQuery::find()->andWhere(['=', 'g_code', $postData['g_code']])->one();
         if(!$goods){
             return $this->error(404, Yii::t('app', '指定的商品不存在'));
         }
         $loginUser = Yii::$app->user->identity;
         $postData['g_sku_create_uid'] = $loginUser->u_id;
+        $postData['g_id'] = $goods['g_id'];
         $skuData = [$postData];
         $gModel = new GoodsModel();
+        // 调用的是创建多条的接口
 		$skus = $gModel->createMultiGoodsSku($skuData, $goods);
 		if(!$skus){
             return $this->error(1, $gModel->getErrors());
@@ -139,7 +155,8 @@ class GoodsController extends ApiController{
             return $this->error(404, Yii::t('app', '指定的商品不存在'));
         }
         $loginUser = Yii::$app->user->identity;
-        $postData['g_update_uid'] = $loginUser->u_id;
+        $postData['g_update_uid']
+         = $loginUser->u_id;
         $goodsModel = new GoodsModel();
         $result = $goodsModel->updateGoods($postData, $goods);
         if(!$result){
@@ -147,9 +164,24 @@ class GoodsController extends ApiController{
         }
         return $this->succ($result->toArray());
     }
+
+    /**
+     * @api post,/goods,Goods,创建商品主记录
+     * - g_cls_id required,integer,in_body,商品分类id
+     * - g_code required,string,in_body,商品编号
+     * - g_primary_name required,string,in_body,商品第一名称
+     * - g_intro_text required,string,in_body,商品简介
+     * - g_metas required,array#g_meta_param,in_body,商品元信息设置列表
+     * - g_sku_attrs required,array#g_attr_param,in_body,商品属性信息列表
+     * - g_secondary_name optional,string,in_body,商品第二名称
+     *
+     * @return #global_res
+     * - data object#goods_item,商品信息
+     */
     public function actionCreate(){
         $postData = Yii::$app->request->getBodyParams();
         $loginUser = Yii::$app->user->identity;
+
         $postData['g_create_uid'] = $loginUser->u_id;
       	$gModel = new GoodsModel();
       	$goods = $gModel->createGoods($postData);
@@ -158,8 +190,17 @@ class GoodsController extends ApiController{
         }
         return $this->succ($goods->toArray());
     }
-    public function actionView($g_id){
-        $goods = GoodsQuery::find()->andWhere(['=', 'g_id', $g_id])->one();
+
+    /**
+     * @api get,/goods/{g_code},Goods,获取主商品信息
+     * - g_code required,string,in_path,商品编号
+     *
+     * @return #global_res
+     * - data object#goods_item,主商品信息
+     *
+     */
+    public function actionView($g_code){
+        $goods = GoodsQuery::find()->andWhere(['=', 'g_code', $g_code])->one();
         if(!$goods){
             return $this->error(404, Yii::t('app', '指定的商品不存在'));
         }
@@ -208,15 +249,53 @@ class GoodsController extends ApiController{
  *
  * @def #goods_item
  * - g_id integer,商品id
+ * - g_code string,商品编号
+ * - g_cls_id string,商品所属分类id
+ * - g_status string,商品状态
  * - g_primary_name string,商品主要名称
  * - g_secondary_name string,商品第二名称
  * - g_sku_attrs array#g_sku_attr,商品sku属性列表
  * - g_metas array#g_meta,商片元属性列表
+ * - g_option_attrs array#g_sku_attr,商品选项属性列表
+ * - g_vaild_sku_ids array#valid_sku_id,商品有效sku id
+ * - g_skus array#sku_item,商品sku
+ * - g_intro_text string,商品介绍文本
+ *
+ * @def #sku_item
+ * - sku_id integer,sku id值
+ *
+ * @def #valid_sku_id
+ * - value string,sku值
+ * - name string,sku值名称
  *
  * @def #g_sku_attr
  * - g_atr_id integer,属性id
+ * - g_atr_opts array#g_atr_opt_item,选值值列表
+ * - g_atr_name string,属性名称
+ * - g_atr_show_name string,属性展示名称
+ *
+ * @def #g_atr_opt_item
+ * - g_opt_value string,选项值
+ * - g_opt_id integer,选项值id
+ * - g_opt_img_url string,选项值关联图片url
+ * - g_opt_img integer,选项值是否支持图片显示
  *
  * @def #g_meta
  * - g_atr_id integer,属性id
+ * - gm_id integer,动态属性值id
+ * - g_atr_name string,元属性名称
+ * - gm_value string,元属性值
+ *
+ * @def #g_meta_param
+ * - g_atr_id optional,integer,元属性id，指定这个属性说明使用原有属性id，没指定新属性则必须指定这个值
+ * - g_atr_code optional,string,元属性编号，使用这个属性用于创建新的属性，属性的类型属于商品
+ * - g_atr_name optional,string,元属性名称，使用这个属性用于创建新的属性，属性的类型属于商品
+ * - gm_value required,string,元属性值
+ *
+ * @def #g_attr_param
+ * - g_atr_id optional,string,属性id，指定这个属性说明使用原有属性id，没指定新属性则必须指定这个值
+ * - g_atr_code optional,string,属性编号，使用这个属性用于创建新的属性，属性的类型属于商品
+ * - g_atr_name optional,string,属性名称，使用这个属性用于创建新的属性，属性的类型属于商品
+ * - g_atr_opts required,string,sku属性选项值，选项值使用逗号隔开
  *
  */

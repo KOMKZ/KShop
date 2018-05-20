@@ -23,9 +23,9 @@ permissions:
   - goods/list@获取商品列表
   - goods/create-source@
   - goods/view-sku@
-  - goods/create-sku@
+  - goods/create-sku@创建商品sku记录
   - goods/update@
-  - goods/create@
+  - goods/create@创建商品主记录
   - goods/view@
   - goods/create-cls-attr@
   - goods/delete-cls-attr@
@@ -49,79 +49,22 @@ permissions:
   - 'classification/*@分类的全部权限'
   - 'goods/*@商品的全部权限'
 assign:
-  - root@auth/login
-  - root@auth/get-info
-  - root@auth/logout
-  - root@classification/index
-  - root@classification/update
-  - root@classification/delete
-  - root@classification/create
-  - root@demo/index
-  - root@demo/wx
-  - root@file/index
-  - root@file/delete
-  - root@file/list
-  - root@file/chunk-task-create
-  - root@file/create
-  - root@file/output
-  - root@goods/list
-  - root@goods/create-source
-  - root@goods/view-sku
-  - root@goods/create-sku
-  - root@goods/update
-  - root@goods/create
-  - root@goods/view
-  - root@goods/create-cls-attr
-  - root@goods/delete-cls-attr
-  - root@goods/cls-attrs
-  - root@rbac/create-role
-  - root@rbac/permissions
-  - root@rbac/assign
-  - root@site/enums-map
-  - root@site/labels
-  - root@site/index
-  - root@site/error
-  - root@trans/notify
-  - root@user/update
-  - root@user/view
-  - root@user/list
-  - root@user/create
-  - root@goods/can-update-goods-price
-  - vistor@auth/login
-  - vistor@auth/get-info
-  - vistor@auth/logout
-  - vistor@classification/index
-  - vistor@classification/update
-  - vistor@classification/delete
-  - vistor@classification/create
-  - vistor@demo/index
-  - vistor@demo/wx
-  - vistor@file/index
-  - vistor@file/delete
-  - vistor@file/list
-  - vistor@file/chunk-task-create
-  - vistor@file/create
-  - vistor@file/output
-  - vistor@goods/list
-  - vistor@goods/create-source
-  - vistor@goods/view-sku
-  - vistor@goods/create-sku
-  - vistor@goods/update
-  - vistor@goods/create
-  - vistor@goods/view
-  - vistor@goods/create-cls-attr
-  - vistor@goods/delete-cls-attr
-  - vistor@goods/cls-attrs
-  - vistor@rbac/create-role
-  - vistor@rbac/permissions
-  - vistor@rbac/assign
   - vistor@site/enums-map
   - vistor@site/labels
   - vistor@site/index
   - vistor@site/error
-  - vistor@trans/notify
-  - vistor@user/update
-  - vistor@user/view
-  - vistor@user/list
-  - vistor@user/create
-  - vistor@goods/can-update-goods-price
+  - vistor@auth/login
+  - vistor@auth/get-info
+  - vistor@goods/view
+  - vistor@goods/list
+  - goods_admin@goods/list
+  - goods_admin@goods/create-source
+  - goods_admin@goods/view-sku
+  - goods_admin@goods/create-sku
+  - goods_admin@goods/update
+  - goods_admin@goods/create
+  - goods_admin@goods/view
+  - goods_admin@goods/create-cls-attr
+  - goods_admin@goods/delete-cls-attr
+  - goods_admin@goods/cls-attrs
+  - goods_admin@goods/can-update-goods-price

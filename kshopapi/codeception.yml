@@ -2,7 +2,7 @@
 suites:
     api:
         actor: ApiTester
-        path: .
+        path: api
         modules:
             enabled:
                 - REST:

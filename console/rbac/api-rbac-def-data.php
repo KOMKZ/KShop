@@ -14,7 +14,11 @@ return [
 		['goods/*', '商品的全部权限']
 	],
 	'assign' => [
-		['root', '*/*']
-		,['vistor', '*/*']
+		['vistor', 'site/*']
+		,['vistor', 'auth/login']
+		,['vistor', 'auth/get-info']
+		,['vistor', 'goods/view']
+		,['vistor', 'goods/list']
+		,['goods_admin', 'goods/*']
 	]
 ];

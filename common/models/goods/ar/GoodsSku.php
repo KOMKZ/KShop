@@ -45,6 +45,7 @@ class GoodsSku extends ActiveRecord
     }
 
     public function getG_opt_limits(){
+        return [];
         if(empty(static::$currentSkuValues)){
             static::$currentSkuValues = GoodsSkuQuery::findValid()
                                             ->select(['g_sku_value'])
@@ -61,7 +62,6 @@ class GoodsSku extends ActiveRecord
                 return array_combine($matches['atr'], $matches['opt']);
             }, ArrayHelper::getColumn(static::$currentSkuValues, 'g_sku_value'));
         }
-
         preg_match_all('/(?P<atr>[0-9]+):(?P<opt>[0-9]+)/', $this->g_sku_value, $matches);
         $curMap = array_combine($matches['atr'], $matches['opt']);
         $validMap = [];
@@ -100,6 +100,8 @@ class GoodsSku extends ActiveRecord
             ['g_id', 'required'],
             ['g_id', 'integer'],
 
+
+
             ['g_sku_value', 'required'],
             ['g_sku_value', 'string'],
 
@@ -121,8 +123,6 @@ class GoodsSku extends ActiveRecord
             // todo > 0
             ['g_sku_stock_num', 'required'],
             ['g_sku_stock_num', 'integer'],
-
-
 
         ];
     }
