@@ -18,7 +18,7 @@ foreach(\yii\helpers\FileHelper::findFiles($configDir, [
             'merge_config.php',
             'application.php',
             'application-test.php'
-        ]);
+        ]) && (0 !== strpos(basename($path), "nm-"));
     }
 ]) as $configFile){
     if(preg_match('/.+\-local.php$/', $configFile)){
