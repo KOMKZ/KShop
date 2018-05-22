@@ -18,7 +18,7 @@ permissions:
   - file/delete@
   - file/list@
   - file/chunk-task-create@
-  - file/create@
+  - file/create@上传一个文件
   - file/output@
   - goods/list@获取商品列表
   - goods/create-source@
@@ -26,7 +26,7 @@ permissions:
   - goods/create-sku@创建商品sku记录
   - goods/update@
   - goods/create@创建商品主记录
-  - goods/view@
+  - goods/view@获取主商品信息
   - goods/create-cls-attr@
   - goods/delete-cls-attr@
   - goods/cls-attrs@
@@ -57,6 +57,7 @@ assign:
   - vistor@auth/get-info
   - vistor@goods/view
   - vistor@goods/list
+  - vistor@file/output
   - goods_admin@goods/list
   - goods_admin@goods/create-source
   - goods_admin@goods/view-sku
@@ -68,3 +69,9 @@ assign:
   - goods_admin@goods/delete-cls-attr
   - goods_admin@goods/cls-attrs
   - goods_admin@goods/can-update-goods-price
+  - goods_admin@file/index
+  - goods_admin@file/delete
+  - goods_admin@file/list
+  - goods_admin@file/chunk-task-create
+  - goods_admin@file/create
+  - goods_admin@file/output
