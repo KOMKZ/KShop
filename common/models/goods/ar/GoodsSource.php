@@ -14,12 +14,15 @@ class GoodsSource extends ActiveRecord
     const CLS_TYPE_OPTION = 'option';
     const CLS_TYPE_GOODS = 'goods';
 
+    // 这些字段可用于筛选分类，如商品的轮播图
     const TYPE_IMG = 'img';
 
 
     public static function tableName(){
         return "{{%goods_source}}";
     }
+    
+
 
     public function fields(){
         $fields = parent::fields();

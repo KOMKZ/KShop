@@ -44,7 +44,15 @@ class GoodsController extends ApiController{
 		return $this->succItems($provider->getModels(), $provider->totalCount);
     }
 
-
+    /**
+     * @api post,/source,Source,创建一个资源
+     * - gs_cls_id required,integer,in_body,资源关联对象id
+     * - gs_cls_type required,integer,in_body,资源关联对象的id类型
+     * - gs_type required,string,in_body,资源的类型
+     *
+     * @return #global_res
+     * - data object#source_item
+     */
     public function actionCreateSource(){
         $postData = Yii::$app->request->getBodyParams();
         $file = UploadedFile::getInstanceByName('file');
@@ -62,13 +70,15 @@ class GoodsController extends ApiController{
             $sourceData = [
                 'file_source_path' => $file->tempName,
                 'file_save_name' => $file->name,
-                'file_is_tmp' => 0
+                'file_is_tmp' => 0,
+                'file_category' => 'pub_img'
             ];
             $file = $fileModel->createFileBySource($sourceData);
             if(!$file){
                 return $this->error(1, $fileModel->getErrors());
             }
             $postData['gs_sid'] = $file['file_query_id'];
+            $postData['gs_name'] = $file['file_save_name'];
         }
         // 查找资源所属
         if(empty($postData['gs_cls_type'])){
@@ -79,7 +89,7 @@ class GoodsController extends ApiController{
             $clsObject = GoodsSkuQuery::find()->where(['g_sku_id' => $postData['gs_cls_id']])->one();
         }elseif(GoodsSource::CLS_TYPE_GOODS == $postData['gs_cls_type']){
             // 商品本身
-            $clsObject = GoodsQuery::find()->where(['g_id' => $postData['gs_cls_id']])->one();
+            $clsObject = GoodsQuery::find()->where(['g_code' => $postData['gs_cls_id']])->one();
         }elseif($GoodsSource::CLS_TYPE_OPTION == $postData['gs_cls_type']){
             // 选项
             $clsObject = GoodsOptionQuery::find()->where(['g_opt_id' => $postData['gs_cls_id']])->one();
@@ -145,18 +155,22 @@ class GoodsController extends ApiController{
         return $this->succ($sku->toArray());
     }
 
-    public function actionUpdate(){
+    /**
+     * @api put,/goods/{g_code},Goods,修改主商品
+     * - g_code required,string,in_path,主商品编号
+     *
+     * @return #global_res
+     * - data object#goods_item
+     */
+    public function actionUpdate($g_code){
         $postData = Yii::$app->request->getBodyParams();
-        if(empty($postData['g_id'])){
-            return $this->error(500, Yii::t('app', '参数不完整'));
-        }
-        $goods = GoodsQuery::find()->andWhere(['=', 'g_id' , $postData['g_id']])->one();
+
+        $goods = GoodsQuery::find()->andWhere(['=', 'g_code' , $g_code])->one();
         if(!$goods){
             return $this->error(404, Yii::t('app', '指定的商品不存在'));
         }
         $loginUser = Yii::$app->user->identity;
-        $postData['g_update_uid']
-         = $loginUser->u_id;
+        $postData['g_update_uid'] = $loginUser->u_id;
         $goodsModel = new GoodsModel();
         $result = $goodsModel->updateGoods($postData, $goods);
         if(!$result){
@@ -206,6 +220,7 @@ class GoodsController extends ApiController{
         }
         return $this->succ($goods->toArray());
     }
+
     public function actionCreateClsAttr(){
         $postData = Yii::$app->request->getBodyParams();
         $attrModel = new GoodsAttrModel();
@@ -216,6 +231,7 @@ class GoodsController extends ApiController{
         }
         return $this->succ($goodsAttr->toArray());
     }
+
     public function actionDeleteClsAttr(){
         $postData = Yii::$app->request->getBodyParams();
         if(empty($postData['g_atr_id'])){
@@ -227,6 +243,7 @@ class GoodsController extends ApiController{
         }
         return $this->succ($attr->delete());
     }
+
     public function actionClsAttrs(){
         $getData = Yii::$app->request->get();
         if(!empty($getData['g_cls_id'])){
@@ -297,5 +314,12 @@ class GoodsController extends ApiController{
  * - g_atr_code optional,string,属性编号，使用这个属性用于创建新的属性，属性的类型属于商品
  * - g_atr_name optional,string,属性名称，使用这个属性用于创建新的属性，属性的类型属于商品
  * - g_atr_opts required,string,sku属性选项值，选项值使用逗号隔开
+ *
+ * @df #source_item
+ * - gs_sid string,文件id
+ * - gs_content string,文件内容，对于图片来说是url
+ * - gs_type string,资源用分类
+ * - gs_cls_id integer,资源所属对象id
+ * - gs_cls_type string,资源所属对象类型
  *
  */

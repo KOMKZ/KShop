@@ -426,6 +426,7 @@ class GoodsModel extends Model
 		}
 		return $goodsSource;
 	}
+
 	/**
 	 * 验证并返回一个商品详细数据对象
 	 * @param  array $data 商品详细数据

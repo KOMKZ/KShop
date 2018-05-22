@@ -92,6 +92,16 @@ class FileController extends Controller
         return $this->succ($fileTask->toArray());
     }
 
+    /**
+     * @api post,/files,File,上传一个文件
+     * - file_save_name optional,string,in_body,文件保存名称
+     * - file_is_tmp optional,integer,in_body,文件是否是临时文件
+     * - file_valid_time optional,integer,in_body,仅当is_tmp为1的时候有效，如定义3600，说明文件在服务器的有效时间是3600秒
+     * - file_category optional,string,in_body,文件分类信息
+     *
+     * @return #global_res
+     * - data object#file_item,文件信息
+     */
     public function actionCreate(){
         $post = Yii::$app->request->getBodyParams();
         $fileModel = new FileModel();
@@ -181,3 +191,10 @@ class FileController extends Controller
         }
     }
 }
+
+/**
+ * @def #file_item
+ * - file_query_id integer,文件索引id
+ * - file_url string,文件url
+ *
+ */

@@ -53,6 +53,7 @@ class Goods extends ActiveRecord
 			'g_option_attrs',
 			'g_vaild_sku_ids',
 			'g_skus',
+			'g_source',
 			'g_detail'
 		]);
 	}
@@ -134,6 +135,24 @@ class Goods extends ActiveRecord
 			   ->leftJoin("{$gaTable}", "{$gaTable}.g_atr_id = {$grTable}.g_atr_id")
 			   ->andWhere(['=', "{$gaTable}.g_atr_type", GoodsAttr::ATR_TYPE_SKU])
 			   ->andWhere(['=', "{$grTable}.gr_status", GoodsRealAttr::STATUS_VALID]);
+	}
+
+	public function getG_source(){
+		$gTable = Goods::tableName();
+		$gsTable = GoodsSource::tableName();
+		$query = $this->hasMany(GoodsSource::className(), [
+			'gs_cls_id' => 'g_id',
+			// 'gs_cls_type' => GoodsSource::CLS_TYPE_SKU,
+		])
+		->select([
+			"{$gsTable}.gs_sid",
+			"{$gsTable}.gs_cls_type",
+			"{$gsTable}.gs_type"
+		])
+		->andWhere([
+			'gs_cls_type' => GoodsSource::CLS_TYPE_GOODS
+		]);
+		return $query;
 	}
 
 	public function getG_metas(){

@@ -29,6 +29,8 @@ class GetCest
 				"g_code" => "A10001"
 			]
 		]);
+        $res = $this->getResData($i);
+        Debug::debug($res);
 
 	}
 }
