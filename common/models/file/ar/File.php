@@ -63,10 +63,23 @@ class File extends ActiveRecord
     public function scenarios(){
         return [
             'default' => [
-                'file_is_private', 'file_is_tmp', 'file_save_name', 'file_save_type', 'file_valid_time', 'file_source_path', 'file_category'
+                'file_is_private',
+                'file_is_tmp',
+                'file_save_name',
+                'file_save_type',
+                'file_valid_time',
+                'file_source_path',
+                'file_category',
+                'file_prefix'
             ],
             'chunkupload' => [
-                'file_is_private', 'file_is_tmp', 'file_save_name', 'file_save_type', 'file_valid_time', 'file_category'
+                'file_is_private',
+                'file_is_tmp',
+                'file_save_name',
+                'file_save_type',
+                'file_valid_time',
+                'file_category',
+                'file_prefix'
             ]
         ];
     }
@@ -100,10 +113,9 @@ class File extends ActiveRecord
                 }
             }],
 
-            ['file_category', 'string'],
-            ['file_category', 'default', 'value' => 'default'],
+            ['file_category', 'required'],
             ['file_category', 'filter', 'filter' => function($value){
-                return trim($value, '/');
+                return ltrim(trim($value, '/'), '/');
             }]
         ];
     }

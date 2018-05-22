@@ -105,13 +105,9 @@ class Disk extends Model implements SaveMediumInterface
     }
     /**
      * 构造本地存储的存储元信息
-     * @return array 
+     * @return array
      */
     public function buildMediumInfo(){
-        return [
-            'base' => $this->base,
-            'dirMode' => $this->dirMode,
-            'fileMode' => $this->fileMode
-        ];
+        return [];
     }
 }

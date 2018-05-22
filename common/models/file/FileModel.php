@@ -19,6 +19,7 @@ use common\models\file\query\FileTaskQuery;
  */
 class FileModel extends Model
 {
+    public static $globalUploadParams = [];
 
     public function deleteFile(File $file){
         // 先删数据
@@ -104,15 +105,33 @@ class FileModel extends Model
      * @return \common\models\file\ar\File
      */
     public function createFile($data, $isCopy = false){
+        if(!empty($data['file_category'])){
+            $data = array_merge($data, $this->getFromCategory($data['file_category']));
+        }
         if(!$file = $this->validateFileData($data)){
             return false;
         }
         $file->file_ext = pathinfo($file->file_save_name, PATHINFO_EXTENSION);
         $file->file_md5_value = $isCopy ? $data['file_md5_value'] : md5_file($file->file_source_path);
-        $file->file_prefix = self::buildPrefix($file->file_category);
         $file->file_real_name = self::buildFileRealName($file);
         $file->file_valid_time = 1 == $file->file_is_tmp ? $file->file_valid_time : 0;
+
         return $file;
+    }
+
+    public function getFromCategory($type){
+        if(empty(static::$globalUploadParams)){
+            static::$globalUploadParams = include(Yii::getAlias("@common/config/file/nm-file-params.php"));
+            $localFile = Yii::getAlias("@common/config/file/nm-file-params-local.php");
+            if(file_exists($localFile)){
+                static::$globalUploadParams = array_merge(
+                    static::$globalUploadParams,
+                    include($localFile)
+                );
+            }
+        }
+        $params = ArrayHelper::getValue(static::$globalUploadParams, $type, []);
+        return $params;
     }
 
     /**
@@ -373,12 +392,12 @@ class FileModel extends Model
      */
     public static function parseQueryId($string){
         $typeList = implode('|', ConstMap::getConst('file_save_type', true));
-        if(preg_match("/^({$typeList}):{1}(.+)/", $string, $matches)){
+        if(preg_match("/^({$typeList}):{1}(.+)@(.+):{1}(.+)/", $string, $matches)){
             $fileCondition = [];
-            $fileCondition['file_category'] = trim(dirname($matches[2]), '/');
+            $fileCondition['file_category'] = ltrim(trim($matches[2], '/'), '/');
             $fileCondition['file_save_type'] = $matches[1];
-            $fileCondition['file_prefix'] = self::buildPrefix($fileCondition['file_category']);
-            $fileCondition['file_real_name'] = basename(trim($matches[2]));
+            $fileCondition['file_prefix'] = ltrim(trim($matches[3], '/'), '/');
+            $fileCondition['file_real_name'] = basename(trim($matches[4]));
             return $fileCondition;
         }else{
             return [];
@@ -433,15 +452,8 @@ class FileModel extends Model
         }
         return $chunkDir;
     }
-    /**
-     * 构建文件的保存前缀
-     * 目前的规则时对文件file_category进行md5计算，注意相同分类的文件将被分在同一个prefix目录下
-     * @param  string $value 需要计算prefix的值，一般来说时file_category
-     * @return string
-     */
-    public static function buildPrefix($value){
-        return md5($value);
-    }
+
+
     /**
      * 构建文件查询id
      * @see self::parseQueryId
@@ -452,7 +464,8 @@ class FileModel extends Model
      */
     public static function buildFileQueryId(File $file){
         return $file->file_save_type . ':' .
-               $file->file_category . '/' . $file->file_real_name;
+               $file->file_category . '@' . $file->file_prefix . ':'
+               . $file->file_real_name;
     }
 
     /**

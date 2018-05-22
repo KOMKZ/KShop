@@ -7,6 +7,7 @@ use yii\base\InvalidConfigException;
 use common\models\file\ar\File;
 use yii\helpers\FileHelper;
 use OSS\OssClient;
+use yii\helpers\ArrayHelper;
 
 /**
  *
@@ -19,11 +20,9 @@ class Oss extends Model implements SaveMediumInterface{
      */
     CONST NAME = 'oss';
 
-    /**
-     * oss存储的bucket
-     * @var string
-     */
-    public $bucket;
+    public $bucket_cans = [];
+
+    public static $nameAlias = [];
 
     /**
      * oss存储访问key
@@ -37,29 +36,6 @@ class Oss extends Model implements SaveMediumInterface{
      */
     public $access_secret_key;
 
-    /**
-     * endpoint是否时别名，即是不是域名
-     * @var string
-     */
-    protected $is_cname;
-
-    /**
-     * Oss存储节点
-     * @var string
-     */
-    public $endpoint;
-
-    /**
-     * oss存储内网节点
-     * @var string
-     */
-    public $inner_endpoint;
-
-    /**
-     * oss存储bucket的根目录
-     * @var string
-     */
-    protected $base;
 
     /**
      * 私有文件url的默认有效时间
@@ -79,26 +55,14 @@ class Oss extends Model implements SaveMediumInterface{
      */
     protected static $innerOss;
 
-    /**
-     * 设置文件存储的根目录
-     * @param string $value 更目录
-     */
-    public function setBase($value){
-        $this->base = trim($value, '/');
-    }
 
-    /**
-     * 是否是别名设置
-     * @param integer|bool $value 是否是别名设置
-     */
-    public function setIs_cname($value){
-        $this->is_cname = (boolean)$value;
-    }
+
+
 
 
     public function init(){
         parent::init();
-        $requireAttrs = ['bucket', 'access_key_id', 'access_secret_key', 'endpoint', 'inner_endpoint', 'base'];
+        $requireAttrs = [ 'access_key_id', 'access_secret_key'];
         foreach($requireAttrs as $attr){
             if(empty($this->$attr)){
                 throw new InvalidConfigException(Yii::t('app', "{$attr}不能为空"));
@@ -114,8 +78,41 @@ class Oss extends Model implements SaveMediumInterface{
      * 返回的url可能带签名也有不带签名，主要有file_is_private决定
      */
     public function buildFileUrl(File $file, $params = []){
+        $bukDef = $this->getBucketDef($file->file_category);
+        if($bukDef['cdn'] && $bukDef['cdn_host']){
+            if($bukDef['cdn_type'] == 'n'){
+                $uri = "/" .$this->buildFileObjectName($file);
+                $cdnhost = $bukDef['cdn_host'];
+                return sprintf("%s%s", $cdnhost, $uri);
+
+            }else{
+                // a auth type
+                $uri = "/" .$this->buildFileObjectName($file);
+                $key = $bukDef['cdn_key'];
+                $timeStamp = $this->timeout + time() - 1800;
+                $uuid = uniqid();
+                $uid = 0;
+                $cdnhost = $bukDef['cdn_host'];
+                // default a auth way
+                $hstr = md5(sprintf("%s-%s-%s-%s-%s",
+                          $uri,
+                          $timeStamp,
+                          $uuid,
+                          $uid,
+                          $key
+                        ));
+                $ak = sprintf("%s-%s-%s-%s",
+                        $timeStamp,
+                        $uuid,
+                        $uid,
+                        $hstr
+                        );
+
+                return sprintf("%s%s?auth_key=%s", $cdnhost, $uri, $ak);
+            }
+        }
         if(!$file->file_is_private){
-            $host = $this->getHostName();
+            $host = $this->getHostName($file->file_category);
             $objectName = $this->buildFileObjectName($file);
             return "http://" . $host . '/' . $objectName;
         }else{
@@ -124,7 +121,7 @@ class Oss extends Model implements SaveMediumInterface{
             return $this->createClient()->signUrl($originMedium->bucket, $objectName, $this->timeout , OssClient::OSS_HTTP_GET, []);
         }
     }
-    
+
     public function deleteFile(File $file){
         $originMedium = json_decode($file->file_medium_info);
         $this->createClient(true)->deleteObject($originMedium->bucket, $this->buildFileObjectName($file));
@@ -136,16 +133,30 @@ class Oss extends Model implements SaveMediumInterface{
      * @param  boolean $inner 是否是内网域名
      * @return string         内网域名
      */
-    protected function getHostName($inner = false){
+    protected function getHostName($alias, $inner = false){
+        $target = $this->getBucketDef($alias);
         if($inner){
-            return implode('.', [$this->bucket, $this->inner_endpoint]);
+            return implode('.', [$target['bucket'], $target['inner_endpoint']]);
         }else{
-            if($this->is_cname){
-                return $this->endpoint;
+            if((bool)$target['is_cname']){
+                return $target['endpoint'];
             }else{
-                return implode('.', [$this->bucket, $this->endpoint]);
+                return implode('.', [$target['bucket'], $target['endpoint']]);
             }
         }
+    }
+    public function getBucketDef($alias){
+        return ArrayHelper::getValue($this->bucket_cans, $alias, []);
+    }
+    public function getBucketName($alias){
+        if(empty(static::$nameAlias[$alias])){
+            $target = $this->getBucketDef($alias);
+            if(!$target){
+                return '';
+            }
+            return static::$nameAlias[$alias] = $target['bucket'];
+        }
+        return static::$nameAlias[$alias];
     }
 
     /**
@@ -155,7 +166,7 @@ class Oss extends Model implements SaveMediumInterface{
      * @return string       oss对象名称
      */
     public function buildFileObjectName(File $file){
-         return $this->base . '/' . $file->getFileSavePath();
+        return $file->getFileSavePath();
     }
 
     /**
@@ -205,16 +216,16 @@ class Oss extends Model implements SaveMediumInterface{
      * @return File       统一文件对象
      */
     public function save(File $file){
-        $client = $this->createClient(true);
+        $client = $this->createClient($this->getBucketDef($file->file_category));
         $objectName = $this->buildFileObjectName($file);
         $options = [];
         $options[OssClient::OSS_CONTENT_LENGTH] = filesize($file->file_source_path);
         $options[OssClient::OSS_HEADERS] = [
             'Content-Disposition' => sprintf('%s; filename="%s"', 'inline', $file->file_save_name)
         ];
-        $client->uploadFile($this->bucket, $objectName, $file->file_source_path, $options);
+        $client->uploadFile($this->getBucketName($file->file_category), $objectName, $file->file_source_path, $options);
         if(!$file->file_is_private){
-            $client->putObjectAcl($this->bucket, $objectName, OssClient::OSS_ACL_TYPE_PUBLIC_READ_WRITE);
+            $client->putObjectAcl($this->getBucketName($file->file_category), $objectName, OssClient::OSS_ACL_TYPE_PUBLIC_READ_WRITE);
         }
         return $file;
     }
@@ -224,15 +235,15 @@ class Oss extends Model implements SaveMediumInterface{
      * @param  boolean $inner 是否创建为内网实例
      * @return \OSS\OssClient   oss实例
      */
-    public function createClient($inner = false){
+    public function createClient($def, $inner = false){
         if(!$inner){
             if(null === self::$oss){
-                self::$oss = new OssClient($this->access_key_id, $this->access_secret_key, $this->endpoint, $this->is_cname);
+                self::$oss = new OssClient($this->access_key_id, $this->access_secret_key, $def['endpoint'], (bool)$def['is_cname']);
             }
             return self::$oss;
         }else{
             if(null === self::$innerOss){
-                self::$innerOss = new OssClient($this->access_key_id, $this->access_secret_key, $this->inner_endpoint, $this->is_cname);
+                self::$innerOss = new OssClient($this->access_key_id, $this->access_secret_key, $def['inner_endpoint'], (bool)$def['is_cname']);
             }
             return self::$innerOss;
         }
@@ -240,18 +251,10 @@ class Oss extends Model implements SaveMediumInterface{
 
     /**
      * 构造oss存储元信息
-     * @return array 
+     * @return array
      */
     public function buildMediumInfo(){
-        return [
-            'bucket' => $this->bucket,
-            'access_key_id' => $this->access_key_id,
-            'access_secret_key' => $this->access_secret_key,
-            'is_cname' => $this->is_cname,
-            'endpoint' => $this->endpoint,
-            'inner_endpoint' => $this->inner_endpoint,
-            'base' => $this->base,
-        ];
+        return [];
     }
 
 }
