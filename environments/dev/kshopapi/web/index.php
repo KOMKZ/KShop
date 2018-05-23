@@ -18,5 +18,10 @@ yii\helpers\ArrayHelper::merge(
     require(__DIR__ . '/../../common/config/merge_config.php'),
     require(__DIR__ . '/../config/merge_config.php')
 );
-
+/*
+$config['bootstrap'][] = 'debug';
+$config['modules']['debug'] = [
+	'class' => 'yii\debug\Module',
+];
+*/
 (new yii\web\Application($config))->run();

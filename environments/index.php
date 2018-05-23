@@ -33,6 +33,7 @@ return [
         'path' => 'dev',
         'setWritable' => [
             'kshopapi/runtime',
+            'kshopapi/web/assets'
         ],
         'setExecutable' => [
             'yii',

@@ -1,5 +1,6 @@
 <?php
 use Codeception\Util\Debug;
+use Yii;
 
 class CreateSourceCest
 {
@@ -45,7 +46,7 @@ class CreateSourceCest
 			'gs_cls_type' => 'goods',
 			'gs_type' => 'img'
 		], [
-			'file' => '/home/lartik/tmp/1.jpg'
+			'file' => Yii::getAlias('@kshopapi/tests/_data/kshop.png')
 		]);
 		$I->seeResponseCodeIs(200);
 		$I->seeResponseContainsJson([

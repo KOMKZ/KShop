@@ -21,10 +21,10 @@ permissions:
   - file/create@上传一个文件
   - file/output@
   - goods/list@获取商品列表
-  - goods/create-source@
+  - goods/create-source@创建一个资源
   - goods/view-sku@
   - goods/create-sku@创建商品sku记录
-  - goods/update@
+  - goods/update@修改主商品
   - goods/create@创建商品主记录
   - goods/view@获取主商品信息
   - goods/create-cls-attr@
