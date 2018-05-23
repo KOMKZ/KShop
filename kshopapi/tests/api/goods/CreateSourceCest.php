@@ -41,8 +41,7 @@ class CreateSourceCest
         $res = $this->getResData($I);
 		$goods = $res['data'];
 		// 测试创建商品资源
-		$I->sendPOST(sprintf("/source"), [
-			'gs_cls_id' => $goods['g_code'],
+		$I->sendPOST(sprintf("/goods/%s/source", $goods['g_code']), [
 			'gs_cls_type' => 'goods',
 			'gs_type' => 'img'
 		], [

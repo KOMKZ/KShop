@@ -482,6 +482,12 @@ class GoodsModel extends Model
 	 */
 	public function updateGoods($data, Goods $goods){
 		$t = Yii::$app->db->beginTransaction();
+		$data = array_merge([
+			'g_metas' => [],
+			'g_sku_attrs' => [],
+			'g_del_meta_ids' => [],
+			'g_del_atr_ids' => [],
+		], $data);
 		try {
 			if(empty($goods->g_id)){
 				$this->addError('', Yii::t('app', "商品g_id不存在"));
@@ -506,6 +512,7 @@ class GoodsModel extends Model
 				return false;
 			}
 			$oldMetaData = $newMetaData = [];
+
 			foreach($data['g_metas'] as $metaData){
 				if(!array_key_exists('gm_id', $metaData)){
 					$newMetaData[] = $metaData;
@@ -555,10 +562,9 @@ class GoodsModel extends Model
 				$this->addError($code, "创建商品属性失败:" . $error);
 				return false;
 			}
-
 			// 确保sku实例此时是正确的
 			self::ensureSkuValid($goods);
-			// $t->commit();
+			$t->commit();
 			$goods->refresh();
 			return $goods;
 		} catch (\Exception $e) {

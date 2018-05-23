@@ -77,14 +77,11 @@ class CreateCest
                         ],
                         'g_atr_name' => '颜色'
                     ]
-
                 ]
             ],
         ]);
 
         // 测试创建sku
-
-
         foreach($goods['g_vaild_sku_ids'] as $item){
             $I->sendPOST(sprintf('/goods/%s/sku', $goods['g_code']), [
                 'g_code' => $goods['g_code'],

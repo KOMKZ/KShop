@@ -44,6 +44,7 @@ class GoodsController extends ApiController{
 		return $this->succItems($provider->getModels(), $provider->totalCount);
     }
 
+
     /**
      * @api post,/source,Source,创建一个资源
      * - gs_cls_id required,integer,in_body,资源关联对象id
@@ -53,7 +54,7 @@ class GoodsController extends ApiController{
      * @return #global_res
      * - data object#source_item
      */
-    public function actionCreateSource(){
+    public function actionCreateSource($index){
         $postData = Yii::$app->request->getBodyParams();
         $file = UploadedFile::getInstanceByName('file');
         if($file){
@@ -86,13 +87,13 @@ class GoodsController extends ApiController{
         }
         if(GoodsSource::CLS_TYPE_SKU == $postData['gs_cls_type']){
             // sku本身
-            $clsObject = GoodsSkuQuery::find()->where(['g_sku_id' => $postData['gs_cls_id']])->one();
+            $clsObject = GoodsSkuQuery::find()->where(['g_sku_id' => $index])->one();
         }elseif(GoodsSource::CLS_TYPE_GOODS == $postData['gs_cls_type']){
             // 商品本身
-            $clsObject = GoodsQuery::find()->where(['g_code' => $postData['gs_cls_id']])->one();
+            $clsObject = GoodsQuery::find()->where(['g_code' => $index])->one();
         }elseif($GoodsSource::CLS_TYPE_OPTION == $postData['gs_cls_type']){
             // 选项
-            $clsObject = GoodsOptionQuery::find()->where(['g_opt_id' => $postData['gs_cls_id']])->one();
+            $clsObject = GoodsOptionQuery::find()->where(['g_opt_id' => $index])->one();
         }else{
             return $this->error(1, Yii::t('app', '无效参数值gs_cls_type'));
         }
@@ -133,7 +134,7 @@ class GoodsController extends ApiController{
     public function actionCreateSku(){
         $postData = Yii::$app->request->getBodyParams();
         $queryData = Yii::$app->request->getQueryParams();
-        $postData['g_code'] = ArrayHelper::getValue($queryData, 'g_code', null);
+        $postData['g_code'] = ArrayHelper::getValue($queryData, 'index', null);
         if(empty($postData['g_code'])){
             return $this->error(500, Yii::t('app', '参数不完整'));
         }
@@ -158,14 +159,16 @@ class GoodsController extends ApiController{
     /**
      * @api put,/goods/{g_code},Goods,修改主商品
      * - g_code required,string,in_path,主商品编号
+     * - g_primary_name optional,string,in_body,商品主名称
+     * - g_secondary_name optional,string,in_body,商品第二名称
      *
      * @return #global_res
      * - data object#goods_item
      */
-    public function actionUpdate($g_code){
+    public function actionUpdate($index){
         $postData = Yii::$app->request->getBodyParams();
 
-        $goods = GoodsQuery::find()->andWhere(['=', 'g_code' , $g_code])->one();
+        $goods = GoodsQuery::find()->andWhere(['=', 'g_code' , $index])->one();
         if(!$goods){
             return $this->error(404, Yii::t('app', '指定的商品不存在'));
         }
@@ -185,7 +188,7 @@ class GoodsController extends ApiController{
      * - g_code required,string,in_body,商品编号
      * - g_primary_name required,string,in_body,商品第一名称
      * - g_intro_text required,string,in_body,商品简介
-     * - g_metas required,array#g_meta_param,in_body,商品元信息设置列表
+     * - g_metas required,array#g_meta_update_param,in_body,商品元信息设置列表
      * - g_sku_attrs required,array#g_attr_param,in_body,商品属性信息列表
      * - g_secondary_name optional,string,in_body,商品第二名称
      *
@@ -213,8 +216,8 @@ class GoodsController extends ApiController{
      * - data object#goods_item,主商品信息
      *
      */
-    public function actionView($g_code){
-        $goods = GoodsQuery::find()->andWhere(['=', 'g_code', $g_code])->one();
+    public function actionView($index){
+        $goods = GoodsQuery::find()->andWhere(['=', 'g_code', $index])->one();
         if(!$goods){
             return $this->error(404, Yii::t('app', '指定的商品不存在'));
         }
@@ -309,11 +312,25 @@ class GoodsController extends ApiController{
  * - g_atr_name optional,string,元属性名称，使用这个属性用于创建新的属性，属性的类型属于商品
  * - gm_value required,string,元属性值
  *
+ * @def #g_meta_update_param
+ * - g_atr_id optional,integer,元属性id，指定这个属性说明使用原有属性id，没指定新属性则必须指定这个值
+ * - g_atr_code optional,string,元属性编号，使用这个属性用于创建新的属性，属性的类型属于商品
+ * - g_atr_name optional,string,元属性名称，使用这个属性用于创建新的属性，属性的类型属于商品
+ * - gm_value required,string,元属性值
+ * - gm_id optional,integer,动态元属性id，如果是更新旧的属性则必传
+ *
  * @def #g_attr_param
  * - g_atr_id optional,string,属性id，指定这个属性说明使用原有属性id，没指定新属性则必须指定这个值
  * - g_atr_code optional,string,属性编号，使用这个属性用于创建新的属性，属性的类型属于商品
  * - g_atr_name optional,string,属性名称，使用这个属性用于创建新的属性，属性的类型属于商品
  * - g_atr_opts required,string,sku属性选项值，选项值使用逗号隔开
+ *
+ * @def #g_attr_update_param
+ * - g_atr_id optional,string,属性id，指定这个属性说明使用原有属性id，没指定新属性则必须指定这个值
+ * - g_atr_code optional,string,属性编号，使用这个属性用于创建新的属性，属性的类型属于商品
+ * - g_atr_name optional,string,属性名称，使用这个属性用于创建新的属性，属性的类型属于商品
+ * - g_atr_opts required,string,sku属性选项值，选项值使用逗号隔开
+ * - gr_id optional,integer,动态属性id，如果是更新旧的属性则必须指定
  *
  * @df #source_item
  * - gs_sid string,文件id

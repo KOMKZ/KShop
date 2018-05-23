@@ -165,6 +165,7 @@ class Goods extends ActiveRecord
 				   "{$gmTable}.gm_value",
 				   "{$gmTable}.g_atr_id",
 				   "{$gaTable}.g_atr_name",
+				   "{$gmTable}.gm_id", // 必须有
 			   ])
 			   ->andWhere(['=', "$gaTable.g_atr_type", GoodsAttr::ATR_TYPE_META])
 			   ->andWhere(['=', "{$gmTable}.gm_status", GoodsMeta::STATUS_VALID])

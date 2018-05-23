@@ -28,7 +28,7 @@ class CreateCest
     // tests
     public function tryToTest(ApiTester $I){
 		$I->setAuthHeader();
-		$I->sendPOST("/files", [
+		$I->sendPOST("/file", [
 			'file_category' => 'pub_img',
 		], [
 			'file' => "/home/lartik/tmp/1.jpg"

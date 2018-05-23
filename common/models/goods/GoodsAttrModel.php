@@ -11,6 +11,7 @@ use common\models\goods\ar\Goods;
 use common\models\goods\ar\GoodsMeta;
 use common\models\goods\ar\GoodsRealOption;
 use common\models\goods\query\GoodsAttrQuery;
+use common\models\goods\query\GoodsQuery;
 use common\helpers\ArrayHelper;
 use common\models\staticdata\Errno;
 
@@ -54,10 +55,16 @@ class GoodsAttrModel extends Model
     public function updateGoodsAttrs($attrData, Goods $goods, $asArray = true){
         $t = Yii::$app->db->beginTransaction();
         try {
-            $attrs = ArrayHelper::index($goods->g_attrs, 'gr_id');
             foreach($attrData as $attrItem){
-                if(!isset($attrItem['gr_id']) || !array_key_exists($attrItem['gr_id'], $attrs))continue;
-                if(!$attr = $this->updateGoodsAttr($attrs[$attrItem['gr_id']], $attrItem, $goods))return false;
+                $attr = GoodsQuery::findAttrs()
+                                ->andWhere(['=', 'gr_id', $attrItem['gr_id']])
+                                ->one();
+                if(!$attr){
+                    $this->addError("", sprintf("指定的属性不存在%s", $attrItem['gr_id']));
+                    return false;
+                }
+                if(!$attr = $this->updateGoodsAttr($attr, $attrItem, $goods))return false;
+                $attrs[$attrItem['gr_id']] = $attr;
             }
             $t->commit();
             return $attrs;
@@ -120,10 +127,18 @@ class GoodsAttrModel extends Model
     public function updateGoodsMetas($metasData, Goods $goods, $asArray = true){
         $t = Yii::$app->db->beginTransaction();
         try {
+
             $metas = ArrayHelper::index($goods->g_metas, 'gm_id');
             foreach($metasData as $metaData){
-                if(!isset($metaData['gm_id']) || !array_key_exists($metaData['gm_id'], $metas))continue;
-                if(!$meta = $this->updateGoodsMeta($metas[$metaData['gm_id']], $metaData, $goods))return false;
+                $meta = GoodsQuery::findMetas()
+                                ->andWhere(['=', 'gm_id', $metaData['gm_id']])
+                                ->one();
+                if(!$meta){
+                    $this->addError("", sprintf("指定的元属性不存在%s", $metaData['gm_id']));
+                    return false;
+                }
+                $metaData['g_id'] = $goods->g_id;
+                if(!$meta = $this->updateGoodsMeta($meta, $metaData, $goods))return false;
                 $metas[$metaData['gm_id']] = $meta;
             }
             $t->commit();

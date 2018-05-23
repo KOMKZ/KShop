@@ -7,13 +7,13 @@ return [
 			'OPTIONS <route:.*>' => "site/index",
 			'trans_notification/<type:.*?>' => 'trans/notify',
 
-			'POST /goods' => 'goods/create',
-			'GET /goods/<g_code:.+>' => 'goods/view',
-			'GET /goods' => 'goods/list',
-			'POST /goods/<g_code:.+>/sku' => 'goods/create-sku',
-			'POST /source' => 'goods/create-source',
 
-			'POST /files' => 'file/create',
+			'GET <controller:[\w\-]+>/<index:.+>/?' => "<controller>/view",
+			'GET <controller:[\w\-]+>/?' => "<controller>/list",
+			'POST <controller:[\w\-]+>/?' => "<controller>/create",
+			'POST <controller:[\w\-]+>/<index:.+>/<sub:[\w\-]+>/?' => '<controller>/create-<sub>',
+			'PUT <controller:[\w\-]+>/<index:.+>/?' => '<controller>/update'
+
 		],
 	]
 ];
