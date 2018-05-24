@@ -14,8 +14,27 @@ use yii\di\ServiceLocator;
 class DataController extends Controller{
 
 	public function actionInstTestUser(){
-		// Yii::$app->db->beginTransaction();
-
+		// 用户数据
+		Yii::$app->db->createCommand()->truncateTable(User::tableName())->execute();
+		$max = 3;
+		$default = [
+			'u_username' => 'kitralzhong%s',
+			'password' => 'philips',
+			'password_confirm' => 'philips',
+			'u_email' => 'kitralzhong%s@qq.com',
+			'u_auth_status' => 'had_auth',
+			'u_status' => 'active',
+		];
+		$i = 0;
+		$uModel = new UserModel();
+		while($i <= $max){
+			$defaultData = $default;
+			$defaultData['u_username'] = sprintf($defaultData['u_username'], $i);
+			$defaultData['u_email'] = sprintf($defaultData['u_email'], $i);
+			$uModel->createUser($defaultData);
+			$i++;
+			echo $defaultData['u_username'] . "\n";
+		}
 	}
 
 	public function actionInstTest(){
@@ -26,27 +45,7 @@ class DataController extends Controller{
 
 		try {
 			$t = $db->beginTransaction();
-			// 用户数据
-			Yii::$app->db->createCommand()->truncateTable(User::tableName())->execute();
-			$max = 3;
-			$default = [
-				'u_username' => 'kitralzhong%s',
-				'password' => 'philips',
-				'password_confirm' => 'philips',
-				'u_email' => 'kitralzhong%s@qq.com',
-				'u_auth_status' => 'had_auth',
-				'u_status' => 'active',
-			];
-			$i = 0;
-			$uModel = new UserModel();
-			while($i <= $max){
-				$defaultData = $default;
-				$defaultData['u_username'] = sprintf($defaultData['u_username'], $i);
-				$defaultData['u_email'] = sprintf($defaultData['u_email'], $i);
-				$uModel->createUser($defaultData);
-				$i++;
-				echo $defaultData['u_username'] . "\n";
-			}
+
 
 			// 插入分类信息
 			$db->createCommand()->truncateTable(GoodsClassification::tableName())->execute();

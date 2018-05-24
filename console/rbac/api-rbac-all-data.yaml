@@ -57,6 +57,7 @@ assign:
   - vistor@auth/get-info
   - vistor@goods/view
   - vistor@goods/list
+  - vistor@goods/view-sku
   - vistor@file/output
   - goods_admin@goods/list
   - goods_admin@goods/create-source

@@ -45,6 +45,7 @@ class GoodsSku extends ActiveRecord
     }
 
     public function getG_opt_limits(){
+        // todo
         return [];
         if(empty(static::$currentSkuValues)){
             static::$currentSkuValues = GoodsSkuQuery::findValid()

@@ -6,6 +6,8 @@ use common\models\goods\GoodsModel;
 use kshopapi\controllers\ApiController;
 use common\models\goods\query\GoodsAttrQuery;
 use common\models\goods\ar\GoodsAttr;
+use common\models\goods\ar\Goods;
+use common\models\goods\ar\GoodsSku;
 use common\models\goods\query\GoodsQuery;
 use common\models\goods\query\GoodsSkuQuery;
 use common\models\goods\GoodsAttrModel;
@@ -46,13 +48,14 @@ class GoodsController extends ApiController{
 
 
     /**
-     * @api post,/source,Source,创建一个资源
-     * - gs_cls_id required,integer,in_body,资源关联对象id
+     * @api post,/goods/{index}/source,Goods,创建一个资源
+     * - index required,integer,in_path,资源关联对象id
      * - gs_cls_type required,integer,in_body,资源关联对象的id类型
      * - gs_type required,string,in_body,资源的类型
      *
      * @return #global_res
-     * - data object#source_item
+     * - data object#source_item,返回资源对象类型
+     *
      */
     public function actionCreateSource($index){
         $postData = Yii::$app->request->getBodyParams();
@@ -108,11 +111,22 @@ class GoodsController extends ApiController{
         return $this->succ($gSource->toArray());
     }
 
-    public function actionViewSku($g_id, $g_sku_value){
+    /**
+     * @api get,/goods/{index}/sku/{sub_index},Goods,查询一个sku信息
+     * - index required,string,in_path,商品编号
+     * - sub_index required,string,in_path,sku值
+     *
+     * @return #global_res
+     * - data object#sku_item,返回sku对象
+     */
+    public function actionViewSku($index, $sub_index){
         $getData = Yii::$app->request->get();
-        $goodsSku = GoodsSkuQuery::find()
-                                 ->andWhere(['=', 'g_id', $g_id])
-                                 ->andWhere(['=', 'g_sku_value', $g_sku_value])
+        $gTable = Goods::tableName();
+        $gskuTable = GoodsSku::tableName();
+        $goodsSku = GoodsSkuQuery::findByWithM()
+                                 ->andWhere(['=', "{$gTable}.g_code", $index])
+                                 ->andWhere(['=', "{$gskuTable}.g_sku_value", $sub_index])
+                                 ->andWhere(['=', "{$gskuTable}.g_sku_status", GoodsSku::STATUS_ON_SALE])
                                  ->one();
         if(!$goodsSku){
             return $this->error(404, Yii::t('app', '指定的数据不存在'));
@@ -126,7 +140,6 @@ class GoodsController extends ApiController{
     * - g_sku_value required,string,in_body,商品sku值
     * - g_sku_price required,integer,in_body,商品sku价格
     * - g_sku_stock_num required,integer,in_body,商品库存量
-    *
     *
     * @return #global_res
     * - data object#goods_item,商品信息
@@ -142,6 +155,7 @@ class GoodsController extends ApiController{
         if(!$goods){
             return $this->error(404, Yii::t('app', '指定的商品不存在'));
         }
+        // todo 发现重复的则更改
         $loginUser = Yii::$app->user->identity;
         $postData['g_sku_create_uid'] = $loginUser->u_id;
         $postData['g_id'] = $goods['g_id'];
@@ -161,9 +175,11 @@ class GoodsController extends ApiController{
      * - g_code required,string,in_path,主商品编号
      * - g_primary_name optional,string,in_body,商品主名称
      * - g_secondary_name optional,string,in_body,商品第二名称
+     * - g_metas optional,array#g_meta_update_param,in_body,商品需要修改的元属性列表
+     * - g_sku_attrs optional,array#g_attr_update_param,in_body,商品需要修改的属性列表
      *
      * @return #global_res
-     * - data object#goods_item
+     * - data object#goods_item,商品信息
      */
     public function actionUpdate($index){
         $postData = Yii::$app->request->getBodyParams();
@@ -338,7 +354,7 @@ class GoodsController extends ApiController{
  * - g_atr_opts required,string,sku属性选项值，选项值使用逗号隔开
  * - gr_id optional,integer,动态属性id，如果是更新旧的属性则必须指定
  *
- * @df #source_item
+ * @def #source_item
  * - gs_sid string,文件id
  * - gs_content string,文件内容，对于图片来说是url
  * - gs_type string,资源用分类

@@ -1,0 +1,5 @@
+#!/usr/bin/env php
+<?php
+unset($argv[0]);
+$argvs = implode(" ", $argv);
+system(__DIR__ . "/vendor/codeception/codeception/codecept " . $argvs);

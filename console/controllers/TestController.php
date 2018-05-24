@@ -24,15 +24,8 @@ class TestController extends Controller{
         Yii::$app->db->createCommand($clear)->execute();
 
         // 重新安装数据
+        system(sprintf("%s/yii_test data/inst-test-user", ROOT_PATH));
         system(sprintf("%s/yii_test data/inst-test", ROOT_PATH));
         system(sprintf("%s/yii_test rbac/install-rbac-data", ROOT_PATH));
-    }
-    
-    public function actionIndex(){
-        // 执行测试
-        $args = $_SERVER['argv'];
-        unset($args[0], $args[1]);
-        $args = implode(" ", $args);
-        system(sprintf("%s %s", ROOT_PATH . '/vendor/codeception/codeception/codecept', $args));
     }
 }

@@ -88,24 +88,6 @@ class CreateCest
             ],
         ]);
 
-        // 测试创建sku
-        foreach($goods['g_vaild_sku_ids'] as $item){
-            $I->sendPOST(sprintf('/goods/%s/sku', $goods['g_code']), [
-                'g_code' => $goods['g_code'],
-                'g_sku_value' => $item['value'],
-                'g_sku_price' => 10000,
-                'g_sku_stock_num' => 10,
-            ]);
-            $I->seeResponseCodeIs(200);
-            $I->seeResponseContainsJson([
-                'code' => 0,
-                'data' => [
-                    'g_sku_value' => $item['value'],
-                    "g_sku_price" => 10000,
-                    'g_sku_stock_num' => 10,
-                ]
-            ]);
-        }
 
 
 
