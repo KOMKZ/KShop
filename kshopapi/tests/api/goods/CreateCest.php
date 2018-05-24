@@ -44,7 +44,14 @@ class CreateCest
                 ['g_atr_name' => "logo标志", "gm_value" => "严选"],
             ],
             'g_sku_attrs' => [
-                ['g_atr_id' => 6, 'gm_value' => '粉红色,白色,黑色']
+                [
+                    'g_atr_id' => 6,
+                    'g_atr_opts' => [
+                        ['g_opt_name' => '粉红色'],
+                        ['g_opt_name' => '白色'],
+                        ['g_opt_name' => '黑色'],
+                    ]
+                ]
             ]
         ]);
         // $res = $I->getResData();

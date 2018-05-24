@@ -37,10 +37,13 @@ class UpdateCest
                 ['g_atr_name' => "明星代言人", "gm_value" => "lartik"],
             ],
             'g_sku_attrs' => [
-                ['gr_id' => 1, 'g_atr_opts' => [
-                    ['g_opt_id' => 1, 'g_opt_name' => '红粉色'],
-                    ['g_opt_name' => '黄色']
-                ]]
+                [
+                    'gr_id' => 1,
+                    'g_atr_opts' => [
+                        ['g_opt_id' => 1, 'g_opt_name' => '红粉色'],
+                        ['g_opt_name' => '黄色']
+                    ]
+                ]
             ]
         ]);
         $I->seeResponseCodeIs(200);

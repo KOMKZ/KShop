@@ -59,19 +59,26 @@ server {
 
 ```
 ./yii migrate/up
+# 可选，执行下述命令安装测试数据库
+./yii_test migrate/up
 ```
 
 执行命令安装测试数据（可选）:
 
 ```
 ./yii data/inst-test
-./yii data/inst-user-test
+
+# 可选，执行下述命令安装测试数据库
+./yii_test data/inst-test
 ```
 
 执行命令安装必要数据
 
 ```
 ./yii rbac/install-rbac-data
+
+# 可选，执行下述命令安装测试数据库
+./yii_test rbac/install-rbac-data
 ```
 
 ## 检验安装结果

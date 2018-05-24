@@ -15,6 +15,8 @@ foreach(\yii\helpers\FileHelper::findFiles($configDir, [
             '.gitignore',
             'bootstrap.php',
             'merge_config.php',
+            'test-config.php',
+            'test-config-local.php',
             'application.php',
             'application-test.php'
         ]);

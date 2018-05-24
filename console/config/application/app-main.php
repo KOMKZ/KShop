@@ -4,7 +4,7 @@ $params = array_merge(
     require(__DIR__ . '/params-local.php')
 );
 return [
-    'id' => 'kshopconsole',
+    'id' => 'lshop-console',
     'basePath' => dirname(dirname(__DIR__)),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',

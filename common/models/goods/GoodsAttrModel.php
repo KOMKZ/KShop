@@ -283,7 +283,7 @@ class GoodsAttrModel extends Model
                 $this->addError('', Yii::t('商品属性创建失败'));
                 return false;
             }
-            $options = $this->createAttrOptions(ArrayHelper::getValue($attr, 'gm_value'), $attrDef->g_attr, $goods);
+            $options = $this->createAttrOptions(ArrayHelper::getValue($attr, 'g_atr_opts'), $attrDef->g_attr, $goods);
             if(!$options){
                 return false;
             }

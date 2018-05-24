@@ -3,7 +3,7 @@ $params = array_merge(
     require(__DIR__ . '/params.php')
 );
 return [
-    'id' => 'kshopapi',
+    'id' => 'lshop-api',
     'defaultRoute' => 'site/index',
     'basePath' => dirname(dirname(__DIR__)),
     'bootstrap' => ['log'],

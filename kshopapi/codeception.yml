@@ -1,16 +1,4 @@
 # suite config
-suites:
-    api:
-        actor: ApiTester
-        path: api
-        modules:
-            enabled:
-                - REST:
-                    url: http://localhost:8011/index.php
-                    depends: PhpBrowser
-                    part: JSON
-
-
 paths:
     tests: tests
     output: tests/_output

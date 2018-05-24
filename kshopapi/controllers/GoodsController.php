@@ -323,7 +323,13 @@ class GoodsController extends ApiController{
  * - g_atr_id optional,string,属性id，指定这个属性说明使用原有属性id，没指定新属性则必须指定这个值
  * - g_atr_code optional,string,属性编号，使用这个属性用于创建新的属性，属性的类型属于商品
  * - g_atr_name optional,string,属性名称，使用这个属性用于创建新的属性，属性的类型属于商品
- * - g_atr_opts required,string,sku属性选项值，选项值使用逗号隔开
+ * - g_atr_opts required,array#g_atr_opt_param,sku属性选项值，选项值使用逗号隔开
+ *
+ * @def #g_atr_opt_param
+ * - g_opt_name required,string,选项值
+ *
+ * @def #g_atr_opt_param
+ * - g_opt_name required,string,选项值
  *
  * @def #g_attr_update_param
  * - g_atr_id optional,string,属性id，指定这个属性说明使用原有属性id，没指定新属性则必须指定这个值
