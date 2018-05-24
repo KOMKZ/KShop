@@ -162,7 +162,7 @@ class GoodsController extends ApiController{
         $skuData = [$postData];
         $gModel = new GoodsModel();
         // 调用的是创建多条的接口
-		$skus = $gModel->createMultiGoodsSku($skuData, $goods);
+		$skus = $gModel->updateMultiGoodsSku($skuData, $goods);
 		if(!$skus){
             return $this->error(1, $gModel->getErrors());
 		}

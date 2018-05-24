@@ -126,28 +126,38 @@ class GoodsModel extends Model
 	 */
 	public function updateMultiGoodsSku($skusData, Goods $goods){
 		$t = Yii::$app->db->beginTransaction();
+		$result = [];
 		try {
 			// 分析出新的还有旧的
 			$oldSkus = $newSkus = [];
 			$validSkus = $goods->g_vaild_sku_ids;
 			$currentSkus = ArrayHelper::index($goods->g_skus, 'g_sku_value');
 			foreach($skusData as $skuData){
-				if(empty($skuData['g_sku_value']) || empty($validSkus[$skuData['g_sku_value']]))continue;
+				if(empty($skuData['g_sku_value']) || empty($currentSkus[$skuData['g_sku_value']]))continue;
 				if(array_key_exists($skuData['g_sku_value'], $currentSkus)){
 					$oldSkus[] = $skuData;
 				}else{
 					$newSkus[] = $skuData;
 				}
 			}
-			if($newSkus && !$this->createMultiGoodsSku($newSkus, $goods)){
+			if($newSkus && !($newSkus = $this->createMultiGoodsSku($newSkus, $goods))){
 				return false;
 			}
+			if($newSkus){
+				$newSkusResult = $this->createMultiGoodsSku($newSkus, $goods);
+				if(!$newSkusResult){
+					return false;
+				}else{
+					$result = $newSkusResult;
+				}
+			}
 			if(!empty($oldSkus)){
-				foreach($oldSkus as $skuData){
+				foreach($oldSkus as $key => $skuData){
 					if(false === $this->updateGoodsSku($currentSkus[$skuData['g_sku_value']], $skuData, $goods)){
 						return false;
 					}
 				}
+				
 			}
 			$goods->refresh();
 			$t->commit();

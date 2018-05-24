@@ -1,0 +1,1284 @@
+2018-04-27 12:33:53 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 12:33:53 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][error][yii\base\InvalidConfigException] exception 'yii\base\InvalidConfigException' with message 'The directory is not writable by the Web process: /home/lartik/pro/php/LartikShop/kshopadmin/web/assets' in /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/AssetManager.php:215
+Stack trace:
+#0 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Object.php(107): yii\web\AssetManager->init()
+#1 [internal function]: yii\base\Object->__construct(Array)
+#2 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/di/Container.php(375): ReflectionClass->newInstanceArgs(Array)
+#3 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/di/Container.php(156): yii\di\Container->build('yii\\web\\AssetMa...', Array, Array)
+#4 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/BaseYii.php(348): yii\di\Container->get('yii\\web\\AssetMa...', Array, Array)
+#5 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/di/ServiceLocator.php(135): yii\BaseYii::createObject(Array)
+#6 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(605): yii\di\ServiceLocator->get('assetManager')
+#7 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/View.php(225): yii\base\Application->getAssetManager()
+#8 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/View.php(285): yii\web\View->getAssetManager()
+#9 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/AssetBundle.php(125): yii\web\View->registerAssetBundle('yii\\widgets\\Act...')
+#10 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/widgets/ActiveForm.php(225): yii\web\AssetBundle::register(Object(yii\web\View))
+#11 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/widgets/ActiveForm.php(209): yii\widgets\ActiveForm->registerClientScript()
+#12 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Widget.php(109): yii\widgets\ActiveForm->run()
+#13 /home/lartik/pro/php/LartikShop/kshopadmin/views/site/login.php(55): yii\base\Widget::end()
+#14 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/View.php(330): require('/home/lartik/pr...')
+#15 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/lartik/pr...', Array)
+#16 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/lartik/pr...', Array, Object(kshopadmin\controllers\SiteController))
+#17 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Controller.php(381): yii\base\View->render('login', Array, Object(kshopadmin\controllers\SiteController))
+#18 /home/lartik/pro/php/LartikShop/kshopadmin/controllers/SiteController.php(69): yii\base\Controller->render('login', Array)
+#19 [internal function]: kshopadmin\controllers\SiteController->actionLogin()
+#20 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#21 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#22 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('login', Array)
+#23 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('site/login', Array)
+#24 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#25 /home/lartik/pro/php/LartikShop/kshopadmin/web/index.php(22): yii\base\Application->run()
+#26 {main}
+2018-04-27 12:33:53 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][info][application] $_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/site'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/site/login'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '45352'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524803633.1861
+    'REQUEST_TIME' => 1524803633
+]
+2018-04-27 12:34:07 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 12:34:07 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][error][yii\base\InvalidConfigException] exception 'yii\base\InvalidConfigException' with message 'The directory is not writable by the Web process: /home/lartik/pro/php/LartikShop/kshopadmin/web/assets' in /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/AssetManager.php:215
+Stack trace:
+#0 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Object.php(107): yii\web\AssetManager->init()
+#1 [internal function]: yii\base\Object->__construct(Array)
+#2 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/di/Container.php(375): ReflectionClass->newInstanceArgs(Array)
+#3 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/di/Container.php(156): yii\di\Container->build('yii\\web\\AssetMa...', Array, Array)
+#4 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/BaseYii.php(348): yii\di\Container->get('yii\\web\\AssetMa...', Array, Array)
+#5 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/di/ServiceLocator.php(135): yii\BaseYii::createObject(Array)
+#6 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(605): yii\di\ServiceLocator->get('assetManager')
+#7 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/View.php(225): yii\base\Application->getAssetManager()
+#8 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/View.php(285): yii\web\View->getAssetManager()
+#9 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/AssetBundle.php(125): yii\web\View->registerAssetBundle('yii\\widgets\\Act...')
+#10 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/widgets/ActiveForm.php(225): yii\web\AssetBundle::register(Object(yii\web\View))
+#11 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/widgets/ActiveForm.php(209): yii\widgets\ActiveForm->registerClientScript()
+#12 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Widget.php(109): yii\widgets\ActiveForm->run()
+#13 /home/lartik/pro/php/LartikShop/kshopadmin/views/site/login.php(55): yii\base\Widget::end()
+#14 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/View.php(330): require('/home/lartik/pr...')
+#15 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/lartik/pr...', Array)
+#16 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/lartik/pr...', Array, Object(kshopadmin\controllers\SiteController))
+#17 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Controller.php(381): yii\base\View->render('login', Array, Object(kshopadmin\controllers\SiteController))
+#18 /home/lartik/pro/php/LartikShop/kshopadmin/controllers/SiteController.php(69): yii\base\Controller->render('login', Array)
+#19 [internal function]: kshopadmin\controllers\SiteController->actionLogin()
+#20 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#21 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#22 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('login', Array)
+#23 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('site/login', Array)
+#24 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#25 /home/lartik/pro/php/LartikShop/kshopadmin/web/index.php(22): yii\base\Application->run()
+#26 {main}
+2018-04-27 12:34:07 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][info][application] $_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/site'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/site/login'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '45352'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524803647.7852
+    'REQUEST_TIME' => 1524803647
+]
+2018-04-27 12:34:23 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 12:34:23 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][error][yii\base\InvalidConfigException] exception 'yii\base\InvalidConfigException' with message 'The directory is not writable by the Web process: /home/lartik/pro/php/LartikShop/kshopadmin/web/assets' in /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/AssetManager.php:215
+Stack trace:
+#0 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Object.php(107): yii\web\AssetManager->init()
+#1 [internal function]: yii\base\Object->__construct(Array)
+#2 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/di/Container.php(375): ReflectionClass->newInstanceArgs(Array)
+#3 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/di/Container.php(156): yii\di\Container->build('yii\\web\\AssetMa...', Array, Array)
+#4 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/BaseYii.php(348): yii\di\Container->get('yii\\web\\AssetMa...', Array, Array)
+#5 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/di/ServiceLocator.php(135): yii\BaseYii::createObject(Array)
+#6 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(605): yii\di\ServiceLocator->get('assetManager')
+#7 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/View.php(225): yii\base\Application->getAssetManager()
+#8 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/View.php(285): yii\web\View->getAssetManager()
+#9 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/AssetBundle.php(125): yii\web\View->registerAssetBundle('yii\\widgets\\Act...')
+#10 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/widgets/ActiveForm.php(225): yii\web\AssetBundle::register(Object(yii\web\View))
+#11 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/widgets/ActiveForm.php(209): yii\widgets\ActiveForm->registerClientScript()
+#12 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Widget.php(109): yii\widgets\ActiveForm->run()
+#13 /home/lartik/pro/php/LartikShop/kshopadmin/views/site/login.php(55): yii\base\Widget::end()
+#14 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/View.php(330): require('/home/lartik/pr...')
+#15 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/lartik/pr...', Array)
+#16 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/lartik/pr...', Array, Object(kshopadmin\controllers\SiteController))
+#17 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Controller.php(381): yii\base\View->render('login', Array, Object(kshopadmin\controllers\SiteController))
+#18 /home/lartik/pro/php/LartikShop/kshopadmin/controllers/SiteController.php(69): yii\base\Controller->render('login', Array)
+#19 [internal function]: kshopadmin\controllers\SiteController->actionLogin()
+#20 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#21 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#22 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('login', Array)
+#23 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('site/login', Array)
+#24 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#25 /home/lartik/pro/php/LartikShop/kshopadmin/web/index.php(22): yii\base\Application->run()
+#26 {main}
+2018-04-27 12:34:23 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][info][application] $_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/site'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/site/login'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '45352'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524803663.8869
+    'REQUEST_TIME' => 1524803663
+]
+2018-04-27 12:35:06 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 12:35:06 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/site'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/site/login'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '45352'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524803706.5473
+    'REQUEST_TIME' => 1524803706
+]
+2018-04-27 17:39:18 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][error][yii\web\HttpException:404] exception 'yii\web\NotFoundHttpException' with message 'Code file not found: 5ed2d5817d45f1d787dc808315566e60' in /home/lartik/pro/php/LartikShop/common/module/kgii/controllers/DefaultController.php:79
+Stack trace:
+#0 [internal function]: common\module\kgii\controllers\DefaultController->actionPreview('model', '5ed2d5817d45f1d...')
+#1 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#2 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#3 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('preview', Array)
+#4 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('kgii/default/pr...', Array)
+#5 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#6 /home/lartik/pro/php/LartikShop/kshopadmin/web/index.php(27): yii\base\Application->run()
+#7 {main}
+2018-04-27 17:39:18 [127.0.0.1][-][vt3vv5c6sb97rv9v6k74orrsr4][info][application] $_GET = [
+    'id' => 'model'
+    'file' => '5ed2d5817d45f1d787dc808315566e60'
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => 'id=model&file=5ed2d5817d45f1d787dc808315566e60'
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/default/preview?id=model&file=5ed2d5817d45f1d787dc808315566e60'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '53240'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/model'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524821958.4905
+    'REQUEST_TIME' => 1524821958
+]
+2018-04-27 17:39:18 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 17:39:18 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/site/login'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '53240'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/model'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524821958.5428
+    'REQUEST_TIME' => 1524821958
+]
+2018-04-27 18:02:06 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:02:06 [127.0.0.1][-][-][info][application] $_GET = [
+    'id' => 'crud'
+]
+
+$_POST = [
+    '_csrf-frontend' => 'V_mwLFrIY5oxc7f3cY1vNFdoSKl4Lk9pWS4kZ1OLePpaStKk6ejb1j3j2lXTrh1cxOZYB60hSA0q50okb2K7ag=='
+    'Generator' => [
+        'modelClass' => '\\common\\models\\post\\PostModel'
+        'searchModelClass' => '\\common\\models\\post\\PostSModel'
+        'controllerClass' => '\\kshopapi\\controllers\\PostController'
+        'viewPath' => 'post'
+        'baseControllerClass' => 'yii\\web\\Controller'
+        'indexWidgetType' => 'grid'
+        'enableI18N' => '1'
+        'enablePjax' => '1'
+        'messageCategory' => 'app'
+        'template' => 'default'
+    ]
+    'preview' => ''
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'POST'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'CONTENT_LENGTH' => '627'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/crud'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55438'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '627'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_ORIGIN' => 'http://localhost:8012'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/crud'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823326.7144
+    'REQUEST_TIME' => 1524823326
+]
+2018-04-27 18:02:10 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:02:10 [127.0.0.1][-][-][info][application] $_GET = [
+    'id' => 'crud'
+]
+
+$_POST = [
+    '_csrf-frontend' => 'YtjQrWpkIgzExvKvnUR7tarSva84wxm9gTOCbhN75W5va7Il2USaQMhWnw0_ZwndOVytAe3MHtny-uwtL5Im_g=='
+    'Generator' => [
+        'modelClass' => '\\common\\models\\post\\PostModel'
+        'searchModelClass' => '\\common\\models\\post\\PostSModel'
+        'controllerClass' => '\\kshopapi\\controllers\\PostController'
+        'viewPath' => 'post'
+        'baseControllerClass' => 'yii\\web\\Controller'
+        'indexWidgetType' => 'grid'
+        'enableI18N' => '1'
+        'enablePjax' => '1'
+        'messageCategory' => 'app'
+        'template' => 'default'
+    ]
+    'answers' => [
+        '77e0e0e70f27f77a6f1c744a0b75f3ba' => '1'
+        'ebec5a1c45e88e585bb32c26de39e78e' => '1'
+        '65bd56fb7ce4e95ecf4d63c56a77b47d' => '1'
+        '8715457a93e3138f32c2591729fa1fc0' => '1'
+        'd93de760e9f612a9da1ed832704eea8a' => '1'
+        '339302cb7e93006043b2f853b61ba06f' => '1'
+        'a65f053220845ea3d5d715fd65face69' => '1'
+        '2b03572d7d2af13a2c38124eee3ee94a' => '1'
+    ]
+    'generate' => ''
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'POST'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'CONTENT_LENGTH' => '1012'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/crud'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55438'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '1012'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_ORIGIN' => 'http://localhost:8012'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/crud'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823330.4417
+    'REQUEST_TIME' => 1524823330
+]
+2018-04-27 18:02:56 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:02:56 [127.0.0.1][-][-][info][application] $_GET = [
+    'id' => 'crud'
+]
+
+$_POST = [
+    '_csrf-frontend' => 'dJ0Kp2facbaMlqnOd3kikBJFq07SSapLJ8nsbkY0RLJ5Lmgv1PrJ-oAGxGzVWlD4gcu74AdGrS9UAIItet2HIg=='
+    'Generator' => [
+        'modelClass' => '\\common\\models\\post\\PostModel'
+        'searchModelClass' => '\\common\\models\\post\\PostSModel'
+        'controllerClass' => '\\kshopadmin\\controllers\\PostController'
+        'viewPath' => '@kshopadmin/views/post'
+        'baseControllerClass' => 'yii\\web\\Controller'
+        'indexWidgetType' => 'grid'
+        'enableI18N' => '1'
+        'enablePjax' => '1'
+        'messageCategory' => 'app'
+        'template' => 'default'
+    ]
+    'preview' => ''
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'POST'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'CONTENT_LENGTH' => '653'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/crud'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55438'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '653'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_ORIGIN' => 'http://localhost:8012'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/crud'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823376.5646
+    'REQUEST_TIME' => 1524823376
+]
+2018-04-27 18:02:58 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:02:58 [127.0.0.1][-][-][info][application] $_GET = [
+    'id' => 'crud'
+]
+
+$_POST = [
+    '_csrf-frontend' => '2sCugbCHixTVj_zEPU_0aWzMD7O0hcyFZeU4tJA8-jPXc8wJA6czWNkfkWafbIYB_0IfHWGKy-EWLFb3rNU5ow=='
+    'Generator' => [
+        'modelClass' => '\\common\\models\\post\\PostModel'
+        'searchModelClass' => '\\common\\models\\post\\PostSModel'
+        'controllerClass' => '\\kshopadmin\\controllers\\PostController'
+        'viewPath' => '@kshopadmin/views/post'
+        'baseControllerClass' => 'yii\\web\\Controller'
+        'indexWidgetType' => 'grid'
+        'enableI18N' => '1'
+        'enablePjax' => '1'
+        'messageCategory' => 'app'
+        'template' => 'default'
+    ]
+    'answers' => [
+        'a168867ab1dd96d6385c2c7fd1eed1c8' => '1'
+        'ff0d4d310454f441347e8d13cfdc1934' => '1'
+        'd0687d202a585076b3a94aa77e388070' => '1'
+        '60fc817ea9fead271de98ba7e1379769' => '1'
+        'fbf5943fbdf8c8b7be3c3786bc3f4bda' => '1'
+        'e7e82dcd488c77d174f0a10fab15a49e' => '1'
+        'c4ad7027aa20b6293727e444991628a4' => '1'
+    ]
+    'generate' => ''
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'POST'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'CONTENT_LENGTH' => '990'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/crud'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55438'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '990'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_ORIGIN' => 'http://localhost:8012'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/crud'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823378.8745
+    'REQUEST_TIME' => 1524823378
+]
+2018-04-27 18:03:44 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:03:44 [127.0.0.1][-][-][info][application] $_GET = [
+    'id' => 'crud'
+]
+
+$_POST = [
+    '_csrf-frontend' => 'ruu7MTc4ulyvzBK3Wh8fcBKXlayr8ix2brWvWbmI_YGjWNm5hBgCEKNcfxX4PG0YgRmFAn79KxIdfMEahWE-EQ=='
+    'Generator' => [
+        'modelClass' => '\\common\\models\\post\\PostModel'
+        'searchModelClass' => '\\common\\models\\post\\PostSModel'
+        'controllerClass' => '\\kshopadmin\\controllers\\PostController'
+        'viewPath' => '@kshopadmin/views/post'
+        'baseControllerClass' => 'yii\\web\\Controller'
+        'indexWidgetType' => 'grid'
+        'enableI18N' => '1'
+        'enablePjax' => '1'
+        'messageCategory' => 'app'
+        'template' => 'default'
+    ]
+    'preview' => ''
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'POST'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'CONTENT_LENGTH' => '653'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/crud'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55438'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '653'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_ORIGIN' => 'http://localhost:8012'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/crud'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823424.3797
+    'REQUEST_TIME' => 1524823424
+]
+2018-04-27 18:03:46 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:03:46 [127.0.0.1][-][-][info][application] $_GET = [
+    'id' => 'crud'
+]
+
+$_POST = [
+    '_csrf-frontend' => 'BuZOUIcFc3J6Ufu8C4g40ZEP3_vsIHl5fsjhblHs9CELVSzYNCXLPnbBlh6pq0q5AoHPVTkvfh0NAY8tbQU3sQ=='
+    'Generator' => [
+        'modelClass' => '\\common\\models\\post\\PostModel'
+        'searchModelClass' => '\\common\\models\\post\\PostSModel'
+        'controllerClass' => '\\kshopadmin\\controllers\\PostController'
+        'viewPath' => '@kshopadmin/views/post'
+        'baseControllerClass' => 'yii\\web\\Controller'
+        'indexWidgetType' => 'grid'
+        'enableI18N' => '1'
+        'enablePjax' => '1'
+        'messageCategory' => 'app'
+        'template' => 'default'
+    ]
+    'answers' => [
+        'a168867ab1dd96d6385c2c7fd1eed1c8' => '1'
+        'ff0d4d310454f441347e8d13cfdc1934' => '1'
+        'd0687d202a585076b3a94aa77e388070' => '1'
+        '60fc817ea9fead271de98ba7e1379769' => '1'
+        'fbf5943fbdf8c8b7be3c3786bc3f4bda' => '1'
+        'e7e82dcd488c77d174f0a10fab15a49e' => '1'
+        'c4ad7027aa20b6293727e444991628a4' => '1'
+    ]
+    'generate' => ''
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'POST'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'CONTENT_LENGTH' => '990'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/crud'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55438'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '990'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_ORIGIN' => 'http://localhost:8012'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/crud'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823426.3945
+    'REQUEST_TIME' => 1524823426
+]
+2018-04-27 18:04:12 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:04:12 [127.0.0.1][-][-][info][application] $_GET = [
+    'id' => 'crud'
+]
+
+$_POST = [
+    '_csrf-frontend' => 'Q7IyEn2eHF246fPhrdPHv7uyBzUR3NpMCUTmg6nCH0ZOAVCazr6kEbR5nkMP8LXXKDwXm8TT3Sh6jYjAlSvc1g=='
+    'Generator' => [
+        'modelClass' => '\\common\\models\\post\\PostModel'
+        'searchModelClass' => '\\common\\models\\post\\PostSModel'
+        'controllerClass' => '\\kshopadmin\\controllers\\PostController'
+        'viewPath' => '@kshopadmin/views/post'
+        'baseControllerClass' => 'yii\\web\\Controller'
+        'indexWidgetType' => 'grid'
+        'enableI18N' => '1'
+        'enablePjax' => '1'
+        'messageCategory' => 'app'
+        'template' => 'default'
+    ]
+    'preview' => ''
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'POST'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'CONTENT_LENGTH' => '653'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/crud'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55438'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '653'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_ORIGIN' => 'http://localhost:8012'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/crud'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823452.0269
+    'REQUEST_TIME' => 1524823452
+]
+2018-04-27 18:04:14 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:04:14 [127.0.0.1][-][-][info][application] $_GET = [
+    'id' => 'crud'
+]
+
+$_POST = [
+    '_csrf-frontend' => 'GhrlwzZbMw8SN-NanbCyEtiP3cz7uw0tylTgbC_9USgXqYdLhXuLQx6njvg_k8B6SwHNYi60Ckm5nY4vExSSuA=='
+    'Generator' => [
+        'modelClass' => '\\common\\models\\post\\PostModel'
+        'searchModelClass' => '\\common\\models\\post\\PostSModel'
+        'controllerClass' => '\\kshopadmin\\controllers\\PostController'
+        'viewPath' => '@kshopadmin/views/post'
+        'baseControllerClass' => 'yii\\web\\Controller'
+        'indexWidgetType' => 'grid'
+        'enableI18N' => '1'
+        'enablePjax' => '1'
+        'messageCategory' => 'app'
+        'template' => 'default'
+    ]
+    'answers' => [
+        'a168867ab1dd96d6385c2c7fd1eed1c8' => '1'
+    ]
+    'generate' => ''
+]
+
+$_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'POST'
+    'CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'CONTENT_LENGTH' => '702'
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/crud'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55438'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CONTENT_LENGTH' => '702'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_ORIGIN' => 'http://localhost:8012'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_CONTENT_TYPE' => 'application/x-www-form-urlencoded'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/crud'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823454.4743
+    'REQUEST_TIME' => 1524823454
+]
+2018-04-27 18:05:46 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:05:46 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/post'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55516'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823546.6
+    'REQUEST_TIME' => 1524823546
+]
+2018-04-27 18:05:54 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:05:54 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SESSION = [
+    '__flash' => []
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/post/create'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55516'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/post'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823554.9294
+    'REQUEST_TIME' => 1524823554
+]
+2018-04-27 18:06:58 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:06:58 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/classification/index'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/site/login'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55516'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/post/create'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823618.0838
+    'REQUEST_TIME' => 1524823618
+]
+2018-04-27 18:07:00 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 18:06:59 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    'PHPSESSID' => 'vt3vv5c6sb97rv9v6k74orrsr4'
+    '_csrf-frontend' => '≥bà≥ ∏Lêm¢¢#rhìéÆ’ds…nC<È√ê'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/classification/index'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/post/create'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '55516'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/post'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => 'PHPSESSID=vt3vv5c6sb97rv9v6k74orrsr4; _csrf-frontend=%0D%B3b%88%B3+%B8L%0C%90m%A2%A2%23rh%93%8E%10%AE%D5%0F%07ds%C9nC%3C%E9%C3%90'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524823619.9439
+    'REQUEST_TIME' => 1524823619
+]
+2018-04-27 23:37:41 [127.0.0.1][-][-][error][yii\web\HttpException:404] exception 'yii\base\InvalidRouteException' with message 'Unable to resolve the request "gii/model".' in /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Module.php:532
+Stack trace:
+#0 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('gii/model', Array)
+#1 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#2 /home/lartik/pro/php/LartikShop/kshopadmin/web/index.php(27): yii\base\Application->run()
+#3 {main}
+
+Next exception 'yii\web\NotFoundHttpException' with message 'È°µÈù¢Êú™ÊâæÂà∞„ÄÇ' in /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/Application.php:114
+Stack trace:
+#0 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#1 /home/lartik/pro/php/LartikShop/kshopadmin/web/index.php(27): yii\base\Application->run()
+#2 {main}
+2018-04-27 23:37:40 [127.0.0.1][-][-][info][application] $_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/gii/model'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '44310'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524843460.3991
+    'REQUEST_TIME' => 1524843460
+]
+2018-04-27 23:37:41 [127.0.0.1][-][-][error][yii\i18n\PhpMessageSource::loadFallbackMessages] The message file for category 'app' does not exist: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh-CN/app.php Fallback file does not exist as well: /home/lartik/pro/php/LartikShop/kshopadmin/messages/zh/app.php
+2018-04-27 23:37:41 [127.0.0.1][-][-][info][application] $_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/site/login'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '44310'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524843461.0742
+    'REQUEST_TIME' => 1524843461
+]
+2018-04-27 23:46:01 [127.0.0.1][-][-][error][yii\base\ErrorException:1] exception 'yii\base\ErrorException' with message 'Call to undefined function common\module\kgii\console()' in /home/lartik/pro/php/LartikShop/common/module/kgii/Module.php:87
+Stack trace:
+#0 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/web/Application.php(69): yii\base\Application->bootstrap()
+#1 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(272): yii\web\Application->bootstrap()
+#2 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Object.php(107): yii\base\Application->init()
+#3 /home/lartik/pro/php/LartikShop/vendor/yiisoft/yii2/base/Application.php(205): yii\base\Object->__construct()
+#4 /home/lartik/pro/php/LartikShop/kshopadmin/web/index.php(27): yii\base\Application->__construct()
+#5 {main}
+2018-04-27 23:46:01 [127.0.0.1][-][-][info][application] $_COOKIE = [
+    '_csrf-frontend' => 'ŸcßeN˙˙.«ÔèS\'®zÅ‰Ã“∫É)$_ë
+ˆ'
+]
+
+$_SERVER = [
+    'USER' => 'www-data'
+    'HOME' => '/var/www'
+    'FCGI_ROLE' => 'RESPONDER'
+    'PATH_INFO' => ''
+    'SCRIPT_FILENAME' => '/home/lartik/pro/php/LartikShop/kshopadmin/web/index.php'
+    'QUERY_STRING' => ''
+    'REQUEST_METHOD' => 'GET'
+    'CONTENT_TYPE' => ''
+    'CONTENT_LENGTH' => ''
+    'SCRIPT_NAME' => '/index.php'
+    'REQUEST_URI' => '/kgii/crud'
+    'DOCUMENT_URI' => '/index.php'
+    'DOCUMENT_ROOT' => '/home/lartik/pro/php/LartikShop/kshopadmin/web'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_SCHEME' => 'http'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_SOFTWARE' => 'nginx/1.12.1'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'REMOTE_PORT' => '44596'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '8012'
+    'SERVER_NAME' => ''
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'localhost:8012'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8'
+    'HTTP_REFERER' => 'http://localhost:8012/kgii/model'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, br'
+    'HTTP_ACCEPT_LANGUAGE' => 'zh-CN,zh;q=0.9'
+    'HTTP_COOKIE' => '_csrf-frontend=%D9c%1D%A7eN%FA%FA%19.%1C%C7%EF%8FS%27%13%A8z%1F%81%E4%CC%D2%BA%83%29%24_%91%0A%F6'
+    'PHP_SELF' => '/index.php'
+    'REQUEST_TIME_FLOAT' => 1524843961.3894
+    'REQUEST_TIME' => 1524843961
+]

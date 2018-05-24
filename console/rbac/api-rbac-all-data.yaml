@@ -22,7 +22,7 @@ permissions:
   - file/output@
   - goods/list@获取商品列表
   - goods/create-source@创建一个资源
-  - goods/view-sku@
+  - goods/view-sku@查询一个sku信息
   - goods/create-sku@创建商品sku记录
   - goods/update@修改主商品
   - goods/create@创建商品主记录
