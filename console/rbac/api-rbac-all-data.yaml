@@ -21,12 +21,13 @@ permissions:
   - file/create@上传一个文件
   - file/output@
   - goods/list@获取商品列表
-  - goods/create-source@创建一个资源
-  - goods/view-sku@查询一个sku信息
-  - goods/create-sku@创建商品sku记录
-  - goods/update@修改主商品
   - goods/create@创建商品主记录
   - goods/view@获取主商品信息
+  - goods/update@修改主商品
+  - goods/create-sku@创建商品sku记录
+  - goods/view-sku@查询一个sku信息
+  - goods/create-source@创建一个资源
+  - goods/list-source@
   - goods/create-cls-attr@
   - goods/delete-cls-attr@
   - goods/cls-attrs@
@@ -57,15 +58,17 @@ assign:
   - vistor@auth/get-info
   - vistor@goods/view
   - vistor@goods/list
+  - vistor@goods/list-source
   - vistor@goods/view-sku
   - vistor@file/output
   - goods_admin@goods/list
-  - goods_admin@goods/create-source
-  - goods_admin@goods/view-sku
-  - goods_admin@goods/create-sku
-  - goods_admin@goods/update
   - goods_admin@goods/create
   - goods_admin@goods/view
+  - goods_admin@goods/update
+  - goods_admin@goods/create-sku
+  - goods_admin@goods/view-sku
+  - goods_admin@goods/create-source
+  - goods_admin@goods/list-source
   - goods_admin@goods/create-cls-attr
   - goods_admin@goods/delete-cls-attr
   - goods_admin@goods/cls-attrs

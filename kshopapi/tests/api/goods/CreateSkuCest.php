@@ -33,7 +33,8 @@ class CreateSkuCest
             'g_vaild_sku_ids' => [
                 ['value' => '6:1'],
                 ['value' => '6:2'],
-                ['value' => '6:3']
+                ['value' => '6:3'],
+                ['value' => '6:4']
             ]
         ];
         $I->setAuthHeader();

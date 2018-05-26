@@ -113,6 +113,7 @@ class SwgController extends Controller
     protected function geneSwgJson($module){
         $bin = dirname(((Yii::getAlias('@app')))) . '/vendor/zircote/swagger-php/bin/swagger';
         system(sprintf("php %s %s --output %s", $bin, $this->getPhpFilePath($module), $this->getJsonFilePath($module)));
+        system(sprintf("cp %s /var/www/html/swagger.json", $this->getJsonFilePath($module)));
     }
     protected function appendDocInPhpFile($content, $module){
         file_put_contents($this->getPhpFilePath($module), $content . "\n\n", FILE_APPEND);
@@ -192,7 +193,7 @@ tpl;
                     $normalProps[] = $prop;
                     break;
                 default:
-                    throw new \Exception("不合法的query_or_path类型");
+                    throw new \Exception(sprintf("不合法的query_or_path类型,%s", $prop['query_or_path']));
                     break;
             }
         }

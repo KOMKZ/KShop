@@ -43,8 +43,8 @@ class File extends ActiveRecord
      * @return [type] [description]
      */
     public function getFileDiskFullSavePath(){
-        $mediumInfo = json_decode($this->file_medium_info);
-        return $mediumInfo->base . '/' . $this->getFileSavePath();
+        // $mediumInfo = json_decode($this->file_medium_info);
+        return Yii::$app->filedisk->base . '/' . $this->getFileSavePath();
     }
 
 

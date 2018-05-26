@@ -16,7 +16,8 @@ return [
         ]
     ],
     'apides' => [
-        'all' => 'lshop api swagger'
+        'all' => 'lshop api swagger',
+        'all-test' => 'lshop api swagger',
     ],
     'apialias' => [
         '@api' => ROOT_PATH . '/kshopapi/controllers',

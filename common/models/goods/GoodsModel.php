@@ -130,18 +130,15 @@ class GoodsModel extends Model
 		try {
 			// 分析出新的还有旧的
 			$oldSkus = $newSkus = [];
-			$validSkus = $goods->g_vaild_sku_ids;
+			$validSkus = ArrayHelper::index($goods->g_vaild_sku_ids, 'value');
 			$currentSkus = ArrayHelper::index($goods->g_skus, 'g_sku_value');
 			foreach($skusData as $skuData){
-				if(empty($skuData['g_sku_value']) || empty($currentSkus[$skuData['g_sku_value']]))continue;
+				if(empty($skuData['g_sku_value']) || empty($validSkus[$skuData['g_sku_value']]))continue;
 				if(array_key_exists($skuData['g_sku_value'], $currentSkus)){
 					$oldSkus[] = $skuData;
 				}else{
 					$newSkus[] = $skuData;
 				}
-			}
-			if($newSkus && !($newSkus = $this->createMultiGoodsSku($newSkus, $goods))){
-				return false;
 			}
 			if($newSkus){
 				$newSkusResult = $this->createMultiGoodsSku($newSkus, $goods);
@@ -153,16 +150,18 @@ class GoodsModel extends Model
 			}
 			if(!empty($oldSkus)){
 				foreach($oldSkus as $key => $skuData){
-					if(false === $this->updateGoodsSku($currentSkus[$skuData['g_sku_value']], $skuData, $goods)){
+					$sku = $this->updateGoodsSku($currentSkus[$skuData['g_sku_value']], $skuData, $goods);
+					if(false === $sku){
 						return false;
 					}
+					$result[] = $sku;
 				}
-				
+
 			}
 			$goods->refresh();
 			$t->commit();
 			//maybe change
-			return true;
+			return $result;
 		} catch (\Exception $e) {
 			Yii::error($e);
 			$this->addError(Errno::EXCEPTION, Yii::t("app", "更新产品sku异常"));
@@ -210,7 +209,7 @@ class GoodsModel extends Model
 	public function createGoodsSku($skuData, Goods $goods){
 		$sku = new GoodsSku();
 		if(!$sku->load($skuData, '') || !$sku->validate()){
-			$this->addError('', $this->getOneErrMsg($sku));
+			$this->addErrors($sku->getErrors());
 			return false;
 		}
 		$skuItems = ArrayHelper::index($goods->g_vaild_sku_ids, 'value');

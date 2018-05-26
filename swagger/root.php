@@ -7,8 +7,8 @@
  * - consumes application/json
  * - basePath /
  * - version 1.0.0
- * - title KSHOP SWAGGER API
- * - description KSHOP SWAGGER API
+ * - title LSHOP SWAGGER API
+ * - description LSHOP SWAGGER API
  * - Contact name="784248377@qq.com"
  * - License name="784248377@qq.com"
  */

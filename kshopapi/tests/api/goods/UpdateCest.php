@@ -61,9 +61,9 @@ class UpdateCest
                     [
                         'g_atr_opts' => [
                             ["g_opt_name" => "红粉色"],
-                            ["g_opt_name" => "白色"],
+                            ["g_opt_name" => "灰色"],
                             ["g_opt_name" => "黑色"],
-                            ["g_opt_name" => "黄色"],
+                            ["g_opt_name" => "金色"],
                         ],
                         'g_atr_name' => '颜色'
                     ]

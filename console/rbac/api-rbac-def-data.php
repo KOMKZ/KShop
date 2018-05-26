@@ -19,6 +19,7 @@ return [
 		,['vistor', 'auth/get-info']
 		,['vistor', 'goods/view']
 		,['vistor', 'goods/list']
+		,['vistor', 'goods/list-source']
 		,['vistor', 'goods/view-sku']
 		,['vistor', 'file/output']
 		,['goods_admin', 'goods/*']

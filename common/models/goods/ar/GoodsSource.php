@@ -14,14 +14,18 @@ class GoodsSource extends ActiveRecord
     const CLS_TYPE_OPTION = 'option';
     const CLS_TYPE_GOODS = 'goods';
 
-    // 这些字段可用于筛选分类，如商品的轮播图
     const TYPE_IMG = 'img';
+
+    const U_SKU_M_IMG = 'sku_m';
+    const U_GOODS_M_IMG = 'goods_m';
+
+
 
 
     public static function tableName(){
         return "{{%goods_source}}";
     }
-    
+
 
 
     public function fields(){
@@ -45,7 +49,13 @@ class GoodsSource extends ActiveRecord
             ['gs_type', 'required'],
             ['gs_type', 'in', 'range' => ConstMap::getConst('gs_type', true)],
 
+            ['gs_use_type', 'required'],
+            ['gs_use_type', 'in', 'range' => ConstMap::getConst('gs_use_type', true)],
+
             ['gs_sid', 'required'],
+
+            ['g_id', 'required'],
+            ['g_id', 'integer'],
 
             ['gs_name', 'string'],
 

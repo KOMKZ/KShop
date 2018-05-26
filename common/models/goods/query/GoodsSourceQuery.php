@@ -14,6 +14,12 @@ class GoodsSourceQuery extends Object
         return GoodsSource::find();
     }
 
-    
+    public static function findByWithM(){
+        $gTable = Goods::tableName();
+        $gsTable = GoodsSource::tableName();
+        return self::find()->leftJoin($gTable, "{$gsTable}.g_id = {$gTable}.g_id");
+    }
+
+
 
 }

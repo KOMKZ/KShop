@@ -40,19 +40,53 @@ class CreateSourceCest
 		]);
         $res = $this->getResData($I);
 		$goods = $res['data'];
-		// 测试创建商品资源
-		$I->sendPOST(sprintf("/goods/%s/source", $goods['g_code']), [
-			'gs_cls_type' => 'goods',
-			'gs_type' => 'img'
-		], [
-			'file' => Yii::getAlias('@kshopapi/tests/_data/kshop.png')
-		]);
-		$I->seeResponseCodeIs(200);
-		$I->seeResponseContainsJson([
-			'code' => 0,
-			'data' => [
-				'gs_cls_id' => $goods['g_id']
-			]
-		]);
+        $gs = [
+            '@kshopapi/tests/_data/g1.jpg',
+            '@kshopapi/tests/_data/g2.jpg',
+            '@kshopapi/tests/_data/g3.jpg',
+            '@kshopapi/tests/_data/g4.jpg',
+        ];
+
+        foreach($gs as $path){
+            // 测试创建商品资源
+    		$I->sendPOST(sprintf("/goods/%s/source", $goods['g_code']), [
+    			'gs_cls_type' => 'goods',
+    			'gs_type' => 'img',
+                'gs_use_type' => 'goods_m'
+    		], [
+    			'file' => Yii::getAlias($path)
+    		]);
+    		$I->seeResponseCodeIs(200);
+    		$I->seeResponseContainsJson([
+    			'code' => 0,
+    			'data' => [
+    				'gs_cls_id' => $goods['g_id']
+    			]
+    		]);
+        }
+
+        $skuSource = [
+            ['index' => 'A10001-6:1', 'path' => '@kshopapi/tests/_data/pink.png'],
+            ['index' => 'A10001-6:2', 'path' => '@kshopapi/tests/_data/grey.png'],
+            ['index' => 'A10001-6:3', 'path' => '@kshopapi/tests/_data/black.png'],
+            ['index' => 'A10001-6:4', 'path' => '@kshopapi/tests/_data/gold.png'],
+        ];
+        foreach($skuSource as $item){
+            // 测试创建商品资源
+    		$I->sendPOST(sprintf("/goods/%s/source", $item['index']), [
+    			'gs_cls_type' => 'sku',
+    			'gs_type' => 'img',
+                'gs_use_type' => 'sku_m'
+    		], [
+    			'file' => Yii::getAlias($item['path'])
+    		]);
+    		$I->seeResponseCodeIs(200);
+    		$I->seeResponseContainsJson([
+    			'code' => 0,
+    			'data' => [
+                    'gs_name' => basename($item['path'])
+    			]
+    		]);
+        }
 	}
 }

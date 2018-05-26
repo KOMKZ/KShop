@@ -62,6 +62,10 @@ return [
 		\common\models\goods\ar\GoodsSource::CLS_TYPE_GOODS => Yii::t('app', '商品资源'),
 		\common\models\goods\ar\GoodsSource::CLS_TYPE_OPTION => Yii::t('app', '商品属性值资源')
 	],
+	'gs_use_type' => [
+		\common\models\goods\ar\GoodsSource::U_SKU_M_IMG => Yii::t('app', 'sku记录主图'),
+		\common\models\goods\ar\GoodsSource::U_GOODS_M_IMG => Yii::t('app', '商品展示轮播图'),
+	],
 	'mail_content_type' => [
 		\common\models\mail\ar\Mail::CONTENT_TYPE_HTML => Yii::t('app', 'text/html'),
 	],

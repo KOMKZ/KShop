@@ -43,6 +43,27 @@ class ToolController extends Controller{
             ['debug', 'is_test']
         );
     }
+
+	public function actionReInstall(){
+		$yii = basename($_SERVER['argv'][0]);
+
+		$actions = [
+			'data/clear-file',
+			'migrate/down 100 --interactive=0',
+			'migrate/up --interactive=0',
+			'data/inst-test',
+			'data/inst-test-user',
+			'rbac/install-rbac-data'
+		];
+		foreach ($actions as $action) {
+			system(sprintf("cd %s;./%s %s", ROOT_PATH, $yii, $action));
+		}
+	}
+
+
+
+
+
 	public function debug($content){
 		if($this->debug){
 			echo $content . "\n";

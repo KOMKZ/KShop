@@ -64,6 +64,10 @@ class Disk extends Model implements SaveMediumInterface
         $this->base = rtrim($value, '/');
     }
 
+    public function getBase(){
+        return $this->base;
+    }
+
     /**
      * 构建文件的访问url
      * @param  \common\models\file\ar\File   $file   统一文件对象
