@@ -10,6 +10,7 @@ return [
 
 
 			'GET <controller:[\w\-:]+>/<index:[^\/]+>/<sub:[\w\-:]+>/<sub_index:[^\/]+>/?' => "<controller>/view-<sub>",
+			'PUT <controller:[\w\-:]+>/<index:[^\/]+>/<sub:[\w\-:]+>/<sub_index:[^\/]+>/?' => "<controller>/update-<sub>",
 			'GET <controller:[\w\-:]+>/<index:[^\/]+>/?' => "<controller>/view",
 			'GET <controller:[\w\-:]+>/?' => "<controller>/list",
 			'GET <controller:[\w\-:]+>/<index:[^\/]+>/<sub:[\w\-:]+>/?' => "<controller>/list-<sub>",

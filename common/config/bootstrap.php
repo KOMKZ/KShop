@@ -10,7 +10,7 @@ use common\models\action\ActionModel;
 use common\models\order\OrderModel;
 Yii::setAlias('@common', dirname(__DIR__));
 Yii::setAlias('@kshopapi', dirname(dirname(__DIR__)) . '/kshopapi');
-Yii::setAlias('@kshopadmin', dirname(dirname(__DIR__)) . '/kshopadmin');
+Yii::setAlias('@lshopadmin', dirname(dirname(__DIR__)) . '/lshopadmin');
 Yii::setAlias('@console', dirname(dirname(__DIR__)) . '/console');
 Yii::setAlias('@OSS', '@common/lib/alisdk/OSS');
 Yii::setAlias('@Aliyun', '@common/lib/alisdk/dysms');
@@ -34,3 +34,7 @@ Event::on(Goods::className(), Goods::EVENT_AFTER_UPDATE, [ActionModel::className
 
 // fix bug https://github.com/auth0/auth0-PHP/issues/56
 \Firebase\JWT\JWT::$leeway = 50;
+
+\Yii::$container->set('yii\bootstrap\ActiveForm', [
+    'fieldClass' => "common\bootstrap\ActiveField",
+]);

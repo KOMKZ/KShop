@@ -27,7 +27,8 @@ permissions:
   - goods/create-sku@创建商品sku记录
   - goods/view-sku@查询一个sku信息
   - goods/create-source@创建一个资源
-  - goods/list-source@
+  - goods/list-source@查询商品资源
+  - goods/update-sku@
   - goods/create-cls-attr@
   - goods/delete-cls-attr@
   - goods/cls-attrs@

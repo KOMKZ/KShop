@@ -25,7 +25,7 @@ use common\base\Filter;
 class GoodsController extends ApiController{
 
     /**
-     * @api get,/goods,Goods,获取商品列表
+     * @api get,/goods,Goods,获取主商品列表
      * @return #global_res
      * - data object#goods_list_res,商品列表信息
      */
@@ -289,6 +289,21 @@ class GoodsController extends ApiController{
  			// ]
  		]);
  		return $this->succItems($provider->getModels(), $provider->totalCount);
+    }
+
+    public function actionUpdateSku($index, $sub_index){
+        $gTable = Goods::tableName();
+        $gskuTable = GoodsSku::tableName();
+        $goodsSku = GoodsSkuQuery::findByWithM()
+                                 ->andWhere(['=', "{$gTable}.g_code", $index])
+                                 ->andWhere(['=', "{$gskuTable}.g_sku_value", $sub_index])
+                                 ->andWhere(['=', "{$gskuTable}.g_sku_status", GoodsSku::STATUS_ON_SALE])
+                                 ->one();
+        if(!$goodsSku){
+            return $this->error(404, Yii::t('app', '指定的数据不存在'));
+        }
+        console($goodsSku);
+
     }
 
     public function actionCreateClsAttr(){

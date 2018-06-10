@@ -143,7 +143,7 @@ class UserModel extends Model
 		}
 	}
 
-	
+
 
 	public function updateUser(User $user, $data){
 		$user->scenario = 'update';
@@ -179,7 +179,7 @@ class UserModel extends Model
 				$oldFile->update(false);
 			}
 		}
-		
+
 		if(false === $userExtend->update(false)){
 			$this->addError(Errno::DB_UPDATE_FAIL, Yii::t('app', "数据库更新失败"));
 			return false;
@@ -247,7 +247,7 @@ class UserModel extends Model
 	}
 
 	public function loginInSession($user, $remember = false){
-		Yii::$app->user->login($user, $remember ? 3600 * 24 * 30 : 0);
+		Yii::$app->user->login($user,  3600 * 24 * 30);
 		return true;
 	}
 

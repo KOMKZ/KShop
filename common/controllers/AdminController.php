@@ -12,9 +12,12 @@ use yii\base\ActionEvent;
 class AdminController extends Controller
 {
 	public $enableCsrfValidation = false;
-
+	public function getAdminSession(){
+		return Yii::$app->user->identity;
+	}
 	public function behaviors()
 	{
+		return [];
 		// todo 权限控制这样弄 不好拆卸
 		// 比如哪天我就不需要安装权限控制了，这里不够灵活
 		return [
@@ -53,6 +56,11 @@ class AdminController extends Controller
 	}
 	public function setError($msg){
 		Yii::$app->session->setFlash('error', Yii::t('app', $msg));
+	}
+	public function setErrorFromErrors($errors){
+		if(!empty($errors[''])){
+			$this->setError(implode(",", $errors[""]));
+		}
 	}
 	public function setSuccess($msg){
 		Yii::$app->session->setFlash('success', Yii::t('app', $msg));

@@ -1,0 +1,229 @@
+a:12:{s:6:"config";s:2414:"a:5:{s:10:"phpVersion";s:37:"5.6.35-1+ubuntu17.10.1+deb.sury.org+1";s:10:"yiiVersion";s:6:"2.0.12";s:11:"application";a:8:{s:3:"yii";s:6:"2.0.12";s:4:"name";s:14:"My Application";s:7:"version";s:3:"1.0";s:8:"language";s:5:"en-US";s:14:"sourceLanguage";s:5:"en-US";s:7:"charset";s:5:"UTF-8";s:3:"env";s:3:"dev";s:5:"debug";b:1;}s:3:"php";a:5:{s:7:"version";s:37:"5.6.35-1+ubuntu17.10.1+deb.sury.org+1";s:6:"xdebug";b:1;s:3:"apc";b:0;s:8:"memcache";b:0;s:9:"memcached";b:0;}s:10:"extensions";a:9:{s:24:"yiisoft/yii2-swiftmailer";a:3:{s:4:"name";s:24:"yiisoft/yii2-swiftmailer";s:7:"version";s:7:"2.0.7.0";s:5:"alias";a:1:{s:16:"@yii/swiftmailer";s:63:"/home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2-swiftmailer";}}s:22:"yiisoft/yii2-bootstrap";a:3:{s:4:"name";s:22:"yiisoft/yii2-bootstrap";s:7:"version";s:7:"2.0.6.0";s:5:"alias";a:1:{s:14:"@yii/bootstrap";s:61:"/home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2-bootstrap";}}s:18:"yiisoft/yii2-debug";a:3:{s:4:"name";s:18:"yiisoft/yii2-debug";s:7:"version";s:8:"2.0.11.0";s:5:"alias";a:1:{s:10:"@yii/debug";s:57:"/home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2-debug";}}s:16:"yiisoft/yii2-gii";a:3:{s:4:"name";s:16:"yiisoft/yii2-gii";s:7:"version";s:7:"2.0.5.0";s:5:"alias";a:1:{s:8:"@yii/gii";s:55:"/home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2-gii";}}s:18:"yiisoft/yii2-faker";a:3:{s:4:"name";s:18:"yiisoft/yii2-faker";s:7:"version";s:7:"2.0.3.0";s:5:"alias";a:1:{s:10:"@yii/faker";s:57:"/home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2-faker";}}s:28:"omnilight/yii2-shopping-cart";a:3:{s:4:"name";s:28:"omnilight/yii2-shopping-cart";s:7:"version";s:7:"1.2.2.0";s:5:"alias";a:1:{s:16:"@yz/shoppingcart";s:67:"/home/lartik/pro/php/lartikShop/vendor/omnilight/yii2-shopping-cart";}}s:24:"rmrevin/yii2-fontawesome";a:3:{s:4:"name";s:24:"rmrevin/yii2-fontawesome";s:7:"version";s:8:"2.17.1.0";s:5:"alias";a:1:{s:24:"@rmrevin/yii/fontawesome";s:63:"/home/lartik/pro/php/lartikShop/vendor/rmrevin/yii2-fontawesome";}}s:18:"cebe/yii2-gravatar";a:3:{s:4:"name";s:18:"cebe/yii2-gravatar";s:7:"version";s:7:"1.1.0.0";s:5:"alias";a:1:{s:14:"@cebe/gravatar";s:71:"/home/lartik/pro/php/lartikShop/vendor/cebe/yii2-gravatar/cebe/gravatar";}}s:25:"dmstr/yii2-adminlte-asset";a:3:{s:4:"name";s:25:"dmstr/yii2-adminlte-asset";s:7:"version";s:7:"2.4.4.0";s:5:"alias";a:1:{s:6:"@dmstr";s:64:"/home/lartik/pro/php/lartikShop/vendor/dmstr/yii2-adminlte-asset";}}}}";s:7:"request";s:4576:"a:14:{s:7:"flashes";a:0:{}s:10:"statusCode";i:500;s:14:"requestHeaders";a:13:{s:4:"host";s:14:"localhost:8012";s:10:"connection";s:10:"keep-alive";s:14:"content-length";s:3:"397";s:13:"cache-control";s:9:"max-age=0";s:25:"upgrade-insecure-requests";s:1:"1";s:10:"user-agent";s:105:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36";s:6:"origin";s:21:"http://localhost:8012";s:12:"content-type";s:33:"application/x-www-form-urlencoded";s:6:"accept";s:85:"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";s:7:"referer";s:34:"http://localhost:8012/goods/create";s:15:"accept-encoding";s:17:"gzip, deflate, br";s:15:"accept-language";s:14:"zh-CN,zh;q=0.9";s:6:"cookie";s:133:"_csrf-frontend=U%19%F6%7F%D8%3C%8B%D7r%B5%DF%CF%3E%ED%E1O%21%E6F%DEP%22%8A%EFOx%A5%A8%27%E8l%2C; PHPSESSID=tgpickv3l1v3mm4k10teqlnee7";}s:15:"responseHeaders";a:4:{s:7:"Expires";s:29:"Thu, 19 Nov 1981 08:52:00 GMT";s:13:"Cache-Control";s:62:"no-store, no-cache, must-revalidate, post-check=0, pre-check=0";s:6:"Pragma";s:8:"no-cache";s:12:"Content-Type";s:24:"text/html; charset=UTF-8";}s:5:"route";s:12:"goods/create";s:6:"action";s:54:"lshopadmin\controllers\GoodsController::actionCreate()";s:12:"actionParams";a:0:{}s:11:"requestBody";a:3:{s:12:"Content Type";s:33:"application/x-www-form-urlencoded";s:3:"Raw";s:397:"_csrf-frontend=N34UeoACLxwVsSoCDN1IXtAOXx8y8LR-DsnhlcxCY-BiZ-IFWD6ky2cE9c0yMKkR8egZwWLSPpFBsUQ966oPzA%3D%3D&DynamicModel%5Bg_primary_name%5D=%E5%BE%B7%E5%BC%8F%E8%BD%BB%E9%87%8F%E4%BF%9D%E6%B8%A9%E6%9D%AF&DynamicModel%5Bg_code%5D=A10001&DynamicModel%5Bg_intro_text%5D=%E5%BE%B7%E5%BC%8F%E8%BD%BB%E9%87%8F%E4%BF%9D%E6%B8%A9%E6%9D%AF+%E7%AE%80%E5%8D%95%E4%BB%8B%E7%BB%8D&DynamicModel%5Bg_cls_id%5D=2";s:17:"Decoded to Params";a:2:{s:14:"_csrf-frontend";s:88:"N34UeoACLxwVsSoCDN1IXtAOXx8y8LR-DsnhlcxCY-BiZ-IFWD6ky2cE9c0yMKkR8egZwWLSPpFBsUQ966oPzA==";s:12:"DynamicModel";a:4:{s:14:"g_primary_name";s:21:"德式轻量保温杯";s:6:"g_code";s:6:"A10001";s:12:"g_intro_text";s:34:"德式轻量保温杯 简单介绍";s:8:"g_cls_id";s:1:"2";}}}s:6:"SERVER";a:39:{s:4:"USER";s:8:"www-data";s:4:"HOME";s:8:"/var/www";s:9:"FCGI_ROLE";s:9:"RESPONDER";s:9:"PATH_INFO";s:0:"";s:15:"SCRIPT_FILENAME";s:56:"/home/lartik/pro/php/lartikShop/lshopadmin/web/index.php";s:12:"QUERY_STRING";s:0:"";s:14:"REQUEST_METHOD";s:4:"POST";s:12:"CONTENT_TYPE";s:33:"application/x-www-form-urlencoded";s:14:"CONTENT_LENGTH";s:3:"397";s:11:"SCRIPT_NAME";s:10:"/index.php";s:11:"REQUEST_URI";s:13:"/goods/create";s:12:"DOCUMENT_URI";s:10:"/index.php";s:13:"DOCUMENT_ROOT";s:46:"/home/lartik/pro/php/lartikShop/lshopadmin/web";s:15:"SERVER_PROTOCOL";s:8:"HTTP/1.1";s:14:"REQUEST_SCHEME";s:4:"http";s:17:"GATEWAY_INTERFACE";s:7:"CGI/1.1";s:15:"SERVER_SOFTWARE";s:12:"nginx/1.12.1";s:11:"REMOTE_ADDR";s:9:"127.0.0.1";s:11:"REMOTE_PORT";s:5:"33934";s:11:"SERVER_ADDR";s:9:"127.0.0.1";s:11:"SERVER_PORT";s:4:"8012";s:11:"SERVER_NAME";s:0:"";s:15:"REDIRECT_STATUS";s:3:"200";s:9:"HTTP_HOST";s:14:"localhost:8012";s:15:"HTTP_CONNECTION";s:10:"keep-alive";s:19:"HTTP_CONTENT_LENGTH";s:3:"397";s:18:"HTTP_CACHE_CONTROL";s:9:"max-age=0";s:30:"HTTP_UPGRADE_INSECURE_REQUESTS";s:1:"1";s:15:"HTTP_USER_AGENT";s:105:"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.117 Safari/537.36";s:11:"HTTP_ORIGIN";s:21:"http://localhost:8012";s:17:"HTTP_CONTENT_TYPE";s:33:"application/x-www-form-urlencoded";s:11:"HTTP_ACCEPT";s:85:"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8";s:12:"HTTP_REFERER";s:34:"http://localhost:8012/goods/create";s:20:"HTTP_ACCEPT_ENCODING";s:17:"gzip, deflate, br";s:20:"HTTP_ACCEPT_LANGUAGE";s:14:"zh-CN,zh;q=0.9";s:11:"HTTP_COOKIE";s:133:"_csrf-frontend=U%19%F6%7F%D8%3C%8B%D7r%B5%DF%CF%3E%ED%E1O%21%E6F%DEP%22%8A%EFOx%A5%A8%27%E8l%2C; PHPSESSID=tgpickv3l1v3mm4k10teqlnee7";s:8:"PHP_SELF";s:10:"/index.php";s:18:"REQUEST_TIME_FLOAT";d:1528645173.6114459;s:12:"REQUEST_TIME";i:1528645173;}s:3:"GET";a:0:{}s:4:"POST";a:2:{s:14:"_csrf-frontend";s:88:"N34UeoACLxwVsSoCDN1IXtAOXx8y8LR-DsnhlcxCY-BiZ-IFWD6ky2cE9c0yMKkR8egZwWLSPpFBsUQ966oPzA==";s:12:"DynamicModel";a:4:{s:14:"g_primary_name";s:21:"德式轻量保温杯";s:6:"g_code";s:6:"A10001";s:12:"g_intro_text";s:34:"德式轻量保温杯 简单介绍";s:8:"g_cls_id";s:1:"2";}}s:6:"COOKIE";a:2:{s:14:"_csrf-frontend";s:32:"U��<��r���>��O!�F�P"��Ox��'�l,";s:9:"PHPSESSID";s:26:"tgpickv3l1v3mm4k10teqlnee7";}s:5:"FILES";a:0:{}s:7:"SESSION";a:2:{s:7:"__flash";a:0:{}s:4:"__id";i:1;}}";s:3:"log";s:13836:"a:1:{s:8:"messages";a:50:{i:0;a:6:{i:0;s:33:"Bootstrap with yii\log\Dispatcher";i:1;i:8;i:2;s:31:"yii\base\Application::bootstrap";i:3;d:1528645173.6156111;i:4;a:0:{}i:5;i:2143944;}i:1;a:6:{i:0;s:21:"Loading module: debug";i:1;i:8;i:2;s:26:"yii\base\Module::getModule";i:3;d:1528645173.615628;i:4;a:0:{}i:5;i:2145792;}i:2;a:6:{i:0;s:15:"Session started";i:1;i:4;i:2;s:21:"yii\web\Session::open";i:3;d:1528645173.6167469;i:4;a:0:{}i:5;i:2619840;}i:3;a:6:{i:0;s:61:"Opening DB connection: mysql:host=localhost;dbname=lartikshop";i:1;i:4;i:2;s:23:"yii\db\Connection::open";i:3;d:1528645173.6175079;i:4;a:0:{}i:5;i:3047872;}i:6;a:6:{i:0;s:65:"SELECT * FROM `user` WHERE (`u_status`='active') AND (`u_id` = 1)";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6180389;i:4;a:0:{}i:5;i:3059800;}i:9;a:6:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6185391;i:4;a:0:{}i:5;i:3114456;}i:12;a:6:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.619348;i:4;a:0:{}i:5;i:3146400;}i:15;a:6:{i:0;s:44:"Bootstrap with yii\debug\Module::bootstrap()";i:1;i:8;i:2;s:31:"yii\base\Application::bootstrap";i:3;d:1528645173.6201611;i:4;a:0:{}i:5;i:3301040;}i:19;a:6:{i:0;s:31:"Route requested: 'goods/create'";i:1;i:8;i:2;s:34:"yii\web\Application::handleRequest";i:3;d:1528645173.6206701;i:4;a:0:{}i:5;i:3443040;}i:20;a:6:{i:0;s:26:"Route to run: goods/create";i:1;i:8;i:2;s:30:"yii\base\Controller::runAction";i:3;d:1528645173.6211059;i:4;a:0:{}i:5;i:3559304;}i:21;a:6:{i:0;s:70:"Running action: lshopadmin\controllers\GoodsController::actionCreate()";i:1;i:8;i:2;s:36:"yii\base\InlineAction::runWithParams";i:3;d:1528645173.6211591;i:4;a:0:{}i:5;i:3572928;}i:22;a:6:{i:0;s:17:"Begin transaction";i:1;i:8;i:2;s:25:"yii\db\Transaction::begin";i:3;d:1528645173.6212029;i:4;a:0:{}i:5;i:3586096;}i:23;a:6:{i:0;s:15:"Set savepoint 1";i:1;i:8;i:2;s:25:"yii\db\Transaction::begin";i:3;d:1528645173.6213939;i:4;a:0:{}i:5;i:3658600;}i:24;a:6:{i:0;s:16:"SAVEPOINT LEVEL1";i:1;i:4;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.621429;i:4;a:0:{}i:5;i:3661096;}i:27;a:6:{i:0;s:30:"SHOW FULL COLUMNS FROM `goods`";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6216071;i:4;a:0:{}i:5;i:3669488;}i:30;a:6:{i:0;s:597:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods' AND kcu.table_name = 'goods'";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.62235;i:4;a:0:{}i:5;i:3687808;}i:33;a:6:{i:0;s:80:"Failed to set unsafe attribute 'g_intro_text' in 'common\models\goods\ar\Goods'.";i:1;i:8;i:2;s:33:"yii\base\Model::onUnsafeAttribute";i:3;d:1528645173.6226659;i:4;a:0:{}i:5;i:3688760;}i:34;a:6:{i:0;s:97:"SELECT EXISTS(SELECT * FROM `goods_classification` WHERE (`goods_classification`.`g_cls_id`='2'))";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6250119;i:4;a:0:{}i:5;i:4841592;}i:37;a:6:{i:0;s:264:"INSERT INTO `goods` (`g_primary_name`, `g_code`, `g_cls_id`, `g_create_uid`, `g_secondary_name`, `g_status`, `g_updated_at`, `g_start_at`, `g_end_at`, `g_created_at`) VALUES ('德式轻量保温杯', 'A10001', 2, 1, '', 'draft', 1528645173, NULL, NULL, 1528645173)";i:1;i:4;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.626044;i:4;a:0:{}i:5;i:4847672;}i:40;a:6:{i:0;s:88:"Failed to set unsafe attribute 'g_primary_name' in 'common\models\goods\ar\GoodsDetail'.";i:1;i:8;i:2;s:33:"yii\base\Model::onUnsafeAttribute";i:3;d:1528645173.6265371;i:4;a:0:{}i:5;i:4914240;}i:41;a:6:{i:0;s:80:"Failed to set unsafe attribute 'g_code' in 'common\models\goods\ar\GoodsDetail'.";i:1;i:8;i:2;s:33:"yii\base\Model::onUnsafeAttribute";i:3;d:1528645173.626545;i:4;a:0:{}i:5;i:4915552;}i:42;a:6:{i:0;s:37:"SHOW FULL COLUMNS FROM `goods_detail`";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6266019;i:4;a:0:{}i:5;i:4918928;}i:45;a:6:{i:0;s:611:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods_detail' AND kcu.table_name = 'goods_detail'";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6270471;i:4;a:0:{}i:5;i:4928880;}i:48;a:6:{i:0;s:82:"Failed to set unsafe attribute 'g_cls_id' in 'common\models\goods\ar\GoodsDetail'.";i:1;i:8;i:2;s:33:"yii\base\Model::onUnsafeAttribute";i:3;d:1528645173.6273661;i:4;a:0:{}i:5;i:4929304;}i:49;a:6:{i:0;s:86:"Failed to set unsafe attribute 'g_create_uid' in 'common\models\goods\ar\GoodsDetail'.";i:1;i:8;i:2;s:33:"yii\base\Model::onUnsafeAttribute";i:3;d:1528645173.627373;i:4;a:0:{}i:5;i:4930584;}i:50;a:6:{i:0;s:101:"INSERT INTO `goods_detail` (`g_intro_text`, `g_id`) VALUES ('德式轻量保温杯 简单介绍', 11)";i:1;i:4;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.6276281;i:4;a:0:{}i:5;i:4935056;}i:53;a:6:{i:0;s:86:"Rendering view file: /home/lartik/pro/php/lartikShop/lshopadmin/views/goods/create.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.628139;i:4;a:0:{}i:5;i:4994112;}i:54;a:6:{i:0;s:2338:"exception 'yii\base\InvalidParamException' with message 'Attribute name must contain word characters only.' in /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/helpers/BaseHtml.php:2155
+Stack trace:
+#0 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/helpers/BaseHtml.php(1286): yii\helpers\BaseHtml::getInputName(Object(yii\base\DynamicModel), '')
+#1 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/helpers/BaseHtml.php(1336): yii\helpers\BaseHtml::activeInput('text', Object(yii\base\DynamicModel), '', Array)
+#2 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/widgets/ActiveField.php(395): yii\helpers\BaseHtml::activeTextInput(Object(yii\base\DynamicModel), '', Array)
+#3 /home/lartik/pro/php/lartikShop/lshopadmin/views/goods/create.php(22): yii\widgets\ActiveField->textInput()
+#4 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/base/View.php(330): require('/home/lartik/pr...')
+#5 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/base/View.php(250): yii\base\View->renderPhpFile('/home/lartik/pr...', Array)
+#6 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/base/View.php(152): yii\base\View->renderFile('/home/lartik/pr...', Array, Object(lshopadmin\controllers\GoodsController))
+#7 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/base/Controller.php(381): yii\base\View->render('create', Array, Object(lshopadmin\controllers\GoodsController))
+#8 /home/lartik/pro/php/lartikShop/lshopadmin/controllers/GoodsController.php(39): yii\base\Controller->render('create', Array)
+#9 [internal function]: lshopadmin\controllers\GoodsController->actionCreate()
+#10 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#11 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#12 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('create', Array)
+#13 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('goods/create', Array)
+#14 /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#15 /home/lartik/pro/php/lartikShop/lshopadmin/web/index.php(26): yii\base\Application->run()
+#16 {main}";i:1;i:1;i:2;s:30:"yii\base\InvalidParamException";i:3;d:1528645173.6327469;i:4;a:0:{}i:5;i:5262560;}i:55;a:6:{i:0;s:105:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/exception.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.632853;i:4;a:0:{}i:5;i:5257784;}i:56;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6345601;i:4;a:0:{}i:5;i:5785896;}i:57;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6356919;i:4;a:0:{}i:5;i:5792400;}i:58;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6362171;i:4;a:0:{}i:5;i:5796760;}i:59;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.636642;i:4;a:0:{}i:5;i:5497568;}i:60;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6368539;i:4;a:0:{}i:5;i:5325680;}i:61;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6370299;i:4;a:0:{}i:5;i:5430272;}i:62;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.637213;i:4;a:0:{}i:5;i:5433568;}i:63;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.637423;i:4;a:0:{}i:5;i:5437392;}i:64;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6376331;i:4;a:0:{}i:5;i:5442560;}i:65;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6378131;i:4;a:0:{}i:5;i:5344952;}i:66;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6379399;i:4;a:0:{}i:5;i:5339784;}i:67;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.638032;i:4;a:0:{}i:5;i:5353544;}i:68;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6381979;i:4;a:0:{}i:5;i:5455264;}i:69;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6384089;i:4;a:0:{}i:5;i:5495504;}i:70;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.6385951;i:4;a:0:{}i:5;i:5392056;}i:71;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.638788;i:4;a:0:{}i:5;i:5494552;}i:72;a:6:{i:0;s:109:"Rendering view file: /home/lartik/pro/php/lartikShop/vendor/yiisoft/yii2/views/errorHandler/callStackItem.php";i:1;i:8;i:2;s:25:"yii\base\View::renderFile";i:3;d:1528645173.638952;i:4;a:0:{}i:5;i:5364752;}i:73;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=1)";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6472199;i:4;a:0:{}i:5;i:5598264;}i:76;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=2)";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.648396;i:4;a:0:{}i:5;i:5656448;}i:79;a:6:{i:0;s:31:"SELECT * FROM `auth_item_child`";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.649224;i:4;a:0:{}i:5;i:5658464;}i:82;a:6:{i:0;s:61:"SELECT `item_name` FROM `auth_assignment` WHERE `user_id`='1'";i:1;i:4;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.649936;i:4;a:0:{}i:5;i:5668704;}}}";s:9:"profiling";s:9467:"a:3:{s:6:"memory";i:6083272;s:4:"time";d:0.040863037109375;s:8:"messages";a:32:{i:4;a:6:{i:0;s:61:"Opening DB connection: mysql:host=localhost;dbname=lartikshop";i:1;i:80;i:2;s:23:"yii\db\Connection::open";i:3;d:1528645173.617516;i:4;a:0:{}i:5;i:3049096;}i:5;a:6:{i:0;s:61:"Opening DB connection: mysql:host=localhost;dbname=lartikshop";i:1;i:96;i:2;s:23:"yii\db\Connection::open";i:3;d:1528645173.618001;i:4;a:0:{}i:5;i:3058808;}i:7;a:6:{i:0;s:65:"SELECT * FROM `user` WHERE (`u_status`='active') AND (`u_id` = 1)";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.618077;i:4;a:0:{}i:5;i:3062248;}i:8;a:6:{i:0;s:65:"SELECT * FROM `user` WHERE (`u_status`='active') AND (`u_id` = 1)";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.618314;i:4;a:0:{}i:5;i:3066824;}i:10;a:6:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6185601;i:4;a:0:{}i:5;i:3116400;}i:11;a:6:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6189029;i:4;a:0:{}i:5;i:3140040;}i:13;a:6:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6193709;i:4;a:0:{}i:5;i:3149312;}i:14;a:6:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6196201;i:4;a:0:{}i:5;i:3150960;}i:25;a:6:{i:0;s:16:"SAVEPOINT LEVEL1";i:1;i:80;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.621448;i:4;a:0:{}i:5;i:3662976;}i:26;a:6:{i:0;s:16:"SAVEPOINT LEVEL1";i:1;i:96;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.6215119;i:4;a:0:{}i:5;i:3664216;}i:28;a:6:{i:0;s:30:"SHOW FULL COLUMNS FROM `goods`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6216271;i:4;a:0:{}i:5;i:3671432;}i:29;a:6:{i:0;s:30:"SHOW FULL COLUMNS FROM `goods`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.621938;i:4;a:0:{}i:5;i:3697000;}i:31;a:6:{i:0;s:597:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods' AND kcu.table_name = 'goods'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6223731;i:4;a:0:{}i:5;i:3690720;}i:32;a:6:{i:0;s:597:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods' AND kcu.table_name = 'goods'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6226239;i:4;a:0:{}i:5;i:3692368;}i:35;a:6:{i:0;s:97:"SELECT EXISTS(SELECT * FROM `goods_classification` WHERE (`goods_classification`.`g_cls_id`='2'))";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.625037;i:4;a:0:{}i:5;i:4843648;}i:36;a:6:{i:0;s:97:"SELECT EXISTS(SELECT * FROM `goods_classification` WHERE (`goods_classification`.`g_cls_id`='2'))";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6252301;i:4;a:0:{}i:5;i:4845064;}i:38;a:6:{i:0;s:264:"INSERT INTO `goods` (`g_primary_name`, `g_code`, `g_cls_id`, `g_create_uid`, `g_secondary_name`, `g_status`, `g_updated_at`, `g_start_at`, `g_end_at`, `g_created_at`) VALUES ('德式轻量保温杯', 'A10001', 2, 1, '', 'draft', 1528645173, NULL, NULL, 1528645173)";i:1;i:80;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.6260729;i:4;a:0:{}i:5;i:4847984;}i:39;a:6:{i:0;s:264:"INSERT INTO `goods` (`g_primary_name`, `g_code`, `g_cls_id`, `g_create_uid`, `g_secondary_name`, `g_status`, `g_updated_at`, `g_start_at`, `g_end_at`, `g_created_at`) VALUES ('德式轻量保温杯', 'A10001', 2, 1, '', 'draft', 1528645173, NULL, NULL, 1528645173)";i:1;i:96;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.626255;i:4;a:0:{}i:5;i:4849224;}i:43;a:6:{i:0;s:37:"SHOW FULL COLUMNS FROM `goods_detail`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6266229;i:4;a:0:{}i:5;i:4920888;}i:44;a:6:{i:0;s:37:"SHOW FULL COLUMNS FROM `goods_detail`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.626869;i:4;a:0:{}i:5;i:4928816;}i:46;a:6:{i:0;s:611:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods_detail' AND kcu.table_name = 'goods_detail'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.62707;i:4;a:0:{}i:5;i:4931792;}i:47;a:6:{i:0;s:611:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods_detail' AND kcu.table_name = 'goods_detail'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.627341;i:4;a:0:{}i:5;i:4933456;}i:51;a:6:{i:0;s:101:"INSERT INTO `goods_detail` (`g_intro_text`, `g_id`) VALUES ('德式轻量保温杯 简单介绍', 11)";i:1;i:80;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.6276519;i:4;a:0:{}i:5;i:4936808;}i:52;a:6:{i:0;s:101:"INSERT INTO `goods_detail` (`g_intro_text`, `g_id`) VALUES ('德式轻量保温杯 简单介绍', 11)";i:1;i:96;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.627821;i:4;a:0:{}i:5;i:4938048;}i:74;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=1)";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6472731;i:4;a:0:{}i:5;i:5600288;}i:75;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=1)";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6477301;i:4;a:0:{}i:5;i:5603744;}i:77;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=2)";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6484561;i:4;a:0:{}i:5;i:5658368;}i:78;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=2)";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6489611;i:4;a:0:{}i:5;i:5660240;}i:80;a:6:{i:0;s:31:"SELECT * FROM `auth_item_child`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.649282;i:4;a:0:{}i:5;i:5660408;}i:81;a:6:{i:0;s:31:"SELECT * FROM `auth_item_child`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.649642;i:4;a:0:{}i:5;i:5681248;}i:83;a:6:{i:0;s:61:"SELECT `item_name` FROM `auth_assignment` WHERE `user_id`='1'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6499879;i:4;a:0:{}i:5;i:5670680;}i:84;a:6:{i:0;s:61:"SELECT `item_name` FROM `auth_assignment` WHERE `user_id`='1'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6502061;i:4;a:0:{}i:5;i:5672320;}}}";s:2:"db";s:9063:"a:1:{s:8:"messages";a:30:{i:7;a:6:{i:0;s:65:"SELECT * FROM `user` WHERE (`u_status`='active') AND (`u_id` = 1)";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.618077;i:4;a:0:{}i:5;i:3062248;}i:8;a:6:{i:0;s:65:"SELECT * FROM `user` WHERE (`u_status`='active') AND (`u_id` = 1)";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.618314;i:4;a:0:{}i:5;i:3066824;}i:10;a:6:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6185601;i:4;a:0:{}i:5;i:3116400;}i:11;a:6:{i:0;s:29:"SHOW FULL COLUMNS FROM `user`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6189029;i:4;a:0:{}i:5;i:3140040;}i:13;a:6:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6193709;i:4;a:0:{}i:5;i:3149312;}i:14;a:6:{i:0;s:595:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'user' AND kcu.table_name = 'user'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6196201;i:4;a:0:{}i:5;i:3150960;}i:25;a:6:{i:0;s:16:"SAVEPOINT LEVEL1";i:1;i:80;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.621448;i:4;a:0:{}i:5;i:3662976;}i:26;a:6:{i:0;s:16:"SAVEPOINT LEVEL1";i:1;i:96;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.6215119;i:4;a:0:{}i:5;i:3664216;}i:28;a:6:{i:0;s:30:"SHOW FULL COLUMNS FROM `goods`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6216271;i:4;a:0:{}i:5;i:3671432;}i:29;a:6:{i:0;s:30:"SHOW FULL COLUMNS FROM `goods`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.621938;i:4;a:0:{}i:5;i:3697000;}i:31;a:6:{i:0;s:597:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods' AND kcu.table_name = 'goods'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6223731;i:4;a:0:{}i:5;i:3690720;}i:32;a:6:{i:0;s:597:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods' AND kcu.table_name = 'goods'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6226239;i:4;a:0:{}i:5;i:3692368;}i:35;a:6:{i:0;s:97:"SELECT EXISTS(SELECT * FROM `goods_classification` WHERE (`goods_classification`.`g_cls_id`='2'))";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.625037;i:4;a:0:{}i:5;i:4843648;}i:36;a:6:{i:0;s:97:"SELECT EXISTS(SELECT * FROM `goods_classification` WHERE (`goods_classification`.`g_cls_id`='2'))";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6252301;i:4;a:0:{}i:5;i:4845064;}i:38;a:6:{i:0;s:264:"INSERT INTO `goods` (`g_primary_name`, `g_code`, `g_cls_id`, `g_create_uid`, `g_secondary_name`, `g_status`, `g_updated_at`, `g_start_at`, `g_end_at`, `g_created_at`) VALUES ('德式轻量保温杯', 'A10001', 2, 1, '', 'draft', 1528645173, NULL, NULL, 1528645173)";i:1;i:80;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.6260729;i:4;a:0:{}i:5;i:4847984;}i:39;a:6:{i:0;s:264:"INSERT INTO `goods` (`g_primary_name`, `g_code`, `g_cls_id`, `g_create_uid`, `g_secondary_name`, `g_status`, `g_updated_at`, `g_start_at`, `g_end_at`, `g_created_at`) VALUES ('德式轻量保温杯', 'A10001', 2, 1, '', 'draft', 1528645173, NULL, NULL, 1528645173)";i:1;i:96;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.626255;i:4;a:0:{}i:5;i:4849224;}i:43;a:6:{i:0;s:37:"SHOW FULL COLUMNS FROM `goods_detail`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6266229;i:4;a:0:{}i:5;i:4920888;}i:44;a:6:{i:0;s:37:"SHOW FULL COLUMNS FROM `goods_detail`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.626869;i:4;a:0:{}i:5;i:4928816;}i:46;a:6:{i:0;s:611:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods_detail' AND kcu.table_name = 'goods_detail'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.62707;i:4;a:0:{}i:5;i:4931792;}i:47;a:6:{i:0;s:611:"SELECT
+    kcu.constraint_name,
+    kcu.column_name,
+    kcu.referenced_table_name,
+    kcu.referenced_column_name
+FROM information_schema.referential_constraints AS rc
+JOIN information_schema.key_column_usage AS kcu ON
+    (
+        kcu.constraint_catalog = rc.constraint_catalog OR
+        (kcu.constraint_catalog IS NULL AND rc.constraint_catalog IS NULL)
+    ) AND
+    kcu.constraint_schema = rc.constraint_schema AND
+    kcu.constraint_name = rc.constraint_name
+WHERE rc.constraint_schema = database() AND kcu.table_schema = database()
+AND rc.table_name = 'goods_detail' AND kcu.table_name = 'goods_detail'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.627341;i:4;a:0:{}i:5;i:4933456;}i:51;a:6:{i:0;s:101:"INSERT INTO `goods_detail` (`g_intro_text`, `g_id`) VALUES ('德式轻量保温杯 简单介绍', 11)";i:1;i:80;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.6276519;i:4;a:0:{}i:5;i:4936808;}i:52;a:6:{i:0;s:101:"INSERT INTO `goods_detail` (`g_intro_text`, `g_id`) VALUES ('德式轻量保温杯 简单介绍', 11)";i:1;i:96;i:2;s:23:"yii\db\Command::execute";i:3;d:1528645173.627821;i:4;a:0:{}i:5;i:4938048;}i:74;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=1)";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6472731;i:4;a:0:{}i:5;i:5600288;}i:75;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=1)";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6477301;i:4;a:0:{}i:5;i:5603744;}i:77;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=2)";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6484561;i:4;a:0:{}i:5;i:5658368;}i:78;a:6:{i:0;s:134:"SELECT `b`.* FROM `auth_assignment` `a`, `auth_item` `b` WHERE (`a`.`item_name`=`b`.`name`) AND (`a`.`user_id`='1') AND (`b`.`type`=2)";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6489611;i:4;a:0:{}i:5;i:5660240;}i:80;a:6:{i:0;s:31:"SELECT * FROM `auth_item_child`";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.649282;i:4;a:0:{}i:5;i:5660408;}i:81;a:6:{i:0;s:31:"SELECT * FROM `auth_item_child`";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.649642;i:4;a:0:{}i:5;i:5681248;}i:83;a:6:{i:0;s:61:"SELECT `item_name` FROM `auth_assignment` WHERE `user_id`='1'";i:1;i:80;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6499879;i:4;a:0:{}i:5;i:5670680;}i:84;a:6:{i:0;s:61:"SELECT `item_name` FROM `auth_assignment` WHERE `user_id`='1'";i:1;i:96;i:2;s:21:"yii\db\Command::query";i:3;d:1528645173.6502061;i:4;a:0:{}i:5;i:5672320;}}}";s:6:"assets";s:6:"a:0:{}";s:4:"mail";s:6:"a:0:{}";s:8:"timeline";s:91:"a:3:{s:5:"start";d:1528645173.611985;s:3:"end";d:1528645173.653084;s:6:"memory";i:6083272;}";s:4:"user";s:2434:"a:5:{s:2:"id";i:1;s:8:"identity";a:11:{s:4:"u_id";s:1:"1";s:10:"u_username";s:14:"'kitralzhong0'";s:10:"u_auth_key";s:2:"''";s:15:"u_password_hash";s:62:"'$2y$13$Y/xjVNDiyf13xSrPgIn/OOG0hNTSgT/QNG3yAv4hS2pOISQdvb3qC'";s:22:"u_password_reset_token";s:2:"''";s:14:"u_access_token";s:2:"''";s:7:"u_email";s:21:"'kitralzhong0@qq.com'";s:8:"u_status";s:8:"'active'";s:13:"u_auth_status";s:10:"'had_auth'";s:12:"u_created_at";s:10:"1527342263";s:12:"u_updated_at";s:10:"1527342263";}s:10:"attributes";a:11:{i:0;a:2:{s:9:"attribute";s:4:"u_id";s:5:"label";s:4:"U Id";}i:1;a:2:{s:9:"attribute";s:10:"u_username";s:5:"label";s:10:"U Username";}i:2;a:2:{s:9:"attribute";s:10:"u_auth_key";s:5:"label";s:10:"U Auth Key";}i:3;a:2:{s:9:"attribute";s:15:"u_password_hash";s:5:"label";s:15:"U Password Hash";}i:4;a:2:{s:9:"attribute";s:22:"u_password_reset_token";s:5:"label";s:22:"U Password Reset Token";}i:5;a:2:{s:9:"attribute";s:14:"u_access_token";s:5:"label";s:14:"U Access Token";}i:6;a:2:{s:9:"attribute";s:7:"u_email";s:5:"label";s:7:"U Email";}i:7;a:2:{s:9:"attribute";s:8:"u_status";s:5:"label";s:8:"U Status";}i:8;a:2:{s:9:"attribute";s:13:"u_auth_status";s:5:"label";s:13:"U Auth Status";}i:9;a:2:{s:9:"attribute";s:12:"u_created_at";s:5:"label";s:12:"U Created At";}i:10;a:2:{s:9:"attribute";s:12:"u_updated_at";s:5:"label";s:12:"U Updated At";}}s:13:"rolesProvider";O:26:"yii\data\ArrayDataProvider":11:{s:3:"key";N;s:9:"allModels";a:1:{s:4:"root";a:7:{s:4:"type";s:1:"1";s:4:"name";s:4:"root";s:11:"description";s:12:"超级用户";s:8:"ruleName";N;s:4:"data";s:4:"null";s:9:"createdAt";s:10:"1527777104";s:9:"updatedAt";s:10:"1527777104";}}s:10:"modelClass";N;s:2:"id";s:4:"dp-2";s:32:" yii\data\BaseDataProvider _sort";N;s:38:" yii\data\BaseDataProvider _pagination";N;s:32:" yii\data\BaseDataProvider _keys";N;s:34:" yii\data\BaseDataProvider _models";N;s:38:" yii\data\BaseDataProvider _totalCount";N;s:27:" yii\base\Component _events";a:0:{}s:30:" yii\base\Component _behaviors";N;}s:19:"permissionsProvider";O:26:"yii\data\ArrayDataProvider":11:{s:3:"key";N;s:9:"allModels";a:0:{}s:10:"modelClass";N;s:2:"id";s:4:"dp-3";s:32:" yii\data\BaseDataProvider _sort";N;s:38:" yii\data\BaseDataProvider _pagination";N;s:32:" yii\data\BaseDataProvider _keys";N;s:34:" yii\data\BaseDataProvider _models";N;s:38:" yii\data\BaseDataProvider _totalCount";N;s:27:" yii\base\Component _events";a:0:{}s:30:" yii\base\Component _behaviors";N;}}";s:6:"router";s:595:"a:1:{s:8:"messages";a:3:{i:16;a:6:{i:0;a:3:{s:4:"rule";s:5:"debug";s:5:"match";b:0;s:6:"parent";N;}i:1;i:8;i:2;s:32:"yii\web\UrlManager::parseRequest";i:3;d:1528645173.6206369;i:4;a:0:{}i:5;i:3438472;}i:17;a:6:{i:0;a:3:{s:4:"rule";s:43:"debug/<controller:[\w\-]+>/<action:[\w\-]+>";s:5:"match";b:0;s:6:"parent";N;}i:1;i:8;i:2;s:32:"yii\web\UrlManager::parseRequest";i:3;d:1528645173.620652;i:4;a:0:{}i:5;i:3440448;}i:18;a:6:{i:0;s:55:"No matching URL rules. Using default URL parsing logic.";i:1;i:8;i:2;s:32:"yii\web\UrlManager::parseRequest";i:3;d:1528645173.620657;i:4;a:0:{}i:5;i:3441656;}}}";s:7:"summary";a:9:{s:3:"tag";s:13:"5b1d4635976e2";s:3:"url";s:34:"http://localhost:8012/goods/create";s:4:"ajax";i:0;s:6:"method";s:4:"POST";s:2:"ip";s:9:"127.0.0.1";s:4:"time";d:1528645173.6114459;s:10:"statusCode";i:500;s:8:"sqlCount";i:15;s:9:"mailCount";i:0;}s:10:"exceptions";a:0:{}}
