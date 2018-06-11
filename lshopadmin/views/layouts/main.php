@@ -16,7 +16,7 @@ if (Yii::$app->controller->action->id === 'login') {
     );
 } else {
 
-    \common\assets\AdminAsset::register($this);
+
 
     dmstr\web\AdminLteAsset::register($this);
 

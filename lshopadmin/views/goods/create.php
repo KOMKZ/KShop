@@ -1,5 +1,7 @@
 <?php
 use yii\bootstrap\ActiveForm;
+use unclead\multipleinput\MultipleInput;
+
 $form = ActiveForm::begin();
 ?>
 <div class="row">
@@ -45,10 +47,20 @@ $form = ActiveForm::begin();
 			</div>
 			<div class="box-body">
 				<?php
-				echo $form->field($model, 'g_metas')->arrayObjInput([
-					'attributes' => [
-						'g_atr_id' => ['label' => '元属性id', 'inputType' => 'textInput'],
-						'gm_value' => ['label' => '元属性值', 'inputType' => 'textInput']
+				echo $form->field($model, 'g_metas')->widget(MultipleInput::className(), [
+					'columns' => [
+						[
+							'name' => 'g_atr_id',
+							'title' => '元属性id',
+						],
+						[
+							'name' => 'gm_value',
+							'title' => '元属性值',
+						],
+						[
+							'name' => 'g_atr_name',
+							'title' => '元属性名称',
+						],
 					]
 				]);
 				?>

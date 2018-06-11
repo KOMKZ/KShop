@@ -28,7 +28,8 @@
         "toplan/phpsms": "~1.8",
         "php-ffmpeg/php-ffmpeg": "^0.11.0",
         "zircote/swagger-php": "^2.0",
-        "dmstr/yii2-adminlte-asset": "^2.1"
+        "dmstr/yii2-adminlte-asset": "^2.1",
+        "unclead/yii2-multiple-input": "~2.0"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

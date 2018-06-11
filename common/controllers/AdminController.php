@@ -71,6 +71,9 @@ class AdminController extends Controller
 	public function setCreateSuccess($msg = ''){
 		$this->setSuccess($msg ? $msg : "创建成功");
 	}
+	public function setNotFoundWarning(){
+		$this->setWarning("指定的数据不存在");
+	}
 	public function setDeleteSuccess($msg = ''){
 		$this->setSuccess($msg ? $msg : "删除成功");
 	}

@@ -285,15 +285,21 @@ class GoodsModel extends Model
 			}
 
 			// create goods attrs info,including option info
-			$gAttrs = $gAttrModel->createGoodsAttrs([
-				'attrs' => ArrayHelper::getValue($data, 'g_sku_attrs', [])
-			], $goods);
-
-			if(!$gAttrs){
-				list($code, $error) = $gAttrModel->getOneError();
-				$this->addError($code, "创建商品属性失败:" . $error);
-				return false;
+			if($skuAttrs = ArrayHelper::getValue($data, 'g_sku_attrs', [])){
+				$gAttrs = $gAttrModel->createGoodsAttrs([
+					'attrs' => $skuAttrs
+				], $goods);
+				if(!$gAttrs){
+					list($code, $error) = $gAttrModel->getOneError();
+					$this->addError($code, "创建商品sku属性失败3:" . $error);
+					return false;
+				}
 			}
+
+
+
+
+
 			$t->commit();
 			return $goods;
 		} catch (\Exception $e) {
@@ -563,12 +569,12 @@ class GoodsModel extends Model
 			}
 			if($newAttrData && !$gAttrModel->createGoodsAttrs(['attrs' => $newAttrData], $goods)){
 				list($code, $error) = $gAttrModel->getOneError();
-				$this->addError($code, "创建商品属性失败:" . $error);
+				$this->addError($code, "创建商品属性失败1:" . $error);
 				return false;
 			}
 			if($oldAttrData && !$gAttrModel->updateGoodsAttrs($oldAttrData, $goods)){
 				list($code, $error) = $gAttrModel->getOneError();
-				$this->addError($code, "创建商品属性失败:" . $error);
+				$this->addError($code, "创建商品属性失败2:" . $error);
 				return false;
 			}
 			// 确保sku实例此时是正确的

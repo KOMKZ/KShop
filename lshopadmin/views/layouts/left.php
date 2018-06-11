@@ -28,7 +28,7 @@
 
         <?= dmstr\widgets\Menu::widget(
             [
-                'options' => ['class' => 'sidebar-menu'],
+                'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
@@ -38,8 +38,8 @@
                         'icon' => 'share',
                         'url' => '#',
                         'items' => [
-                            ['label' => '商品列表', 'icon' => 'circle-o', 'url' => ['goods/list'],],
-                            ['label' => '创建列表', 'icon' => 'circle-o', 'url' => ['goods/create'],],
+                            ['label' => '创建商品', 'icon' => 'file-code-o', 'url' => ['goods/create'],],
+                            ['label' => '商品列表', 'icon' => 'dashboard', 'url' => ['goods/list'],],
                         ],
                     ],
                 ],
