@@ -48,7 +48,6 @@ class ToolController extends Controller{
 		$yii = basename($_SERVER['argv'][0]);
 
 		$actions = [
-			'data/clear-file',
 			'migrate/down 100 --interactive=0',
 			'migrate/up --interactive=0',
 			'data/inst-test',

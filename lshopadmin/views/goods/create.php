@@ -46,8 +46,10 @@ $form = ActiveForm::begin();
 			<div class="box-body">
 				<?php
 				echo $form->field($model, 'g_metas')->arrayObjInput([
-					'g_atr_id' => ['label' => '元属性id', 'inputType' => 'textInput'],
-					'gm_value' => ['label' => '元属性值', 'inputType' => 'textInput']
+					'attributes' => [
+						'g_atr_id' => ['label' => '元属性id', 'inputType' => 'textInput'],
+						'gm_value' => ['label' => '元属性值', 'inputType' => 'textInput']
+					]
 				]);
 				?>
 			</div>
