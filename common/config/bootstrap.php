@@ -36,5 +36,5 @@ Event::on(Goods::className(), Goods::EVENT_AFTER_UPDATE, [ActionModel::className
 \Firebase\JWT\JWT::$leeway = 50;
 
 \Yii::$container->set('yii\bootstrap\ActiveForm', [
-    'fieldClass' => "common\bootstrap\ActiveField",
+    'fieldClass' => "common\widgets\ActiveField",
 ]);

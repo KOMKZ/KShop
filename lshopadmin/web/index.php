@@ -1,5 +1,5 @@
 <?php
-require('/home/lartik/pro/php/composer-global-dep/vendor/digitalnature/php-ref/ref.php');
+require('/home/master/pro/php/composer-global-dep/vendor/digitalnature/php-ref/ref.php');
 defined('ROOT_PATH') or define('ROOT_PATH', dirname((dirname(__DIR__))));
 defined('YII_DEBUG') or define('YII_DEBUG', true);
 defined('YII_ENV') or define('YII_ENV', 'dev');

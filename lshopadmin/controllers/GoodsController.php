@@ -23,12 +23,14 @@ class GoodsController extends Controller{
 			'g_sku_attrs'
 		]);
 		$gModel = new GoodsModel();
+		$form->g_metas = [
+			['g_atr_id' => 1, "gm_value" => 'hello world']
+		];
 		$postData = Yii::$app->request->post("DynamicModel");
 		if($postData){
 			$postData['g_create_uid'] = $this->adminSession->u_id;
 			$goods = $gModel->createGoods($postData);
 			if($goods){
-				console($goods);
 			}else{
 				$this->setErrorFromErrors($gModel->getErrors());
 				$form->addErrors($gModel->getErrors());
