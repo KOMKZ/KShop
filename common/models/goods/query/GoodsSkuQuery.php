@@ -4,6 +4,7 @@ namespace common\models\goods\query;
 use yii\base\Object;
 use common\models\goods\ar\GoodsSku;
 use common\models\goods\ar\Goods;
+use common\models\goods\ar\GoodsMeta;
 
 /**
  *

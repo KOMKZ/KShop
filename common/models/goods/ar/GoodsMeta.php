@@ -17,6 +17,9 @@ class GoodsMeta extends ActiveRecord{
     public function toArray(array $fields = [], array $expand = [], $recursive = true)
     {
         $data = parent::toArray($fields, $expand, $recursive);
+        if(!$data['g_attr']){
+            $data['g_attr'] = [];
+        }
         $data = array_merge($data, $data['g_attr']);
         unset($data['g_attr']);
         return $data;

@@ -68,8 +68,12 @@ class AdminController extends Controller
 	public function setInfo($msg, $noTras = false){
 		Yii::$app->session->setFlash('info', $noTras ? $msg : Yii::t('app', $msg));
 	}
+
 	public function setCreateSuccess($msg = ''){
 		$this->setSuccess($msg ? $msg : "创建成功");
+	}
+	public function setSaveSuccess($msg = ''){
+		$this->setSuccess($msg ? $msg : "保存成功");
 	}
 	public function setNotFoundWarning(){
 		$this->setWarning("指定的数据不存在");
@@ -88,5 +92,36 @@ class AdminController extends Controller
 			   Yii::$app->apiurl->createAbsoluteUrl($route)
 			   :
 			   Url::to($route);
+	}
+	public function succItems($items, $count = null){
+		$res = $this->getRes();
+		$res['data'] = [
+			'items' => $items,
+			'count' => null === $count ? count($items) : $count
+		];
+		$res['code'] = 0;
+		$res['message'] = '';
+		return $this->asJson($res);
+	}
+	private function getRes(){
+		return [
+			'code' => null,
+			'data' => null,
+			'message' => null
+		];
+	}
+	public function succ($data = null){
+		$res = $this->getRes();
+		$res['data'] = $data;
+		$res['code'] = 0;
+		$res['message'] = '';
+		return $this->asJson($res);
+	}
+	public function error($code, $message){
+		$res = $this->getRes();
+		$res['data'] = null;
+		$res['code'] = empty($code) ? 1 : $code;
+		$res['message'] = $message;
+		return $this->asJson($res);
 	}
 }

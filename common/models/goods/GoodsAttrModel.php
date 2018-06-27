@@ -188,7 +188,6 @@ class GoodsAttrModel extends Model
      */
     public function createGoodsMetas($data, $goods, $asArray = true){
         list($newMetas, $oldMetas) = $this->parseMetaNewAndOld($data['metas']);
-
         $metas = [];
         foreach($newMetas as $meta){
             $meta['g_atr_cls_type'] = GoodsAttr::ATR_CLS_TYPE_GOODS;
@@ -421,6 +420,7 @@ class GoodsAttrModel extends Model
      */
     public function createAttr($attrData, GoodsAttr $goodsAttr){
         if(!$goodsAttr->load($attrData, '') || !$goodsAttr->validate()){
+            $this->addErrors($goodsAttr->getErrors());
             return false;
         }
         $goodsAttr->g_atr_created_at = time();

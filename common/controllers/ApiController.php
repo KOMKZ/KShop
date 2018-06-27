@@ -12,13 +12,7 @@ use yii\filters\AccessControl;
 class ApiController extends Controller
 {
 	public $enableCsrfValidation = false;
-	private function getRes(){
-		return [
-			'code' => null,
-			'data' => null,
-			'message' => null
-		];
-	}
+
 	public function behaviors()
 	{
 		return [
@@ -79,6 +73,13 @@ class ApiController extends Controller
 		$res['code'] = 0;
 		$res['message'] = '';
 		return $this->asJson($res);
+	}
+	private function getRes(){
+		return [
+			'code' => null,
+			'data' => null,
+			'message' => null
+		];
 	}
 	public function succ($data = null){
 		$res = $this->getRes();

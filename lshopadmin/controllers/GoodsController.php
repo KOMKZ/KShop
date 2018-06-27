@@ -9,18 +9,115 @@ use common\models\goods\ar\GoodsDetail;
 use yii\base\DynamicModel;
 use yii\data\ActiveDataProvider;
 use common\models\goods\query\GoodsQuery;
+use yii\helpers\ArrayHelper;
+use common\models\goods\ar\GoodsMeta;
 
 
 /**
  *
  */
 class GoodsController extends Controller{
+	public function getUrls(){
+		return [
+			'goods-update' => ['goods/update'],
+			'g-meta-delete' => ['goods/ajax-delete-g-meta']
+		];
+	}
+
+	public function actionAjaxDeleteGMeta($gm_id, $g_id){
+		$goods = GoodsQuery::find()->andWhere(['=', 'g_id', $g_id])->one();
+		if(!$goods){
+			$this->setNotFoundWarning();
+			return $this->error(1, "数据不存在");
+		}
+		$updateData['g_del_meta_ids'][] = $gm_id;
+		$gModel = new GoodsModel();
+		$result = $gModel->updateGoods($updateData, $goods);
+		if(!$result){
+			$this->setError(implode(',', $gModel->getErrors()));
+			return $this->error(1, implode(',', $gModel->getErrors()));
+		}else{
+			$this->setDeleteSuccess();
+		}
+		return $this->succ();
+
+	}
+	public function actionPjaxListGMetas($g_id){
+		$goods = GoodsQuery::find()->andWhere(['=', 'g_id', $g_id])->one();
+		if(!$goods){
+			$this->setNotFoundWarning();
+		}
+		return $this->renderPartial('pjax-list-g-metas', [
+			'goods' => $goods,
+			'urls' => $this->getUrls()
+		]);
+	}
+	public function actionPjaxSaveGMetas($gm_id, $g_id){
+		$meta = GoodsQuery::findMetas()->andWhere(['=', 'gm_id', $gm_id])->one();
+		if(!$meta){
+			$meta = new GoodsMeta();
+		}
+		$updateData = [];
+		$gModel = new GoodsModel();
+		$goods = GoodsQuery::find()->andWhere(['=', 'g_id', $g_id])->one();
+		$postData = Yii::$app->request->post("DynamicModel");
+		if(!$goods){
+			$this->setNotFoundWarning("商品数据不存在");
+			// return $this->refresh();
+		}elseif(!$meta->isNewRecord && $postData){
+			// update
+			$updateData['g_metas'][] = $postData;
+		}elseif($meta->isNewRecord && $postData){
+			$updateData['g_metas'][] = $postData;
+		}
+		$form = new DynamicModel([
+			'gm_id',
+			'g_atr_id',
+			'g_atr_name',
+			'gm_value',
+		]);
+		$form->addRule([
+			'gm_id',
+			'g_atr_id',
+			'g_atr_name',
+			'gm_value',
+		], 'safe');
+		if($updateData){
+			$result = $gModel->updateGoods($updateData, $goods);
+			if(!$result){
+				$this->setErrorFromErrors($gModel->getErrors());
+				$form->addErrors($gModel->getErrors());
+			}else{
+				$this->setSaveSuccess();
+				$meta->refresh();
+			}
+		}
+		$form->setAttributes($meta->toArray(), false);
+		return $this->renderPartial("pjax-save-g-metas", [
+			'model' => $form,
+			'urls' => $this->getUrls()
+		]);
+	}
 	public function actionUpdate($g_id){
 		$goods = GoodsQuery::find()->andWhere(['=', 'g_id', $g_id])->one();
         if(!$goods){
 			$this->setNotFoundWarning();
             return $this->redirect(['goods/list']);
         }
+		$gModel = new GoodsModel();
+		$postData = Yii::$app->request->post();
+		if($postData){
+			$postData = array_merge(
+				ArrayHelper::getValue($postData, 'Goods', []),
+				ArrayHelper::getValue($postData, 'GoodsDetail', [])
+			);
+			$result = $gModel->updateGoods($postData, $goods);
+			if($result){
+				$this->setUpdateSuccess();
+				return $this->refresh();
+			}
+
+		}
 		// $form = new DynamicModel([
 		// 	'g_id',
 		// 	'g_code',
@@ -46,7 +143,8 @@ class GoodsController extends Controller{
 		// $form->load($goods->toArray(), '');
 		return $this->render('update', [
 			'goods' => $goods,
-			'goodsDetail' => $goods->g_detail
+			'goodsDetail' => $goods->g_detail,
+			'urls' => $this->getUrls()
 		]);
 	}
 	public function actionCreate(){

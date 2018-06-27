@@ -529,9 +529,9 @@ class GoodsModel extends Model
 			$oldMetaData = $newMetaData = [];
 
 			foreach($data['g_metas'] as $metaData){
-				if(!array_key_exists('gm_id', $metaData)){
+				if(empty($metaData['gm_id'])){
 					$newMetaData[] = $metaData;
-				}elseif(array_key_exists('gm_id', $metaData) && !in_array($metaData['gm_id'], ArrayHelper::getValue($data, 'g_del_meta_ids', []))){ //
+				}elseif(!empty($metaData['gm_id']) && !in_array($metaData['gm_id'], ArrayHelper::getValue($data, 'g_del_meta_ids', []))){ //
 					$oldMetaData[] = $metaData;
 				}
 			}
@@ -542,8 +542,7 @@ class GoodsModel extends Model
 				return false;
 			}
 			if($newMetaData && !$gAttrModel->createGoodsMetas(['metas' => $newMetaData], $goods)){
-				list($code, $error) = $gAttrModel->getOneError();
-				$this->addError($code, "创建商品元属性失败:" . $error);
+				$this->addErrors($gAttrModel->getErrors());
 				return false;
 			}
 			unset($newMetaData, $oldMetaData);
